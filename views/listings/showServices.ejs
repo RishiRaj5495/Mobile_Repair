@@ -1,0 +1,92 @@
+<% layout("/layouts/boilerPlate") %>
+<%= success %>
+
+
+<style>
+
+
+/* jjjjjjjjjjjjjjjjjjjjjjjjjj */
+  .mainContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+   
+    row-gap:10;
+    
+    
+  }
+  .no-shadow  {
+    border: none;
+  }
+  .btn-outline-primary.no-shadow:hover {
+    background-color: transparent;
+    border-color: #0d6efd;
+    color: #0d6efd;
+  }
+  .modal-footer {
+    display: flex;
+    justify-content: center;
+  }
+</style>
+
+
+<div id="grid">
+  <div class="a">
+  <div class="center">
+
+    
+   <div id="shopName">RepairNow</div> 
+  </div>
+<br><br>
+  <div class="leftBar">
+    <Address>
+     
+     
+    
+      
+      <div>
+        <span><i class="fa-solid fa-location-dot" id="ptaGar"></i> </span>
+        <span>Address : 116/68C/157 Himmatganj </span><br> <span class="Prayagraj">Prayagraj,</span></div>
+        <div>
+       <div id="time">
+        </div>          
+           Opening : <p id="clock">10 'o clock</p> </div>
+    
+    </Address></div>
+
+
+    <img src="images/charger.jpg" alt="charger" class="charger">
+    <br><br>
+    
+  </div>
+  <div id="b" >
+    <div id="contents">
+
+  <div class="content"id="firstItem" onclick="accessories()">Accssories </div>
+  <div class="content"id="secondItem">Review & Rating</div>
+  <div class="content"id="thirdItem" onclick="priceList()">Price list </div>
+    </div>
+
+    <div class="mainContent">
+   <div class = "items">
+    
+
+      
+
+
+
+   </div>
+
+
+
+
+</div>
+
+
+
+
+    
+</div>
+    </div>
+<script src="/js/probList.js"></script>
+ <script src="/js/product.js"></script>
+ <script src="/js/anshuWeb.js"></script>

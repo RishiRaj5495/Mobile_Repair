@@ -1,0 +1,50 @@
+
+<% layout("/layouts/boilerPlate") %>
+<%= success %>
+
+
+
+<!-- <h1>Restaurant Dashboard (RepairNow)</h1>
+
+<label>Restaurant ID: <input id="restId" /></label>
+<button id="join">Connect</button>
+
+<div id="orders"></div>  -->
+
+ <!-- Load your JS logic -->
+ <!-- <script src="/socket.io/socket.io.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.9.4/firebase-messaging.js"></script>
+<script src="/js/firebase-config.js"></script>
+<script src="/js/mobileShops.js"></script>  -->
+
+
+<h1>Restaurant Dashboard (RepairNow)</h1>
+
+<h3>Register (first time)</h3>
+<form id="restaurantForm">
+  <input  type="text"  id="name" name="name" placeholder="Restaurant Name" required />
+  <input  type="text"  id="address" name="address"     placeholder="Address" required />
+  <input type="number"  id="mobile"  name="mobile"    placeholder="Mobile" required />
+  <button type="submit">Register & Save Token</button>
+</form>
+
+<hr>
+
+<h3>Connect to live orders</h3>
+<label>Restaurant ID: <input id="restId" /></label>
+<button id="join">Connect</button>
+<div id="orders"></div>
+
+<!-- Socket.IO client (served by your server) -->
+<script src="/socket.io/socket.io.js"></script>
+
+<!-- Firebase v8 (compat) CDN - MUST be before firebase-config.js -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+
+<!-- Your Firebase config (see file below) -->
+<script src="/js/firebase-config.js"></script>
+
+<!-- Main client logic -->
+<script src="/js/mobileShops.js"></script>
