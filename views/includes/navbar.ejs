@@ -1,0 +1,72 @@
+
+  
+  
+  
+  
+  
+  
+  
+  <div id="navigation-bar">
+  <a   href="/" class="home" alt="Home" style="text-decoration: none;">
+
+    <span class="material-symbols-outlined myclass">
+      home
+    </span>
+   
+    <span class="homie">Home</span>
+  </a>
+  
+  <div class="contact">
+    <span style=" color: rgb(53, 175, 28);">Contact  </span>
+    <span style=" color: rgb(53, 175, 28);"> : 9628465495,</span><span style=" color: rgb(53, 175, 28);">9307159365</span>
+   <div class="call-icon" alt="call-icon">
+    <span class="material-symbols-outlined">
+      call
+      </span>
+
+
+
+      <!-- <span class="calls">Call</span> -->
+  </div></div>
+
+<!-- ////// -->
+      <div class="clickToRepair">
+          <a href="/admin" class="clickToRepair" style="   text-decoration: none;   color: inherit; width: 95px; border: black 2px;">Click To Repair</a>
+  </div>
+
+  <!-- //// -->
+  <div class="right-nav">
+  <!-- <div class="call-icon" alt="call-icon">
+    <span class="material-symbols-outlined">
+      call
+      </span>
+
+
+
+      <span class="calls">Call</span>
+  </div> -->
+  <!-- <div class="direction" alt="direction">
+    <span class="material-symbols-outlined">
+      directions
+      </span>
+  </div> -->
+
+          <% if(currentUser){ %>
+       
+        <div class="photos"alt="photos">
+          <a href="/users/logout" class="signup" style="   text-decoration: none;   color: inherit; ">log out</a>
+  </div>
+      <% } %>
+   <% if(!currentUser) { %>
+  <div class="share" alt="share-link">
+    
+<a href="/users/login" class="ma" style=" text-decoration: none;   color: inherit; "> Login</a>
+  </div>
+  <div class="photos"alt="photos">
+          <a href="/users/signup" class="signup" style="  text-decoration: none;   color: inherit; ">Sign up</a>
+  </div>
+      <% } %>
+ 
+</div>
+  </div>
+

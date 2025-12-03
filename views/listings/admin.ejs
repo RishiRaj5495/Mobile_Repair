@@ -1,0 +1,26 @@
+<% layout("/layouts/boilerPlate") %>
+<%= success %>
+<h1>Admin - Create Order</h1>
+
+<form id="orderForm" action="/" method="POST" enctype="multipart/form-data">
+<label>Customer name: <input id="custName" /></label><br />
+<label>Customer phone: <input id="custPhone" /></label><br />
+
+  
+  <label class="form-label">Upload video:
+    <input type="file" name="video" id="images" />
+  </label><br>
+    
+  
+<label>Restaurant ID: <input id="restId" /></label><br /> 
+
+
+<!-- 
+<textarea id="items" placeholder='JSON array: [{"name":"Fix hinge","qty":1,"price":500}]' rows="6" cols="50"></textarea><br /> -->
+ <button id="place" type="button">Place Order</button>
+
+</form>
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="/js/admin.js"></script>
+

@@ -1,0 +1,45 @@
+<% layout("/layouts/boilerPlate") %> 
+<body>
+  <div class="row signupPage">
+    <div class="col-8 offset-2">
+      <h3>Sign Up</h3>
+      <form action="/users/signup" method="POST" novalidate class="needs-validation">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username:</label>
+          <input type="text" name="username"  placeholder="Enter Username" class="form-control" required>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please enter a valid username</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email:</label>
+          <input type="email" name="email" placeholder="Enter Email" class="form-control" required>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please enter a valid email</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Password:</label>
+          <input type="password" name="password" placeholder="Enter Password" class="form-control" required>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please enter a valid password</div>
+        </div>
+
+
+           <div class="mb-3">
+          <label for="phone" class="form-label">Phone:</label>
+          <input type="phone" name="phone" placeholder="Enter number" class="form-control" required>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please enter a running number</div>
+        </div>
+
+
+
+
+
+
+
+        <button type="submit" class="btn btn-primary px-4 p-1">Sign Up</button>
+      </form>
+    </div>
+  </div>
