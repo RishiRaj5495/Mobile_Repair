@@ -2,7 +2,8 @@
  if(process.env.NODE_ENV !== "production") {
   require('dotenv').config();
     }
-  
+ 
+
 const {isLogged,isOwner,validateListing} = require("./middlewear.js");
   const admin = require("firebase-admin");
   const express = require("express");
@@ -22,6 +23,8 @@ const http = require('http');////
 
 const ExpressError = require("./utils/ExpressError.js"); 
 const session = require("express-session");
+ const MongoStore = require("connect-mongo");
+
 // const MongoStore = require('connect-mongo');
 
 const flash = require("connect-flash");
@@ -59,6 +62,7 @@ async function main() {
 
 const store = MongoStore.create({
   mongoUrl: dbUrl,
+   collectionName: "sessions",
   crypto: {
     secret: process.env.SECRET,
   },
@@ -72,11 +76,13 @@ const sessionOptions = {
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false,
+
   cookie: {
-     expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 1 day
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-  },
+   expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+   maxAge: 7 * 24 * 60 * 60 * 1000,
+   httpOnly: true,
+},
+
 };
 
 
@@ -166,12 +172,13 @@ io.on("connection", (socket) => {
 });
 
 
-admin.initializeApp({
-    credential: admin.credential.cert(
-        path.join(__dirname, "/firebase-admin.json")
-    ),
-});
+const firebaseKeyPath = process.env.RENDER
+  ? "/etc/secrets/firebase-admin.json"      // Render
+  : path.join(__dirname, "firebase-admin.json"); // Local
 
+admin.initializeApp({
+  credential: admin.credential.cert(firebaseKeyPath),
+});
 
 
   
