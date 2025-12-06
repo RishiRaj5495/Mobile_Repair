@@ -84,7 +84,7 @@ body {
 
 .contact{
 min-width: 372px;
-  margin-left: 50px;
+  margin-left: 80px;
   font-size: 20px;
   font-weight: 600;
  
@@ -169,7 +169,10 @@ align-items: center;
 } */
 
 .center{
-  justify-items: cener;
+  justify-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
  /* margin-top: 6px; */
  
 }
@@ -506,6 +509,32 @@ display: flex;
   min-width: 140.36px;
 
 } 
+ .myElement {
+  
+ padding:5px;
+ background-color: rgba(29, 122, 5, 0.527);
+  color: white;
+  font-size: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow:  0 0 2px;
+  min-width: 140.36px;
+  display: none;
+ 
+  
+  }
+  .repair{
+
+padding: 5px;
+height: 50px;
+  min-width: 100px;
+  }
+  .repair2{
+    padding: 10px 0 10px 22px;
+    height: 40px;
+      min-width: 80px;
+        font-size: 18px;
+      }
 /* ------------------- MOBILE RESPONSIVE FIX ------------------- */
  @media (max-width: 600px) { 
 
@@ -516,8 +545,8 @@ display: flex;
   .contact {
     font-size: 14px;
     min-width: auto;
-    margin-left: 0;
-    flex-direction: column;
+    margin-left: 30px;
+    flex-direction: row;
     text-align: center;
   }
   .right-nav {
@@ -535,8 +564,15 @@ display: flex;
    .clickToRepair {
     font-size: 13px;
     padding: 5px;
-    min-width: auto;
+    min-width:auto;
+    display: none;
   } 
+  .myElement {
+    font-size: 13px;
+    /* padding: 5px; */
+    min-width: 140.36px;
+    display: flex;
+  }
 
   /* GRID items become single column */
   #grid {
