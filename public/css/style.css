@@ -1,6 +1,3 @@
-
-
-
 *{
   font-family: "Lexend Deca", serif;
   font-optical-sizing: auto;
@@ -9,7 +6,7 @@
    margin: 0;
   padding: 0;
 }
-/* .container{
+.container{
 margin: 0;
 padding: 0;
 
@@ -28,7 +25,7 @@ align-items: center;
   top: 0;
 
   
-} */
+}
 
 
 .container {
@@ -293,12 +290,12 @@ box-shadow: none !important ;
 
 position: relative;
 right: 20px;
-}
+} 
 .view{
  
- /* position:relative;
- left: 30px; */
-}
+  position:relative;
+ left: 30px; 
+ }
 
 
 .micRepair{
@@ -508,5 +505,90 @@ display: flex;
   box-shadow:  0 0 2px;
   min-width: 140.36px;
 
-}
+} 
+/* ------------------- MOBILE RESPONSIVE FIX ------------------- */
+ @media (max-width: 600px) { 
 
+  /* Navbar */
+   #navigation-bar {
+    padding: 0 10px;
+  }
+  .contact {
+    font-size: 14px;
+    min-width: auto;
+    margin-left: 0;
+    flex-direction: column;
+    text-align: center;
+  }
+  .right-nav {
+    margin-right: 10px;
+    gap: 8px;
+  } */
+
+  /* Logo / home */
+   .home {
+    font-size: 16px;
+    padding: 6px 10px;
+  } 
+
+  /* Click to repair */
+   .clickToRepair {
+    font-size: 13px;
+    padding: 5px;
+    min-width: auto;
+  } 
+
+  /* GRID items become single column */
+  #grid {
+    grid-template-columns: 1fr;
+    grid-gap: 20px;
+  } 
+
+  /* Content buttons */
+   .content {
+    width: 120px;
+    height: 45px;
+    margin-right: 20px;
+    font-size: 14px;
+  } 
+
+  /* Cards size adjust */
+  .cards {
+    width: 90%;
+    height: auto;
+    margin: 1rem auto;
+    padding: 10px;
+    flex-direction: column;
+    text-align: center;
+  } 
+
+  /* Product image */
+   .image img,
+  .imgProduct,
+  .charger,
+  .price {
+    width: 100%;
+    height: auto;
+  } 
+
+  /* Main grid */
+  .mainContent {
+    display: block;       /* From 2-col to 1-col */
+   } 
+
+  /* Text shrink */
+   #shopName {
+    font-size: 28px;
+    width: 260px;
+  }
+
+  .comment {
+    font-size: 18px;
+  }
+
+  .rating {
+    width: 100%;
+    padding: 15px;
+    flex-direction: column;
+  }
+} 
