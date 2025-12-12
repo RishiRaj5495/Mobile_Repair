@@ -21,9 +21,6 @@ module.exports.isLogged = (req, res, next) => {
 
 
 module.exports.saveRidirectUrl = (req, res, next) => {
-
-
-
 if(req.session.redirectUrl) {
   res.locals.redirectUrl = req.session.redirectUrl ;} // Make current user available in views
  next();
