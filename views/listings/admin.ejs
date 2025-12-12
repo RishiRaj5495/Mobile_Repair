@@ -1,23 +1,118 @@
 <% layout("/layouts/boilerPlate") %>
 <%= success %>
-<h1>Admin - Create Order</h1>
+<h1> Forwarding Your Issue</h1>
 
-<form id="orderForm" action="/" method="POST" enctype="multipart/form-data">
+<!-- <form id="orderForm" action="/" method="POST" enctype="multipart/form-data">
 <label>Customer name: <input id="custName" /></label><br />
 <label>Customer phone: <input id="custPhone" /></label><br />
 
   
   <label class="form-label">Upload video:
     <input type="file" name="video" id="images" />
-  </label><br>
+  </label><br> -->
+  <div class="row signupPage">
+    <div class="col-8 offset-2">
+  
+      <form id="orderForm"   action="/" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="username" class="form-label">First name:</label>
+          <input type="text" name="username" id="customerFirstName" placeholder="Enter First word" class="form-control" required>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please enter a valid name</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="username" class="form-label">last name</label>
+          <input type="text" name="username" id="customerLastName"  placeholder="Enter last word" class="form-control" required>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please enter a valid last name</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="phone" class="form-label">Phone</label>
+          <input type="number" name="phone" id="customerPhone" placeholder="Enter your number" class="form-control" required>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please enter a running number</div>
+        </div>
+
+
+
+           <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" name="email"  id="customerEmail"  placeholder="Enter email" class="form-control" required>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please enter a valid email</div>
+        </div>
+
+ <div class="mb-3">
+          <label for="address" class="form-label">Address</label>
+          <input type="text" name="address"  id="customerAddress"  placeholder="Enter your address" class="form-control" required>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please enter a valid email</div>
+        </div>
+  <div class="mb-3">
+            <label for="city" class="form-label">City</label>
+            <input type="text" name="city"  id="customerCity"  placeholder="Enter your city" class="form-control" required>
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please enter a current leaving city</div>
+          </div>
+    <div class="mb-3">
+            
+<div class="mb-3">
+  <label for="customerState" class="form-label">State</label>
+
+  <select name="state" class="form-control" id="customerState" required>
+    <option selected disabled value="">Choose...</option>
+    <option>Prayagraj</option>
+    <option>Lucknow</option>
+    <option>Kanpur</option>
+    <option>Varanasi</option>
+    <option>Agra</option>
+    <option>Meerut</option>
+  </select>
+
+  <div class="valid-feedback">Looks good!</div>
+  <div class="invalid-feedback">Please enter a valid state</div>
+</div>
+  
+  <div class="mb-3">
+            <label for="pincode" class="form-label">Pincode</label>
+            <input type="number" name="pincode"  id="customerPincode"  placeholder="Enter your state" class="form-control" required>
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please enter a valid pincode</div>
+          </div>
+    <div class="mb-3">
+            <label for="country" class="form-label">Country</label>
+            <input type="text" name="country"  id="customerCountry"  placeholder="Enter Your country" class="form-control" required>
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please your country</div>
+          </div>
+
+
+          <div class="mb-3">
+           <label for="video"   class="form-label">Upload video:
+    <input type="file" name="video" id="video" class="form-control" accept="video/*" required/>
+  </label>
+</div>
+  <div class="valid-feedback">Excellent</div>
+            <div class="invalid-feedback">Valid video</div>
+          </div>
+<label>Restaurant ID: <input id="restId" /></label><br /> 
+        <button   id="place" type="submit" class="btn btn-primary px-4 p-1">Forward</button>
+      </form>
+    </div>
+  </div>
+
+
+
+
     
   
-<label>Restaurant ID: <input id="restId" /></label><br /> 
 
 
 <!-- 
 <textarea id="items" placeholder='JSON array: [{"name":"Fix hinge","qty":1,"price":500}]' rows="6" cols="50"></textarea><br /> -->
- <button id="place" type="button">Place Order</button>
+ <!-- <button id="place" type="button">Place Order</button> -->
 
 </form>
 <script src="/socket.io/socket.io.js"></script>
