@@ -9,14 +9,15 @@ importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js')
 //   messagingSenderId: "YOUR_SENDER_ID",
 //   appId: "YOUR_APP_ID"
 // };
+
 const firebaseConfig = {
-  apiKey: "${process.env.FIREBASE_API_KEY}",
-    authDomain: "${process.env.FIREBASE_AUTH_DOMAIN}",
-    projectId: "${process.env.FIREBASE_PROJECT_ID}",
-    storageBucket: "${process.env.FIREBASE_STORAGE_BUCKET}",
-    messagingSenderId: "${process.env.FIREBASE_SENDER_ID}",
-    appId: "${process.env.FIREBASE_APP_ID}",
-    measurementId: "${process.env.FIREBASE_MEASUREMENT_ID}"
+  apiKey: "AIzaSyCdWse7AGWCPKkB-filB8cxR0y6ZZqSxtg",
+  authDomain: "mobile-repair-services.firebaseapp.com",
+  projectId: "mobile-repair-services",
+  storageBucket: "mobile-repair-services.firebasestorage.app",
+  messagingSenderId: "974268726688",
+  appId: "1:974268726688:web:49ba2c1500b9e9988178c5",
+  measurementId: "G-5MDWNS1X2G"
 };
 
 
