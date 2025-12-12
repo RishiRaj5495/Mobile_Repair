@@ -93,21 +93,31 @@ const { admin, io } = require("../app"); // import firebase admin + sockets
 
 router.post("/",upload.single("video"), async (req, res) => {
   try {
-    const { customerName, customerPhone, restaurantId} = req.body;
-    console.log("Creating order for restaurant:", req.body);
+    const { customerFirstName, customerLastName,customerPhone, customerEmail, customerAddress, customerCity,  customerState, customerPincode, customerCountry, restaurantId} = req.body;
+    console.log("Creating order for restaurant:", req.body.restaurantId);
   
 
     // const total = items.reduce(
     //   (sum, item) => sum + (item.price || 0) * (item.qty || 1),
     //   0
     // );
+    const restaurant = await Restaurant.findById(restaurantId);
+console.log("Restaurant found:", restaurant);
  
  console.log("Received video file:", req.file);
  // cloudinary video URL
     let order = await Order.create({
-      customerName,
+      customerFirstName,
+      customerLastName,
       customerPhone,
-      restaurant: restaurantId,
+      
+      customerEmail,
+      customerAddress,
+      customerCity,
+      customerState,
+      customerPincode,
+      customerCountry,
+      restaurant:restaurantId,
         video: {
     url: req.file?.path || null,
     filename: req.file?.filename || null
