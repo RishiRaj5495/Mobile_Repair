@@ -85,7 +85,7 @@ socket.on('disconnect', () => {
 const form = document.getElementById('orderForm');
 
 form.addEventListener('submit', async (e) => {
-  e.preventDefault(); // ❗ stop default POST /
+//  e.preventDefault(); 
 
   // Bootstrap validation check
   if (!form.checkValidity()) {
