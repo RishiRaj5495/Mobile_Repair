@@ -159,12 +159,16 @@ function showOrder(order) {
   const items = (order.items || []).map(i => i.name || i).join(', ');
   div.innerHTML = `
     <h3>New Order #${order._id}</h3>
-    <p>Customer: ${order.customerName || ''}</p>
-     <p>Customer: ${order.customerPhone || ''}</p>
+    <p>Customer Name: ${order.customerFirstName || ''}$${" "} ${order.customerLastName || ''}</p>
+     <p>Customer Phone: ${order.customerPhone || ''}</p>
+       <p>Customer Email: ${order.customerEmail || ''}</p>
+       <p>Customer Address: ${order.customerAddress || ''}$${"| "}Customer Pincode ${order.customerPincode || ''}</p>
+             <p>State: ${order.customerState || ''}$${"| "}City : ${order.customerCity || ''}</p>
+
        <p>Issue Video:</p>
   ${
     order.video && order.video.url
-      ? `<video controls width="300">
+      ? `<video controls width="300" margin="auto">
            <source src="${order.video.url}" type="video/mp4">
          </video>`
       : '<p>No video provided</p>'
