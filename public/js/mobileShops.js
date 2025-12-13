@@ -192,34 +192,36 @@ function showOrder(order) {
       <span class="order-id">#${order._id}</span>
     </div>
 
-    <div class="order-section">
-      <p><strong>Customer:</strong> ${order.customerFirstName || ''} ${order.customerLastName || ''}</p>
-      <p><strong>Phone:</strong> ${order.customerPhone || 'N/A'}</p>
-      <p><strong>Email:</strong> ${order.customerEmail || 'N/A'}</p>
+    <div class="order-body">
+
+      <!-- LEFT -->
+      <div class="order-left">
+        <p><strong>Customer:</strong> ${order.customerFirstName} ${order.customerLastName}</p>
+        <p><strong>Phone:</strong> ${order.customerPhone}</p>
+        <p><strong>Email:</strong> ${order.customerEmail}</p>
+        <p><strong>Address:</strong> ${order.customerAddress}</p>
+        <p><strong>City:</strong> ${order.customerCity} | <strong>State:</strong> ${order.customerState}</p>
+        <p><strong>Pincode:</strong> ${order.customerPincode}</p>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="order-right">
+        <p class="section-title">📹 Issue Video</p>
+        ${
+          order.video && order.video.url
+            ? `<video controls>
+                 <source src="${order.video.url}" type="video/mp4">
+               </video>`
+            : `<p class="no-video">No video provided</p>`
+        }
+      </div>
+
     </div>
 
-    <div class="order-section">
-      <p><strong>Address:</strong> ${order.customerAddress || ''}</p>
-      <p><strong>City:</strong> ${order.customerCity || ''} | 
-         <strong>State:</strong> ${order.customerState || ''}</p>
-      <p><strong>Pincode:</strong> ${order.customerPincode || ''}</p>
-    </div>
-
-    <div class="order-section">
-      <p class="section-title">📹 Issue Video</p>
-      ${
-        order.video && order.video.url
-          ? `<video controls>
-               <source src="${order.video.url}" type="video/mp4">
-             </video>`
-          : `<p class="no-video">No video provided</p>`
-      }
-    </div>
-
-    <div class="order-section shop-info">
-      <p><strong>Shop:</strong> ${order.restaurant?.name || ''}</p>
-      <p><strong>Address:</strong> ${order.restaurant?.address || ''}</p>
-      <p><strong>Mobile:</strong> ${order.restaurant?.mobile || ''}</p>
+    <div class="shop-info">
+      <p><strong>Shop:</strong> ${order.restaurant.name}</p>
+      <p><strong>Address:</strong> ${order.restaurant.address}</p>
+      <p><strong>Mobile:</strong> ${order.restaurant.mobile}</p>
     </div>
 
     <div class="order-actions">
@@ -230,9 +232,6 @@ function showOrder(order) {
 
   document.getElementById('orders').appendChild(div);
 }
-
-
-
 
 
 
