@@ -536,140 +536,47 @@ height: 50px;
         font-size: 18px;
       }
 /* ------------------- MOBILE RESPONSIVE FIX ------------------- */
- @media (max-width: 600px) { 
-
-  /* Navbar */
-   #navigation-bar {
-    padding: 0 10px;
-  }
-  .contact {
-    font-size: 14px;
-    min-width: auto;
-    margin-left: 30px;
-    flex-direction: row;
-    text-align: center;
-  }
-  .right-nav {
-    margin-right: 10px;
-    gap: 8px;
-  } */
-
-  /* Logo / home */
-   .home {
-    font-size: 16px;
-    padding: 6px 10px;
-  } 
-
-  /* Click to repair */
-   .clickToRepair {
-    font-size: 13px;
-    padding: 5px;
-    min-width:auto;
-    display: none;
-  } 
-  .myElement {
-    font-size: 13px;
-    /* padding: 5px; */
-    min-width: 140.36px;
-    display: flex;
-  }
-
-  /* GRID items become single column */
-  #grid {
-    grid-template-columns: 1fr;
-    grid-gap: 20px;
-  } 
-
-  /* Content buttons */
-   .content {
-    width: 120px;
-    height: 45px;
-    margin-right: 20px;
-    font-size: 14px;
-  } 
-
-  /* Cards size adjust */
-  .cards {
-    width: 90%;
-    height: auto;
-    margin: 1rem auto;
-    padding: 10px;
-    flex-direction: column;
-    text-align: center;
-  } 
-
-  /* Product image */
-   .image img,
-  .imgProduct,
-  .charger,
-  .price {
-    width: 100%;
-    height: auto;
-  } 
-
-  /* Main grid */
-  .mainContent {
-    display: block;       /* From 2-col to 1-col */
-   } 
-
-  /* Text shrink */
-   #shopName {
-    font-size: 28px;
-    width: 260px;
-  }
-
-  .comment {
-    font-size: 18px;
-  }
-
-  .rating {
-    width: 100%;
-    padding: 15px;
-    flex-direction: column;
-  }
-} 
-/* ------------------- END MOBILE RESPONSIVE FIX ------------------- */
+ 
 * {
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
 body {
   margin: 0;
-  background: #f4f4f4;
+  background: #f2f4f7;
 }
 
 /* Header */
 .top-bar {
   background: #ffffff;
-  padding: 12px 20px;
+  padding: 14px 20px;
   border-bottom: 1px solid #ddd;
 }
 
-/* ORDERS CONTAINER → VERTICAL */
+/* Orders container → VERTICAL */
 #orders {
-  padding: 15px;
+  padding: 20px;
   display: flex;
-  flex-direction: column;   /* 👈 THIS IS THE KEY */
-  gap: 25px;                /* space between orders */
+  flex-direction: column;   /* 👈 important */
+  gap: 22px;
 }
 
 /* Order Card */
-.order-card {
+.order-box {
   background: #ffffff;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
 
-/* Order title */
-.order-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
+/* Order header */
+.order-box h3 {
+  margin: 0 0 12px;
+  color: #333;
 }
 
-/* Inside order layout */
+/* Layout inside order */
 .order-body {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -680,21 +587,26 @@ body {
 .order-left p {
   margin: 6px 0;
   font-size: 14px;
+  color: #444;
 }
 
 /* Right video */
 .order-right {
   text-align: center;
+  background: #f9fafc;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .order-right video {
   width: 100%;
-  max-width: 220px;
+  max-width: 240px;
   border-radius: 8px;
+  margin-top: 6px;
 }
 
 .no-video {
-  color: gray;
+  color: #888;
   font-style: italic;
 }
 
@@ -702,6 +614,9 @@ body {
 .shop-info {
   margin-top: 10px;
   font-size: 14px;
+  background: #f9fafc;
+  padding: 10px;
+  border-radius: 8px;
 }
 
 /* Buttons */
@@ -709,34 +624,35 @@ body {
   margin-top: 15px;
   display: flex;
   gap: 15px;
+  justify-content: flex-end;
 }
 
 .order-actions button {
   padding: 8px 18px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
 }
 
 .accept {
   background: #28a745;
-  color: white;
+  color: #fff;
 }
 
 .reject {
   background: #dc3545;
-  color: white;
+  color: #fff;
 }
 
-/* Mobile */
+/* Mobile responsive */
 @media (max-width: 768px) {
   .order-body {
     grid-template-columns: 1fr;
   }
 
-  .order-right video {
-    max-width: 100%;
+  .order-actions {
+    justify-content: center;
   }
 }
 
