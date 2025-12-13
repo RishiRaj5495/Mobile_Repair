@@ -629,29 +629,43 @@ height: 50px;
   }
 } 
 /* ------------------- END MOBILE RESPONSIVE FIX ------------------- */
+* {
+  box-sizing: border-box;
+}
+
 body {
+  margin: 0;
   background: #f4f6f9;
   font-family: "Segoe UI", sans-serif;
 }
 
+.page-title {
+  text-align: center;
+  padding: 15px;
+  margin: 0;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Orders Grid */
 #orders {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
   gap: 20px;
   padding: 20px;
 }
 
+/* Order Card */
 .order-card {
   background: #ffffff;
   border-radius: 14px;
   padding: 18px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .order-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 30px rgba(0,0,0,0.12);
 }
 
 /* Header */
@@ -663,44 +677,56 @@ body {
   padding-bottom: 10px;
 }
 
-.order-header h3 {
-  margin: 0;
-  color: #333;
-}
-
 .order-id {
   font-size: 0.85rem;
   color: #777;
 }
 
-/* Sections */
-.order-section {
-  margin-top: 12px;
+/* Body Layout */
+.order-body {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+/* Left */
+.order-left p {
+  margin: 6px 0;
   font-size: 0.95rem;
   color: #444;
 }
 
+/* Right (Video) */
+.order-right {
+  background: #f9fafc;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+}
+
 .section-title {
   font-weight: bold;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
-.shop-info {
-  background: #f9fafc;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-/* Video */
 video {
   width: 100%;
   border-radius: 10px;
-  margin-top: 8px;
 }
 
 .no-video {
   color: #999;
   font-style: italic;
+}
+
+/* Shop Info */
+.shop-info {
+  background: #f9fafc;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 0.9rem;
 }
 
 /* Buttons */
@@ -715,36 +741,47 @@ video {
   padding: 10px;
   border: none;
   border-radius: 10px;
-  font-size: 0.95rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  font-size: 0.95rem;
 }
 
-.btn.accept {
+.accept {
   background: #28a745;
-  color: #fff;
+  color: white;
 }
 
-.btn.accept:hover {
+.accept:hover {
   background: #218838;
 }
 
-.btn.reject {
+.reject {
   background: #dc3545;
-  color: #fff;
+  color: white;
 }
 
-.btn.reject:hover {
+.reject:hover {
   background: #c82333;
 }
 
 /* Mobile */
-@media (max-width: 480px) {
-  .order-card {
-    padding: 14px;
+@media (max-width: 768px) {
+  .order-body {
+    grid-template-columns: 1fr;
   }
 
   .order-actions {
     flex-direction: column;
   }
 }
+/* ------------------- MOBILE RESPONSIVE FIX ------------------- */
+ /* @media (max-width: 600px) { 
+
+ 
+   .order-body {
+    grid-template-columns: 1fr;
+  } 
+
+
+   .order-actions {
+    flex-direction: column;
+  } } */
