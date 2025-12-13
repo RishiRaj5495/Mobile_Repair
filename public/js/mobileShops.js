@@ -182,55 +182,51 @@ document.getElementById('join')?.addEventListener('click', async () => {
 // }
 
 function showOrder(order) {
-  const div = document.createElement('div');
-  div.className = 'order-card';
-  div.id = `order_${order._id}`;
+  const div = document.createElement("div");
+  div.className = "order-box";
 
   div.innerHTML = `
-    <div class="order-header">
-      <h3>🆕 New Order</h3>
-      <span class="order-id">#${order._id}</span>
-    </div>
+    <h3>Order</h3>
 
     <div class="order-body">
 
       <!-- LEFT -->
       <div class="order-left">
-        <p><strong>Customer:</strong> ${order.customerFirstName} ${order.customerLastName}</p>
-        <p><strong>Phone:</strong> ${order.customerPhone}</p>
-        <p><strong>Email:</strong> ${order.customerEmail}</p>
-        <p><strong>Address:</strong> ${order.customerAddress}</p>
-        <p><strong>City:</strong> ${order.customerCity} | <strong>State:</strong> ${order.customerState}</p>
-        <p><strong>Pincode:</strong> ${order.customerPincode}</p>
+        <p><b>Customer:</b> ${order.customer}</p>
+        <p><b>Phone:</b> ${order.phone}</p>
+        <p><b>Email:</b> ${order.email}</p>
+        <p><b>Address:</b> ${order.address}</p>
+        <p><b>City:</b> ${order.city} | <b>State:</b> ${order.state}</p>
+        <p><b>Pincode:</b> ${order.pincode}</p>
+
+        <div class="shop-info">
+          <p><b>Shop:</b> ${order.shop}</p>
+          <p><b>Address:</b> ${order.shopAddress}</p>
+          <p><b>Mobile:</b> ${order.shopMobile}</p>
+        </div>
       </div>
 
       <!-- RIGHT -->
       <div class="order-right">
-        <p class="section-title">📹 Issue Video</p>
+        <b>📹 Issue Video</b><br><br>
         ${
-          order.video && order.video.url
+          order.video
             ? `<video controls>
-                 <source src="${order.video.url}" type="video/mp4">
+                 <source src="${order.video}" type="video/mp4">
                </video>`
-            : `<p class="no-video">No video provided</p>`
+            : `No video`
         }
       </div>
 
     </div>
 
-    <div class="shop-info">
-      <p><strong>Shop:</strong> ${order.restaurant.name}</p>
-      <p><strong>Address:</strong> ${order.restaurant.address}</p>
-      <p><strong>Mobile:</strong> ${order.restaurant.mobile}</p>
-    </div>
-
     <div class="order-actions">
-      <button class="btn accept" onclick="acceptOrder('${order._id}')">Accept</button>
-      <button class="btn reject" onclick="rejectOrder('${order._id}')">Reject</button>
+      <button class="accept">Accept</button>
+      <button class="reject">Reject</button>
     </div>
   `;
 
-  document.getElementById('orders').appendChild(div);
+  document.getElementById("orders").appendChild(div);
 }
 
 
