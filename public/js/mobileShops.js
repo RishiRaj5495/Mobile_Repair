@@ -183,41 +183,38 @@ document.getElementById('join')?.addEventListener('click', async () => {
 
 function showOrder(order) {
   const div = document.createElement("div");
-  div.className = "order-box";
+  div.className = "order-card";
 
   div.innerHTML = `
-    <h3>Order</h3>
+    <div class="order-title">Order</div>
 
     <div class="order-body">
-
-      <!-- LEFT -->
+      
       <div class="order-left">
-        <p><b>Customer:</b> ${order.customer}</p>
-        <p><b>Phone:</b> ${order.phone}</p>
-        <p><b>Email:</b> ${order.email}</p>
-        <p><b>Address:</b> ${order.address}</p>
-        <p><b>City:</b> ${order.city} | <b>State:</b> ${order.state}</p>
-        <p><b>Pincode:</b> ${order.pincode}</p>
-
-        <div class="shop-info">
-          <p><b>Shop:</b> ${order.shop}</p>
-          <p><b>Address:</b> ${order.shopAddress}</p>
-          <p><b>Mobile:</b> ${order.shopMobile}</p>
-        </div>
+        <p><strong>Customer:</strong> ${order.customerName}</p>
+        <p><strong>Phone:</strong> ${order.phone}</p>
+        <p><strong>Email:</strong> ${order.email}</p>
+        <p><strong>Address:</strong> ${order.address}</p>
+        <p><strong>City:</strong> ${order.city} | <strong>State:</strong> ${order.state}</p>
+        <p><strong>Pincode:</strong> ${order.pincode}</p>
       </div>
 
-      <!-- RIGHT -->
       <div class="order-right">
-        <b>📹 Issue Video</b><br><br>
+        <strong>🎥 Issue Video</strong><br/>
         ${
           order.video
             ? `<video controls>
                  <source src="${order.video}" type="video/mp4">
                </video>`
-            : `No video`
+            : `<p class="no-video">No video provided</p>`
         }
       </div>
+    </div>
 
+    <div class="shop-info">
+      <p><strong>Shop:</strong> ${order.shopName}</p>
+      <p><strong>Address:</strong> ${order.shopAddress}</p>
+      <p><strong>Mobile:</strong> ${order.shopMobile}</p>
     </div>
 
     <div class="order-actions">
