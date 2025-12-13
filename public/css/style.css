@@ -770,7 +770,7 @@ video {
   }
 
   .order-actions {
-    flex-direction: column;
+    flex-direction: row;
   }
 }
 /* ------------------- MOBILE RESPONSIVE FIX ------------------- */
