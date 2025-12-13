@@ -152,35 +152,90 @@ document.getElementById('join')?.addEventListener('click', async () => {
   alert('Connected to live orders for ' + restId);
 });
 
+// function showOrder(order) {
+//   const div = document.createElement('div');
+//   div.className = 'order-box';
+//   div.id = `order_${order._id}`;
+//   div.innerHTML = `
+//     <h3>New Order #${order._id}</h3>
+//     <p>Customer Name: ${order.customerFirstName || ''}$${" "} ${order.customerLastName || ''}</p>
+//      <p>Customer Phone: ${order.customerPhone || ''}</p>
+//        <p>Customer Email: ${order.customerEmail || ''}</p>
+//        <p>Customer Address: ${order.customerAddress || ''}$${"| "}Customer Pincode ${order.customerPincode || ''}</p>
+//              <p>State: ${order.customerState || ''}$${"| "}City : ${order.customerCity || ''}</p>
+
+//        <p>Issue Video:</p>
+//   ${
+//     order.video && order.video.url
+//       ? `<video controls width="300" margin="auto">
+//            <source src="${order.video.url}" type="video/mp4">
+//          </video>`
+//       : '<p>No video provided</p>'
+//   }
+//     <p>Forwarded To Shop: ${order.restaurant.name || ''}</p>
+//     <p>Shop Address: ${order.restaurant.address || ''}</p>
+//     <p>Shop Mobile: ${order.restaurant.mobile || ''}</p>
+//     <button onclick="acceptOrder('${order._id}')">Accept</button>
+//     <button onclick="rejectOrder('${order._id}')">Reject</button>
+//   `;
+//   document.getElementById('orders').appendChild(div);
+// }
+
 function showOrder(order) {
   const div = document.createElement('div');
-  div.className = 'order-box';
+  div.className = 'order-card';
   div.id = `order_${order._id}`;
-  const items = (order.items || []).map(i => i.name || i).join(', ');
-  div.innerHTML = `
-    <h3>New Order #${order._id}</h3>
-    <p>Customer Name: ${order.customerFirstName || ''}$${" "} ${order.customerLastName || ''}</p>
-     <p>Customer Phone: ${order.customerPhone || ''}</p>
-       <p>Customer Email: ${order.customerEmail || ''}</p>
-       <p>Customer Address: ${order.customerAddress || ''}$${"| "}Customer Pincode ${order.customerPincode || ''}</p>
-             <p>State: ${order.customerState || ''}$${"| "}City : ${order.customerCity || ''}</p>
 
-       <p>Issue Video:</p>
-  ${
-    order.video && order.video.url
-      ? `<video controls width="300" margin="auto">
-           <source src="${order.video.url}" type="video/mp4">
-         </video>`
-      : '<p>No video provided</p>'
-  }
-    <p>Forwarded To Shop: ${order.restaurant.name || ''}</p>
-    <p>Shop Address: ${order.restaurant.address || ''}</p>
-    <p>Shop Mobile: ${order.restaurant.mobile || ''}</p>
-    <button onclick="acceptOrder('${order._id}')">Accept</button>
-    <button onclick="rejectOrder('${order._id}')">Reject</button>
+  div.innerHTML = `
+    <div class="order-header">
+      <h3>🆕 New Order</h3>
+      <span class="order-id">#${order._id}</span>
+    </div>
+
+    <div class="order-section">
+      <p><strong>Customer:</strong> ${order.customerFirstName || ''} ${order.customerLastName || ''}</p>
+      <p><strong>Phone:</strong> ${order.customerPhone || 'N/A'}</p>
+      <p><strong>Email:</strong> ${order.customerEmail || 'N/A'}</p>
+    </div>
+
+    <div class="order-section">
+      <p><strong>Address:</strong> ${order.customerAddress || ''}</p>
+      <p><strong>City:</strong> ${order.customerCity || ''} | 
+         <strong>State:</strong> ${order.customerState || ''}</p>
+      <p><strong>Pincode:</strong> ${order.customerPincode || ''}</p>
+    </div>
+
+    <div class="order-section">
+      <p class="section-title">📹 Issue Video</p>
+      ${
+        order.video && order.video.url
+          ? `<video controls>
+               <source src="${order.video.url}" type="video/mp4">
+             </video>`
+          : `<p class="no-video">No video provided</p>`
+      }
+    </div>
+
+    <div class="order-section shop-info">
+      <p><strong>Shop:</strong> ${order.restaurant?.name || ''}</p>
+      <p><strong>Address:</strong> ${order.restaurant?.address || ''}</p>
+      <p><strong>Mobile:</strong> ${order.restaurant?.mobile || ''}</p>
+    </div>
+
+    <div class="order-actions">
+      <button class="btn accept" onclick="acceptOrder('${order._id}')">Accept</button>
+      <button class="btn reject" onclick="rejectOrder('${order._id}')">Reject</button>
+    </div>
   `;
+
   document.getElementById('orders').appendChild(div);
 }
+
+
+
+
+
+
 
 function updateOrderUI(order) {
   const div = document.getElementById(`order_${order._id}`);
