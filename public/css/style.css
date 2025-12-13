@@ -628,3 +628,123 @@ height: 50px;
     flex-direction: column;
   }
 } 
+/* ------------------- END MOBILE RESPONSIVE FIX ------------------- */
+body {
+  background: #f4f6f9;
+  font-family: "Segoe UI", sans-serif;
+}
+
+#orders {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.order-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+}
+
+/* Header */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.order-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.order-id {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* Sections */
+.order-section {
+  margin-top: 12px;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.section-title {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.shop-info {
+  background: #f9fafc;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* Video */
+video {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 8px;
+}
+
+.no-video {
+  color: #999;
+  font-style: italic;
+}
+
+/* Buttons */
+.order-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn.accept {
+  background: #28a745;
+  color: #fff;
+}
+
+.btn.accept:hover {
+  background: #218838;
+}
+
+.btn.reject {
+  background: #dc3545;
+  color: #fff;
+}
+
+.btn.reject:hover {
+  background: #c82333;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .order-card {
+    padding: 14px;
+  }
+
+  .order-actions {
+    flex-direction: column;
+  }
+}
