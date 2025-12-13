@@ -181,51 +181,56 @@ document.getElementById('join')?.addEventListener('click', async () => {
 //   document.getElementById('orders').appendChild(div);
 // }
 
+
 function showOrder(order) {
-  const div = document.createElement("div");
-  div.className = "order-card";
+  const div = document.createElement('div');
+  div.className = 'order-box';
+  div.id = `order_${order._id}`;
 
   div.innerHTML = `
-    <div class="order-title">Order</div>
+    <h3>🆕 New Order #${order._id}</h3>
 
     <div class="order-body">
-      
+
+      <!-- LEFT : Customer details -->
       <div class="order-left">
-        <p><strong>Customer:</strong> ${order.customerName}</p>
-        <p><strong>Phone:</strong> ${order.phone}</p>
-        <p><strong>Email:</strong> ${order.email}</p>
-        <p><strong>Address:</strong> ${order.address}</p>
-        <p><strong>City:</strong> ${order.city} | <strong>State:</strong> ${order.state}</p>
-        <p><strong>Pincode:</strong> ${order.pincode}</p>
+        <p><strong>Customer:</strong> ${order.customerFirstName || ''} ${order.customerLastName || ''}</p>
+        <p><strong>Phone:</strong> ${order.customerPhone || 'N/A'}</p>
+        <p><strong>Email:</strong> ${order.customerEmail || 'N/A'}</p>
+        <p><strong>Address:</strong> ${order.customerAddress || ''}</p>
+        <p><strong>State:</strong> ${order.customerState || ''} | 
+           <strong>City:</strong> ${order.customerCity || ''}</p>
+        <p><strong>Pincode:</strong> ${order.customerPincode || ''}</p>
       </div>
 
+      <!-- RIGHT : Video -->
       <div class="order-right">
-        <strong>🎥 Issue Video</strong><br/>
+        <strong>📹 Issue Video</strong>
         ${
-          order.video
+          order.video && order.video.url
             ? `<video controls>
-                 <source src="${order.video}" type="video/mp4">
+                 <source src="${order.video.url}" type="video/mp4">
                </video>`
             : `<p class="no-video">No video provided</p>`
         }
       </div>
+
     </div>
 
     <div class="shop-info">
-      <p><strong>Shop:</strong> ${order.shopName}</p>
-      <p><strong>Address:</strong> ${order.shopAddress}</p>
-      <p><strong>Mobile:</strong> ${order.shopMobile}</p>
+      <p><strong>Forwarded To Shop:</strong> ${order.restaurant?.name || ''}</p>
+      <p><strong>Shop Address:</strong> ${order.restaurant?.address || ''}</p>
+      <p><strong>Shop Mobile:</strong> ${order.restaurant?.mobile || ''}</p>
     </div>
 
     <div class="order-actions">
-      <button class="accept">Accept</button>
-      <button class="reject">Reject</button>
+      <button class="accept" onclick="acceptOrder('${order._id}')">Accept</button>
+      <button class="reject" onclick="rejectOrder('${order._id}')">Reject</button>
     </div>
   `;
 
-  document.getElementById("orders").appendChild(div);
+  document.getElementById('orders').appendChild(div);
 }
-
 
 
 
