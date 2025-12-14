@@ -98,6 +98,43 @@
 
 
     <br><br>
+    <footer class="site-footer">
+  <div class="footer-container">
+
+    <!-- Left: Brand & Copyright -->
+    <div class="footer-section footer-brand">
+      <h5>Mobile Repair Services</h5>
+      <p>Fast, reliable & hassle-free phone repair</p>
+      <p class="copyright">
+        &copy; <%= new Date().getFullYear() %> Mobile Repair Services
+      </p>
+    </div>
+
+    <!-- Middle: Useful Links (from screenshot idea) -->
+    <div class="footer-section footer-links">
+      <h6>Company</h6>
+      <ul>
+        <li><a href="/investors">Investor Relations</a></li>
+        <li><a href="/mobileshops">Partner With Us</a></li>
+        <li><a href="/careers">Careers</a></li>
+        <li><a href="/privacy">Privacy Policy</a></li>
+        <li><a href="/terms">Terms & Conditions</a></li>
+      </ul>
+    </div>
+
+    <!-- Right: Social Icons -->
+    <div class="footer-section footer-socials">
+      <h6>Follow Us</h6>
+      <div class="social-icons">
+        <i class="fa-brands fa-facebook"></i>
+        <i class="fa-brands fa-square-instagram"></i>
+        <i class="fa-brands fa-linkedin"></i>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
     
   </div>
   <div id="b" >
@@ -109,21 +146,84 @@
     </div>
 
     <div class="mainContent">
-   <div class = "items">
+   <!-- <div class = "items">
     
     
+     
+       <%   for(restaurant of restaurants) {  %>
+  
 
-      
+         <div class="card repair-card  " style=" width: 800px;  margin: 20px 0px; padding: 2rem; height: 12rem;">
+  <div class="card-body">
+
+   
+    <div class="d-flex justify-content-between align-items-start mb-2">
+      <h5 class="fw-bold mb-0"><%= restaurant.name %></h5>
+
+      <span class="rating-pill">
+        <%= restaurant.rating || "4.5" %> ★
+      </span>
+    </div>
+
+   
+    <p class="text-muted mb-1">
+      <strong>Address:</strong> <%= restaurant.address %>
+    </p>
+    <p class="text-muted mb-3">
+      <strong>Mobile:</strong> <%= restaurant.mobile %>
+    </p>
+
+    
+    <div class="text-end">
+      <button class="btn btn-danger btn-sm px-4">
+        Forward your issue
+      </button>
+    </div>
+
+  </div>
+</div>
 
 
 
-   </div>
+            <% } %>
 
+   </div> -->
+
+<div class="repair-list-container"  style=" width: 800px;  margin: 20px 0px; padding: 2rem; height: 12rem;">
+  <% for (let restaurant of restaurants) { %>
+    <div class="card repair-card mb-4" style="padding: 0rem 2.5rem;">
+      <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <h5 class="fw-bold mb-0"><%= restaurant.name %></h5>
+          <span class="rating-pill">
+            <%= restaurant.rating || "4.5" %> ★
+          </span>
+         
+
+        </div>
+
+        <p class="text-muted mb-1">
+          <strong>Address:</strong> <%= restaurant.address %>
+        </p>
+        <p class="text-muted mb-3">
+          <strong>Mobile:</strong> <%= restaurant.mobile %>
+        </p>
+
+        <div class="text-end">
+           <a href="/admin" class="btn btn-danger btn-sm px-4"> Forward your issue</a>
+           <!-- <a href="/admin/<%= restaurant._id%>" class="btn btn-danger btn-sm px-4"> Forward your issue</a> -->
+         
+        </div>
+
+      </div>
+    </div>
+  <% } %>
+</div>
 
 
 
 </div>
-
 
 
 
