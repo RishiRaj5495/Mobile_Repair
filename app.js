@@ -30,6 +30,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const User = require("./Models/users.js");
+const Restaurant = require("./Models/mobileShops.js");
 const LocalStrategy = require("passport-local");
 const bodyParser = require('body-parser');//
 const cors = require('cors');//
@@ -50,7 +51,8 @@ socketSetup(io);
 
 // SECRET =695579334c509796d8ed20b04a18e3fd1aaf05fbd05031c08d66b530daeb7196d8176ea409f48aa5
 //58c0ee88cc9c89cbba0501e8e44bc89cad29fb9ed6237c50 
-const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
+// const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
+const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
 main()
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.log("DB error:", err));
@@ -129,9 +131,12 @@ next();
 
 
 
-app.get("/", (req, res) => {
+app.get("/", async(req, res) => {
   console.log("You are awesome");
-  res.render("listings/showServices.ejs");
+   const restaurants = await Restaurant.find();
+  // console.log("ls"+listings); 
+  res.render("listings/showServices.ejs", { restaurants } );
+
 });
 
 app.get('/mobileShops', (req, res) => {
@@ -143,10 +148,13 @@ app.get('/admin',isLogged, (req, res) => {
 });
 
 
-app.get("/listings", (req, res) => {
+app.get("/listings", async(req, res) => {
   console.log("You are awesome");
-  res.render("listings/showServices.ejs");
+   const restaurants = await Restaurant.find();
+  // console.log("ls"+listings); 
+  res.render("listings/showServices.ejs", { restaurants } );
 });
+
 
 
 
