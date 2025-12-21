@@ -124,18 +124,28 @@ function accessories(){
  innHtmlproduct += ` 
 
 
+<div class="cards-container">
+  <div class="cards">
+    <img class="imgProduct" src="${item.image}" alt="...">
 
-<div class="cards" id="cards">
-  <img class="imgProduct" src="${item.image}" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">${item.name}</h5>
-    <p class="card-text">${item.description}</p>
-     
-    <p class="card-text">Price: ₹${item.price}(<span class="discount">${item.discount}</span><span style="color:orange;margin-left: 2px;  ">${item.percent}</span>)</p>
-   
-    <a href="#" class="btn btn-primary">Buy</a>
+    <div class="card-body">
+      <h5 class="card-title">${item.name}</h5>
+
+      <p class="card-text desc">
+        ${item.description}
+      </p>
+
+      <p class="card-text price">
+        Price: ₹${item.price}
+        (<span class="discount">${item.discount}</span>
+        <span class="percent">${item.percent}</span>)
+      </p>
+
+      <a href="#" class="btn btn-primary buy-btn">Buy</a>
+    </div>
   </div>
 </div>
+
 `
 })
 add_Product_Item.innerHTML = innHtmlproduct;
