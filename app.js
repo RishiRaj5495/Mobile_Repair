@@ -143,9 +143,23 @@ app.get('/mobileShops', (req, res) => {
     res.render('listings/mobileShops.ejs');
 });
 
-app.get('/admin',isLogged, (req, res) => {
-    res.render('listings/admin.ejs');
+// app.get('/admin',isLogged, (req, res) => {
+//     res.render('listings/admin.ejs');
+// });
+
+app.get('/admin/:id', isLogged, async (req, res) => {
+  const { id } = req.params;
+
+
+  const restaurant = await Restaurant.findById(id);
+  console.log(restaurant)
+
+  res.render('listings/admin.ejs', { id });
+
+
+  
 });
+
 
 
 app.get("/listings", async(req, res) => {

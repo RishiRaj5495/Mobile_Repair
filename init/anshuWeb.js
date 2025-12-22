@@ -25,7 +25,7 @@ function priceList(){
   </div>
 
   <!-- Button stays inside content1 -->
-  <div class="view-more-wrapper">
+  <div class="view-more-wrapper7">
     <button
       type="button"
       class="btn btn-sm btn-outline-primary"

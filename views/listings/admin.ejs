@@ -97,7 +97,13 @@
   <div class="valid-feedback">Excellent</div>
             <div class="invalid-feedback">Valid video</div>
           </div>
-<label>Restaurant ID: <input id="restId" /></label><br /> 
+<label>
+   <!-- <input id="restId" /> -->
+   <input type="hidden" id="restId" value="<%= id %>" />
+
+<!-- <label>Restaurant ID: <input id="restId" /></label><br />  -->
+
+</label><br /> 
         <button   id="place" type="submit" class="btn btn-primary px-4 p-1">Forward</button>
       </form>
     </div>

@@ -85,7 +85,7 @@ socket.on('disconnect', () => {
 const form = document.getElementById('orderForm');
 
 form.addEventListener('submit', async (e) => {
-
+ e.preventDefault();
   // Bootstrap validation check
   if (!form.checkValidity()) {
     form.classList.add('was-validated');
@@ -106,6 +106,7 @@ form.addEventListener('submit', async (e) => {
   const customerCountry = document.querySelector('#customerCountry').value;
 
   const restaurantId = document.getElementById('restId').value;
+
   const video = document.querySelector('#video').files[0];
 
   const formData = new FormData();
