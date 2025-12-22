@@ -53,7 +53,7 @@ function priceList(){
 
 
           <div class="image_data">
-            <span class="problem">
+            <span class="problem1">
            ${item.problem_Full}
 
 

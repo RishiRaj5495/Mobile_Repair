@@ -13,6 +13,9 @@ margin: 0;
 padding: 0;
 
 }
+.a{
+  width: 100%;
+}
 #navigation-bar{
 
 align-items: center;
@@ -268,8 +271,8 @@ margin-right: 100px;
 
 
 .view-more-wrapper {
-  margin-top: auto;       /* pushes button to bottom */
-  text-align: right;      /* aligns button right */
+  margin-top: auto;       
+  text-align: right;      
 }
 
 .view-more-wrapper button {
@@ -417,25 +420,6 @@ font-weight: 500;
 }
 
 
-/* .cards{
-  display:flex;
- background-color: rgba(255, 255, 255, 0);
-  box-shadow :0 0 1px rgb(134, 134, 134);
-height : 12rem;
-width : 331px;
-
-padding: 0 0 0 10px;
-align-items: center;
-
-margin: 2rem 2rem 0rem 2rem;
-
-}
-.cards:hover{
-
-  box-shadow :3px 3px 20px rgb(134, 134, 134);
-  transform: scale(1.02);
-  transition: box-shadow 0.3s, transform 0.3s;
-} */
 
 
 
@@ -462,7 +446,9 @@ margin: 2rem 2rem 0rem 2rem;
   height: 180px;
   object-fit: contain;
   padding: 10px;
-  margin-top: 20px;
+  margin-top: 60px;
+
+
 }
 /* .card-body {
   padding: 15px;
@@ -716,16 +702,19 @@ body {
 }
 
 
-/* footer css ----------------------------------------- */
+/* footer css ----------------------------------------- ................................................*/
 .site-footer {
   background-color: #f2f2f2; 
   padding: 40px 20px;
   border-top: 1px solid #e0e0e0;
   font-size: 0.95rem;
+  width: 100%;
+  /* max-width: 500px; */
 }
 
 .footer-container {
-  max-width: 1200px;
+  /* max-width: 1400px; */
+  width: 100%;
   margin: auto;
   display: flex;
   justify-content: space-between;
@@ -736,7 +725,7 @@ body {
 /* Footer sections */
 .footer-section {
   flex: 1;
-  min-width: 220px;
+  min-width: 320px;
 }
 
 .footer-brand h5 {
@@ -935,7 +924,7 @@ body {
   .footer-container {
     gap: 20px;
   }
-
+/* /////////////////////////////////// */
   .footer-section {
     min-width: 180px;
   }

@@ -162,7 +162,13 @@ console.log("Order with populated restaurant:", order);
   } catch (e) {
     console.error("Order error:", e);
     res.status(500).json({ error: e.message });
+ 
+ 
+ 
+ 
   }
+
+   
 });
 
 // Update order status (Accept / Decline)
