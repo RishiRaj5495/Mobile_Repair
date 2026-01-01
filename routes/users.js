@@ -11,6 +11,7 @@ const usersController = require("../controllers/users.js"); // Import the functi
 
 
 
+ 
 router
 .route("/signup")
 .get(usersController.signupPage)
@@ -23,7 +24,7 @@ router
 .get(usersController.loginPage)
 .post(
   saveRidirectUrl,
-  passport.authenticate("local", {
+  passport.authenticate("user-local", {
   failureRedirect: "/users/login",
   failureFlash: true,
 }), 
@@ -33,5 +34,5 @@ wrapAsync(usersController.loginAuthentication)
 router.get("/logout",usersController.logoutHere);
 
 
-
 module.exports = router;
+
