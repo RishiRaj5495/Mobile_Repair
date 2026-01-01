@@ -1,7 +1,203 @@
 
 <% layout("/layouts/boilerPlate") %>
 <%= success %>
+<style>
 
+.dashboard-header {
+  text-align: center;
+  margin: 30px auto 40px;
+}
+
+.dashboard-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.dashboard-header .brand {
+  color: #28a745; /* green accent */
+  margin-right: 8px;
+}
+
+.dashboard-header .title {
+  color: #222;
+}
+
+.dashboard-header .subtitle {
+  font-size: 16px;
+  color: #666;
+  letter-spacing: 0.5px;
+}
+
+
+
+
+  .shopClose {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0;
+}
+
+.close-shop-btn {
+  text-decoration: none;
+  background: linear-gradient(135deg, #ff3d3d, #ff6b6b);
+  color: #ffffff;
+  padding: 14px 36px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 30px;
+  box-shadow: 0 10px 25px rgba(255, 61, 61, 0.35);
+  transition: all 0.3s ease;
+}
+
+.close-shop-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 35px rgba(255, 61, 61, 0.5);
+  color: #fff;
+}
+
+.close-shop-btn:active {
+  transform: scale(0.95);
+}
+.live-orders-header {
+  text-align: center;
+  margin: 50px 0 30px;
+}
+
+.live-orders-header h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 6px;
+  display: inline-block;
+  position: relative;
+}
+
+.live-orders-header h3::after {
+  content: "";
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: #28a745; /* green accent */
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+.live-orders-header .subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-top: 6px;
+}
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: #f4f6f8;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+  background: linear-gradient(135deg, #bdfd0d, #8a9808);
+  padding: 35px 20px;
+  text-align: center;
+  color: #fff;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.dashboard-header .brand {
+  font-weight: 700;
+}
+
+.dashboard-header .title {
+  font-weight: 400;
+  margin-left: 8px;
+}
+
+.subtitle {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+/* Page Container */
+.page-container {
+  padding: 40px 20px;
+}
+
+/* Register Card */
+.register-container {
+  background: #ffffff;
+  max-width: 420px;
+  margin: auto;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.register-container h3 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+}
+
+.register-container h3 span {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Inputs */
+.register-container input {
+  width: 100%;
+  padding: 13px 14px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  transition: 0.3s;
+}
+
+.register-container input:focus {
+  outline: none;
+  border-color: #7f9c3c;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
+}
+
+/* Button */
+.register-container button {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #fd9d0d, #798b29);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.register-container button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(163, 192, 60, 0.35);
+}
+
+/* Divider */
+.section-divider {
+  width: 60%;
+  margin: 40px auto 0;
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #ccc, transparent);
+}
+
+</style>
 
 
 <!-- <h1>Restaurant Dashboard (RepairNow)</h1>
@@ -19,22 +215,124 @@
 <script src="/js/mobileShops.js"></script>  -->
 
 
-<h1>Mobileshop Dashboard (RepairNow)</h1>
+<!-- <h1 style="text-align: center;">Mobileshop Dashboard (RepairNow)</h1> -->
+ <!-- <div class="dashboard-header">
+  <h1>
+    <span class="brand">RepairNow</span>
+    <span class="title">Mobile Shop Dashboard</span>
+  </h1>
+  <p class="subtitle">Manage orders, repairs, and live updates in one place</p>
+</div>
 
-<h3>Register (first time)</h3>
-<form id="restaurantForm">
+
+<h3>Register (first time)</h3> -->
+<!-- <form id="restaurantForm">
   <input  type="text"  id="name" name="name" placeholder="Restaurant Name" required />
   <input  type="text"  id="address" name="address"     placeholder="Address" required />
   <input type="number"  id="mobile"  name="mobile"    placeholder="Mobile" required />
   <button type="submit">Register & Save Token</button>
-</form>
+</form> -->
+
+<!-- <form id="restaurantForm">
+  <input type="text" id="name" name="name" placeholder="Username" required />
+  <input type="email" id="email" name="email"  placeholder="Email" required />
+  <input type="password" id="password" name="password"  placeholder="Password" required />
+  <input type="number" id="phone"  name="phone" placeholder="Phone" required />
+  <input type="text" id="address" name="address"  placeholder="Address" required />
+  <button type="submit">Sign Up</button>
+</form> -->
+  <!-- Dashboard Header -->
+<!-- Dashboard Header -->
+<div class="dashboard-header">
+  <h1>
+    <span class="brand">RepairNow</span>
+    <span class="title">Mobile Shop Dashboard</span>
+  </h1>
+  <p class="subtitle">Manage orders, repairs, and live updates in one place</p>
+</div>
+
+<!-- Register Section -->
+<div class="page-container">
+  <div class="register-container">
+    <h3>Register <span>(first time)</span></h3>
+
+    <form id="restaurantForm">
+      <input type="text" id="name" name="name" placeholder="Shop Name" required />
+      <input type="email" id="email" name="email" placeholder="Email Address" required />
+      <input type="number" id="phone" name="phone" placeholder="Phone Number" required />
+      <input type="password" id="password" name="password" placeholder="Password" required />
+      <input type="text" id="address" name="address" placeholder="Shop Address" required />
+
+      <button type="submit">Create Account</button>
+    </form>
+  </div>
+
+  <hr class="section-divider" />
+</div>
 
 <hr>
 
-<h3>Connect to live orders</h3>
-<label>Restaurant ID: <input id="restId" /></label>
-<button id="join">Connect</button>
+
+<!-- <label>Restaurant ID: <input id="restId" /></label> -->
+
+<!-- ----------------------------------------------------------------------- -->
+ <!-- <label>Restaurant ID: <input id="restId" /></label>
+<button id="join">Connect</button> -->
+
+
+  <% if(!currentRestaurant) { %>
+<div class="row loginPage" style="margin-bottom: 20px;">
+    <div class="col-8 offset-2">
+      <h3>Login For Live Orders</h3>
+      <form action="/mobileShop/login_Shop" method="POST" novalidate class="needs-validation">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address:</label>
+          <input type="email" name="email"  placeholder="Email" class="form-control" required>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please enter a valid email</div>
+        </div>
+
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Password:</label>
+          <input type="password" name="password" placeholder="Enter Password" class="form-control" required>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please enter a valid password</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary px-4 p-1">login</button>
+      </form>
+    </div>
+  </div>
+<% } %>
+
+
+
+
+
+
+<% if (currentRestaurant) { %>
+      <!-- <div class="shopClose"alt="photos" style="margin: auto;">
+          <a href="/mobileShop/yourShop/logout" class="signu" style="   text-decoration: none;   color: success;margin: auto; ">Close Your Shop</a>
+  </div> -->
+  <div class="shopClose">
+  <a href="/mobileShop/yourShop/logout" class="close-shop-btn">
+    🚫 Close Your Shop
+  </a>
+</div>
+<!-- <h3>Connect to live orders</h3> -->
+ <div class="live-orders-header">
+  <h3>⚡ Connect to Live Orders</h3>
+  <p class="subtitle">Receive real-time notifications from your customers</p>
+</div>
+
+
+  
 <div id="orders"></div>
+  <script>
+    const RESTAURANT_ID = "<%= currentRestaurant._id %>";
+  </script>
+<% } %>
 
 <!-- Socket.IO client (served by your server) -->
 <script src="/socket.io/socket.io.js"></script>

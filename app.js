@@ -2,10 +2,11 @@
  if(process.env.NODE_ENV !== "production") {
   require('dotenv').config();
     }
- 
+ const admin = require("firebase-admin");
 
-const {isLogged,isOwner,validateListing} = require("./middlewear.js");
-  const admin = require("firebase-admin");
+
+// const {isLogged,isOwner,validateListing} = require("./middlewear.js");
+const {isLogged} = require("./middlewear.js");
   const express = require("express");
   const app = express();
   const mongoose = require("mongoose");
@@ -51,8 +52,8 @@ socketSetup(io);
 
 // SECRET =695579334c509796d8ed20b04a18e3fd1aaf05fbd05031c08d66b530daeb7196d8176ea409f48aa5
 //58c0ee88cc9c89cbba0501e8e44bc89cad29fb9ed6237c50 
-const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
-// const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
+// const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
+const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
 main()
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.log("DB error:", err));
@@ -110,9 +111,38 @@ app.use(session(sessionOptions));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate())); // Use the LocalStrategy for authentication
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+//  passport.use(new LocalStrategy(User.authenticate())); 
+//  passport.serializeUser(User.serializeUser());
+//  passport.deserializeUser(User.deserializeUser());
+passport.use('user-local',
+  new LocalStrategy(User.authenticate())
+);
+
+passport.use('restaurant-local',
+  new LocalStrategy({ usernameField: 'email' },
+    Restaurant.authenticate()
+  )
+);
+
+// Serialize by ID + model type
+passport.serializeUser((entity, done) => {
+  done(null, { id: entity.id, type: entity.constructor.modelName });
+});
+
+passport.deserializeUser(async (obj, done) => {
+  if (obj.type === 'User') {
+    const user = await User.findById(obj.id);
+    done(null, user);
+  } else if (obj.type === 'Restaurant') {
+    const restaurant = await Restaurant.findById(obj.id);
+    done(null, restaurant);
+  }
+});
+
+
+
+
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -121,13 +151,34 @@ app.use(bodyParser.json());
 
 
 
-app.use((req,res,next) => {
+// app.use((req,res,next) => {
 
-res.locals.success = req.flash("success");
-res.locals.error = req.flash("error");
-res.locals.currentUser = req.user; // Set the current user in locals for use in views
-next();
-});   
+// res.locals.success = req.flash("success");
+// res.locals.error = req.flash("error");
+// res.locals.currentUser = req.user; 
+// next();
+// });   
+
+
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+
+  res.locals.currentUser = null;
+  res.locals.currentRestaurant = null;
+
+  if (req.user) {
+    if (req.user.constructor.modelName === "User") {
+      res.locals.currentUser = req.user;
+    } else if (req.user.constructor.modelName === "Restaurant") {
+      res.locals.currentRestaurant = req.user;
+    }
+  }
+
+  next();
+});
+
 
 
 
@@ -142,6 +193,8 @@ app.get("/", async(req, res) => {
 app.get('/mobileShops', (req, res) => {
     res.render('listings/mobileShops.ejs');
 });
+
+
 
 // app.get('/admin',isLogged, (req, res) => {
 //     res.render('listings/admin.ejs');
@@ -176,6 +229,8 @@ app.get("/listings", async(req, res) => {
 
 const usersRouter = require("./routes/users.js");
 // const { Console } = require('console');
+
+
 app.use("/users", usersRouter);
 const ordersRouter = require('./routes/orders.js');//
 const restaurantsRouter = require('./routes/mobileShops.js');//
@@ -184,6 +239,9 @@ app.use("/api/fcm", fcmRouter);                // save token / testing endpoints
 
 app.use('/api/orders', ordersRouter);//
 app.use('/api/restaurants', restaurantsRouter);//
+app.use('/mobileShop', restaurantsRouter);//
+
+
 
   
 

@@ -97,16 +97,45 @@ async function registerForNotifications(restaurantIdForUpdate) {
 }
 
 // Handle registration form (first time register restaurant)
+// document.getElementById('restaurantForm')?.addEventListener('submit', async (e) => {
+//   e.preventDefault();
+//   console.log("Rishi");
+//   const name = document.getElementById('name').value;
+//   const address = document.getElementById('address').value;
+//   const mobile = document.getElementById('mobile').value;
+
+//   // ask permission and get token
+//   const token = await registerForNotifications();
+//   const payload = { name, address, mobile, fcmToken: token };
+
+//   const res = await fetch('/api/restaurants/register', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify(payload)
+//   });
+//   const data = await res.json();
+//   alert(data.message || 'Registered');
+// });
+
+// =================================================new----------------------------------
 document.getElementById('restaurantForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   console.log("Rishi");
-  const name = document.getElementById('name').value;
-  const address = document.getElementById('address').value;
-  const mobile = document.getElementById('mobile').value;
-
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const phone = document.getElementById("phone").value;
+  const address = document.getElementById("address").value;
   // ask permission and get token
   const token = await registerForNotifications();
-  const payload = { name, address, mobile, fcmToken: token };
+  const payload = { name, email, password, phone, address, fcmToken: token };
+  console.log({
+  name,
+  email,
+  phone,
+  address,
+  fcmToken: token
+});
 
   const res = await fetch('/api/restaurants/register', {
     method: 'POST',
@@ -116,6 +145,75 @@ document.getElementById('restaurantForm')?.addEventListener('submit', async (e) 
   const data = await res.json();
   alert(data.message || 'Registered');
 });
+
+
+// document.addEventListener("DOMContentLoaded", () => {
+//   const form = document.getElementById("restaurantForm");
+
+//   if (!form) {
+//     console.error("Form not found");
+//     return;
+//   }
+
+//   form.addEventListener("submit", async (e) => {
+//     e.preventDefault();
+//     console.log("Rishi");
+
+//     const payload = {
+//       name: document.getElementById("name").value,
+//       email: document.getElementById("email").value,
+//       password: document.getElementById("password").value,
+//       phone: document.getElementById("phone").value,
+//       address: document.getElementById("address").value,
+//       fcmToken: await registerForNotifications()
+//     };
+
+//        const res = await fetch('/api/restaurants/register', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify(payload)
+//   });
+//   const data = await res.json();
+//   alert(data.message || 'Registered');
+
+
+
+
+
+
+//   });
+
+
+
+
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -133,24 +231,60 @@ document.getElementById('restaurantForm')?.addEventListener('submit', async (e) 
 
 
 // Socket + join logic
+// let socket;
+// document.getElementById('join')?.addEventListener('click', async () => {
+//   const restId = document.getElementById('restId').value;
+//   if (!restId) return alert('Enter restaurant ID');
+
+//   // when joining, ask for permission and update token for that known rest id
+//   await registerForNotifications(restId);
+
+//   // setup socket (connect once)
+//   if (!socket) {
+//     socket = io();
+//     socket.on('new_order', order => showOrder(order));
+//     socket.on('order_status_changed', order => updateOrderUI(order));
+//   }
+
+//   socket.emit('restaurant:join', restId);
+//   alert('Connected to live orders for ' + restId);
+// });
+
 let socket;
-document.getElementById('join')?.addEventListener('click', async () => {
-  const restId = document.getElementById('restId').value;
-  if (!restId) return alert('Enter restaurant ID');
 
-  // when joining, ask for permission and update token for that known rest id
-  await registerForNotifications(restId);
-
-  // setup socket (connect once)
-  if (!socket) {
-    socket = io();
-    socket.on('new_order', order => showOrder(order));
-    socket.on('order_status_changed', order => updateOrderUI(order));
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!RESTAURANT_ID) {
+    console.error("Restaurant ID missing");
+    return;
   }
 
-  socket.emit('restaurant:join', restId);
-  alert('Connected to live orders for ' + restId);
+  // 1. Register FCM token
+  await registerForNotifications(RESTAURANT_ID);
+
+  // 2. Connect socket
+  socket = io();
+
+  socket.on("connect", () => {
+    socket.emit("restaurant:join", RESTAURANT_ID);
+    console.log("Restaurant connected:", RESTAURANT_ID);
+  });
+
+  socket.on("new_order", order => {
+    showOrder(order);
+  });
+
+  socket.on("order_status_changed", order => {
+    updateOrderUI(order);
+  });
 });
+
+
+
+
+
+
+
+
 
 // function showOrder(order) {
 //   const div = document.createElement('div');
