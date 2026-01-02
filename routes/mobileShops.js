@@ -107,6 +107,7 @@ router.post('/register', async (req, res, next) => {
 //     res.redirect("/mobileShop/dashboard");
 //   }
 // );
+
 router.post("/login_Shop", (req, res, next) => {
   passport.authenticate("restaurant-local", (err, user, info) => {
     if (err) {                                               //
