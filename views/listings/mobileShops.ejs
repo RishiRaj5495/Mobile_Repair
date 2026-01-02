@@ -252,7 +252,18 @@ body {
 </div>
 
 <!-- Register Section -->
-<div class="page-container">
+
+
+
+<!-- <label>Restaurant ID: <input id="restId" /></label> -->
+
+<!-- ----------------------------------------------------------------------- -->
+ <!-- <label>Restaurant ID: <input id="restId" /></label>
+<button id="join">Connect</button> -->
+
+
+  <% if(!currentRestaurant) { %>
+    <div class="page-container">
   <div class="register-container">
     <h3>Register <span>(first time)</span></h3>
 
@@ -271,16 +282,6 @@ body {
 </div>
 
 <hr>
-
-
-<!-- <label>Restaurant ID: <input id="restId" /></label> -->
-
-<!-- ----------------------------------------------------------------------- -->
- <!-- <label>Restaurant ID: <input id="restId" /></label>
-<button id="join">Connect</button> -->
-
-
-  <% if(!currentRestaurant) { %>
 <div class="row loginPage" style="margin-bottom: 20px;">
     <div class="col-8 offset-2">
       <h3>Login For Live Orders</h3>
