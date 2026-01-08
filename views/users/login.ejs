@@ -1,6 +1,31 @@
 <% layout("/layouts/boilerPlate") %> 
+<style>
+
+
+
+  .card {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #0d6efd;
+}
+
+</style>
 <body>
-  <div class="row loginPage" style="margin-bottom: 20px;">
+  <!-- <div class="row loginPage" style="margin-bottom: 20px;">
     <div class="col-8 offset-2">
       <h3>Login Page</h3>
       <form action="/users/login" method="POST" novalidate class="needs-validation">
@@ -22,4 +47,80 @@
         <button type="submit" class="btn btn-primary px-4 p-1">login</button>
       </form>
     </div>
+  </div> -->
+  <div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7">
+
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white text-center rounded-top-4">
+          <h3 class="mb-1">🔐 Welcome Back</h3>
+          <p class="small mb-0">Login to manage your repair requests</p>
+        </div>
+
+        <div class="card-body p-4">
+          <form id="loginForm" action="/users/login" method="POST" class="needs-validation" novalidate>
+
+            <!-- Username -->
+            <div class="mb-3">
+              <label class="form-label">Username</label>
+              <input
+                type="text"
+                name="username"
+                class="form-control"
+                placeholder="Enter your username"
+                required
+              >
+              <div class="invalid-feedback">Please enter your username</div>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                placeholder="Enter your password"
+                required
+              >
+              <div class="invalid-feedback">Please enter your password</div>
+            </div>
+
+            <!-- Submit -->
+            <div class="d-grid mt-4">
+              <button id="loginBtn" type="submit" class="btn btn-primary btn-lg rounded-pill">
+                <span class="btn-text">🔓 Login</span>
+                <span class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+              </button>
+            </div>
+
+          </form>
+
+          <!-- Extra Links -->
+          <div class="text-center mt-3">
+            <small class="text-muted">
+              Don’t have an account?
+              <a href="/users/signup" class="fw-semibold text-primary">Create one</a>
+            </small>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
+</div>
+<script>
+  const loginForm = document.getElementById("loginForm");
+  const loginBtn = document.getElementById("loginBtn");
+  const spinner = loginBtn.querySelector(".spinner-border");
+  const text = loginBtn.querySelector(".btn-text");
+
+  loginForm.addEventListener("submit", function () {
+    if (loginForm.checkValidity()) {
+      loginBtn.disabled = true;
+      spinner.classList.remove("d-none");
+      text.textContent = "Logging in...";
+    }
+  });
+</script>

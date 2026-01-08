@@ -120,13 +120,14 @@ async function registerForNotifications(restaurantIdForUpdate) {
 // =================================================new----------------------------------
 document.getElementById('restaurantForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  console.log("Rishi");
+  console.log("Rishi",e);
   const name = document.getElementById("name").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const phone = document.getElementById("phone").value;
   const address = document.getElementById("address").value;
   // ask permission and get token
+
   const token = await registerForNotifications();
   const payload = { name, email, password, phone, address, fcmToken: token };
   console.log({
@@ -143,7 +144,13 @@ document.getElementById('restaurantForm')?.addEventListener('submit', async (e) 
     body: JSON.stringify(payload)
   });
   const data = await res.json();
-  alert(data.message || 'Registered');
+  if (data.success) {
+        window.location.href = data.redirectUrl; // ✅ redirect works
+      } else {
+        alert(data.message || 'Registered');
+        btn.disabled = false;
+      }
+  // alert(data.message || 'Registered');
 });
 
 
