@@ -1,7 +1,28 @@
 <% layout("/layouts/boilerPlate") %>
-<%= success %>
-<h1> Forwarding Your Issue</h1>
 
+<style>
+  .card {
+  animation: fadeUp 0.5s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-control:focus,
+.form-select:focus {
+  box-shadow: none;
+  border-color: #0d6efd;
+}
+
+</style>
 <!-- <form id="orderForm" action="/" method="POST" enctype="multipart/form-data">
 <label>Customer name: <input id="custName" /></label><br />
 <label>Customer phone: <input id="custPhone" /></label><br />
@@ -10,6 +31,8 @@
   <label class="form-label">Upload video:
     <input type="file" name="video" id="images" />
   </label><br> -->
+  <!-- <%= success %>
+<h1> Forwarding Your Issue</h1>
   <div class="row signupPage">
     <div class="col-8 offset-2">
   
@@ -98,17 +121,144 @@
             <div class="invalid-feedback">Valid video</div>
           </div>
 <label>
-   <!-- <input id="restId" /> -->
+  
    <input type="hidden" id="restId" value="<%= id %>" />
 
-<!-- <label>Restaurant ID: <input id="restId" /></label><br />  -->
+
 
 </label><br /> 
         <button   id="place" type="submit" class="btn btn-primary px-4 p-1">Forward</button>
       </form>
     </div>
-  </div>
+  </div> -->
 
+<!-- <% if (success) { %> 
+  <div class="alert alert-success text-center">
+    <%= success %>
+  </div>
+<% } %> -->
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white text-center rounded-top-4">
+          <h3 class="mb-1">📨 Forwarding Your Issue</h3>
+          <p class="small mb-0">Provide your details so we can assist you faster</p>
+        </div>
+
+        <div class="card-body p-4">
+          <form id="orderForm" action="/" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
+
+            <!-- Name -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">First Name</label>
+                <input type="text" name="username" id="customerFirstName"
+                  placeholder="Enter First word" class="form-control" required>
+                <div class="invalid-feedback">Please enter a valid name</div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Last Name</label>
+                <input type="text" name="username" id="customerLastName"
+                  placeholder="Enter last word" class="form-control" required>
+                <div class="invalid-feedback">Please enter a valid last name</div>
+              </div>
+            </div>
+
+            <!-- Contact -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Phone</label>
+                <input type="number" name="phone" id="customerPhone"
+                  placeholder="Enter your number" class="form-control" required>
+                <div class="invalid-feedback">Please enter a running number</div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" id="customerEmail"
+                  placeholder="Enter email" class="form-control" required>
+                <div class="invalid-feedback">Please enter a valid email</div>
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+              <label class="form-label">Address</label>
+              <input type="text" name="address" id="customerAddress"
+                placeholder="Enter your address" class="form-control" required>
+              <div class="invalid-feedback">Please enter a valid address</div>
+            </div>
+
+            <!-- Location -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">City</label>
+                <input type="text" name="city" id="customerCity"
+                  placeholder="Enter your city" class="form-control" required>
+                <div class="invalid-feedback">Please enter a current city</div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">State</label>
+                <select name="state" id="customerState" class="form-select" required>
+                  <option selected disabled value="">Choose...</option>
+                  <option>Prayagraj</option>
+                  <option>Lucknow</option>
+                  <option>Kanpur</option>
+                  <option>Varanasi</option>
+                  <option>Agra</option>
+                  <option>Meerut</option>
+                </select>
+                <div class="invalid-feedback">Please select a valid state</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Pincode</label>
+                <input type="number" name="pincode" id="customerPincode"
+                  placeholder="Enter your state" class="form-control" required>
+                <div class="invalid-feedback">Please enter a valid pincode</div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Country</label>
+                <input type="text" name="country" id="customerCountry"
+                  placeholder="Enter your country" class="form-control" required>
+                <div class="invalid-feedback">Please enter your country</div>
+              </div>
+            </div>
+
+            <!-- Video -->
+            <div class="mb-4">
+              <label class="form-label">Upload Issue Video</label>
+              <input type="file" name="video" id="video"
+                class="form-control" accept="video/*" required>
+              <div class="invalid-feedback">Please upload a valid video</div>
+            </div>
+
+            <input type="hidden" id="restId" value="<%= id %>">
+
+            <!-- Submit -->
+            <div class="text-center">
+             <button id="place" type="submit" class="btn btn-primary btn-lg px-5 rounded-pill">
+  <span class="btn-text">🚀 Forward Request</span>
+  <span class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+</button>
+
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 
 
@@ -120,7 +270,24 @@
 <textarea id="items" placeholder='JSON array: [{"name":"Fix hinge","qty":1,"price":500}]' rows="6" cols="50"></textarea><br /> -->
  <!-- <button id="place" type="button">Place Order</button> -->
 
-</form>
+<!-- </form> -->
+<script>
+  const orderForm = document.getElementById("orderForm");
+  const submitBtn = document.getElementById("place");
+  const spinner = submitBtn.querySelector(".spinner-border");
+  const btnText = submitBtn.querySelector(".btn-text");
+
+  orderForm.addEventListener("submit", function () {
+    if (orderForm.checkValidity()) {
+      submitBtn.disabled = true;
+      spinner.classList.remove("d-none");
+      btnText.textContent = "Forwarding...";
+    }
+  });
+</script>
+
+
+
 <script src="/socket.io/socket.io.js"></script>
 
 <script src="/js/admin.js"></script>

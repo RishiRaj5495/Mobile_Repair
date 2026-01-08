@@ -1,201 +1,132 @@
 
 <% layout("/layouts/boilerPlate") %>
 <%= success %>
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+  rel="stylesheet"
+/>
+
 <style>
 
-.dashboard-header {
-  text-align: center;
-  margin: 30px auto 40px;
+ .form-control:focus {
+    box-shadow: none;
+    border-color: #6366f1;
+  }
+
+  .btn-primary {
+    background-color: #4f46e5;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background-color: #4338ca;
+  }
+
+  .password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.1rem;
+    opacity: 0.7;
+  }
+
+  .password-toggle:hover {
+    opacity: 1;
+  }
+  /* login eye css */
+
+
+.password-toggle1 {
+  background: transparent;
+  border: none;
+  cursor: pointer;
 }
 
-.dashboard-header h1 {
-  font-size: 36px;
-  font-weight: 700;
+
+
+.password-toggle1 {
+  border-left: 0;
+}
+
+.form-control:focus {
+  z-index: 1;
+}
+
+.password-toggle1 {
+  z-index: 3;
+}
+
+
+/* ///////////// */
+/* Close shop bar */
+.close-shop-bar {
+  width: 20%;
+  background-color: #4f46e5;
+  color: #fff;
+  padding: 8px 0;
+  border-radius: 6px;
+ font-weight: 600;
+min-width: 120px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+.close-shop-bar:hover {
+  background: #2842d6;
+  color: #fff;
+   opacity: 1;
+}
+
+/* Live orders card */
+.live-orders-card {
+  background: #f4f7ff;
+  border-radius: 14px;
+  padding: 28px 20px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.live-orders-card .icon {
+  font-size: 32px;
   margin-bottom: 8px;
 }
 
-.dashboard-header .brand {
-  color: #28a745; /* green accent */
-  margin-right: 8px;
-}
-
-.dashboard-header .title {
-  color: #222;
-}
-
-.dashboard-header .subtitle {
-  font-size: 16px;
-  color: #666;
-  letter-spacing: 0.5px;
-}
-
-
-
-
-  .shopClose {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 40px 0;
-}
-
-.close-shop-btn {
-  text-decoration: none;
-  background: linear-gradient(135deg, #ff3d3d, #ff6b6b);
-  color: #ffffff;
-  padding: 14px 36px;
-  font-size: 18px;
-  font-weight: 600;
-  border-radius: 30px;
-  box-shadow: 0 10px 25px rgba(255, 61, 61, 0.35);
-  transition: all 0.3s ease;
-}
-
-.close-shop-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 35px rgba(255, 61, 61, 0.5);
-  color: #fff;
-}
-
-.close-shop-btn:active {
-  transform: scale(0.95);
-}
-.live-orders-header {
-  text-align: center;
-  margin: 50px 0 30px;
-}
-
-.live-orders-header h3 {
-  font-size: 24px;
+.live-orders-card .title {
   font-weight: 700;
-  color: #333;
   margin-bottom: 6px;
-  display: inline-block;
-  position: relative;
 }
 
-.live-orders-header h3::after {
-  content: "";
-  display: block;
-  width: 50px;
-  height: 3px;
-  background: #28a745; /* green accent */
-  margin: 8px auto 0;
-  border-radius: 2px;
-}
-
-.live-orders-header .subtitle {
+.live-orders-card .subtitle {
+  color: #6b7280;
   font-size: 14px;
-  color: #666;
-  margin-top: 6px;
-}
-* {
-  box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
-}
-
-body {
   margin: 0;
-  background-color: #f4f6f8;
 }
 
-/* Dashboard Header */
-.dashboard-header {
-  background: linear-gradient(135deg, #bdfd0d, #8a9808);
-  padding: 35px 20px;
-  text-align: center;
-  color: #fff;
+/* Mobile responsiveness */
+@media (max-width: 676px) {
+  .live-orders-card {
+    padding: 22px 16px;
+  }
+  .live-orders-card .title {
+    font-size: 18px;
+  }
+  .close-shop-bar{
+
+     font-size: 13px;
+     min-width: 100px;
+     padding: 10px 0;
+  }
 }
 
-.dashboard-header h1 {
-  margin: 0;
-  font-size: 2rem;
-}
 
-.dashboard-header .brand {
-  font-weight: 700;
-}
 
-.dashboard-header .title {
-  font-weight: 400;
-  margin-left: 8px;
-}
 
-.subtitle {
-  margin-top: 10px;
-  font-size: 0.95rem;
-  opacity: 0.9;
-}
 
-/* Page Container */
-.page-container {
-  padding: 40px 20px;
-}
 
-/* Register Card */
-.register-container {
-  background: #ffffff;
-  max-width: 420px;
-  margin: auto;
-  padding: 35px;
-  border-radius: 12px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-}
 
-.register-container h3 {
-  text-align: center;
-  margin-bottom: 25px;
-  font-size: 1.5rem;
-}
 
-.register-container h3 span {
-  font-size: 0.9rem;
-  color: #6c757d;
-}
 
-/* Inputs */
-.register-container input {
-  width: 100%;
-  padding: 13px 14px;
-  margin-bottom: 16px;
-  font-size: 0.95rem;
-  border-radius: 8px;
-  border: 1px solid #dcdcdc;
-  transition: 0.3s;
-}
 
-.register-container input:focus {
-  outline: none;
-  border-color: #7f9c3c;
-  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
-}
-
-/* Button */
-.register-container button {
-  width: 100%;
-  padding: 13px;
-  background: linear-gradient(135deg, #fd9d0d, #798b29);
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.register-container button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(163, 192, 60, 0.35);
-}
-
-/* Divider */
-.section-divider {
-  width: 60%;
-  margin: 40px auto 0;
-  border: none;
-  height: 1px;
-  background: linear-gradient(to right, transparent, #ccc, transparent);
-}
 
 </style>
 
@@ -243,13 +174,6 @@ body {
 </form> -->
   <!-- Dashboard Header -->
 <!-- Dashboard Header -->
-<div class="dashboard-header">
-  <h1>
-    <span class="brand">RepairNow</span>
-    <span class="title">Mobile Shop Dashboard</span>
-  </h1>
-  <p class="subtitle">Manage orders, repairs, and live updates in one place</p>
-</div>
 
 <!-- Register Section -->
 
@@ -263,7 +187,8 @@ body {
 
 
   <% if(!currentRestaurant) { %>
-    <div class="page-container">
+<!-- 
+     <div class="page-container">
   <div class="register-container">
     <h3>Register <span>(first time)</span></h3>
 
@@ -279,32 +204,236 @@ body {
   </div>
 
   <hr class="section-divider" />
+</div> -->
+<!-- ////////////////////////// -->
+<div class="container min-vh-100 d-flex align-items-center justify-content-center">
+  <div class="row w-100 justify-content-center">
+    <div class="col-md-8 col-lg-6">
+
+     
+
+             <div class="card-header text-center rounded-top-4" style="background: linear-gradient(135deg, #4f46e5, #6366f1);">
+          <h4 class="mb-1 fw-bold" style="color:#ffffff; text-shadow:0 2px 6px rgba(0,0,0,0.4);">
+            Register
+          </h4>
+          <p class="mb-0" style="color: rgba(255,255,255,0.85); font-size:0.9rem;">Manage orders, repairs, and live updates in one place</p>
+        </div>
+
+      <!-- Register Card -->
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4">
+          <h3 class="text-center mb-4">
+            Register <span class="text-muted" style="font-size:0.9rem;">(first time)</span>
+          </h3>
+
+          <form id="restaurantForm" novalidate>
+     <label class="form-label">Shop Name :</label>
+            <div class="mb-3">
+              <input type="text" id="name" name="name" class="form-control" placeholder="Shop Name" required />
+            </div>
+        <label class="form-label">Email Address :</label>
+            <div class="mb-3">
+              <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" required />
+              <div class="invalid-feedback">Please enter a valid email</div>
+            </div>
+
+            <div class="mb-3">
+               <label class="form-label">Phone :</label>
+              <input type="number" id="phone" name="phone" class="form-control" placeholder="Phone Number" required />
+              <div class="invalid-feedback">Please enter a valid number</div>
+            </div>
+
+            <!-- Password with eye toggle -->
+               <label class="form-label">Password :</label>
+         
+            <div class="mb-3 position-relative">
+  <input
+    type="password"
+    id="password"
+    name="password"
+    class="form-control"
+    placeholder="Password"
+    required
+  />
+
+  <span class="password-toggle" onclick="togglePassword()">
+    <i class="bi bi-eye-slash" id="toggleIcon"></i>
+  </span>
+</div>
+     <label class="form-label">Shop Address :</label>
+            <div class="mb-3">
+              <input type="text" id="address" name="address" class="form-control" placeholder="Running Address" required />
+              <div class="invalid-feedback">Please enter a running shop address</div>
+            </div>
+
+           
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-lg d-flex align-items-center justify-content-center" id="registerBtn">
+                <span class="spinner-border spinner-border-sm me-2 d-none" id="registerSpinner"></span>
+                <span id="registerText">Create Account</span>
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <hr>
-<div class="row loginPage" style="margin-bottom: 20px;">
-    <div class="col-8 offset-2">
-      <h3>Login For Live Orders</h3>
-      <form action="/mobileShop/login_Shop" method="POST" novalidate class="needs-validation">
-        <div class="mb-3">
-          <label for="email" class="form-label">Email Address:</label>
-          <input type="email" name="email"  placeholder="Email" class="form-control" required>
-          <div class="valid-feedback">Looks good!</div>
-          <div class="invalid-feedback">Please enter a valid email</div>
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+  <div class="row w-100 justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header text-center rounded-top-4" style="background: linear-gradient(135deg, #4f46e5, #6366f1);">
+          <h4 class="mb-1 fw-bold" style="color:#ffffff; text-shadow:0 2px 6px rgba(0,0,0,0.4);">
+            Live Orders Login
+          </h4>
+          <p class="mb-0" style="color: rgba(255,255,255,0.85); font-size:0.9rem;">Mobile Shop Dashboard</p>
         </div>
 
 
-        <div class="mb-3">
-          <label for="password" class="form-label">Password:</label>
-          <input type="password" name="password" placeholder="Enter Password" class="form-control" required>
-          <div class="valid-feedback">Looks good!</div>
-          <div class="invalid-feedback">Please enter a valid password</div>
+        <div class="card-body p-4">
+          <form id="loginForm" action="/mobileShop/login_Shop" method="POST" novalidate class="needs-validation">
+
+            <!-- Email -->
+             <label class="form-label">Email</label>
+            <div class="mb-3">
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                <input type="email" name="email" class="form-control" placeholder="shop@email.com" required>
+                <div class="invalid-feedback">Please enter a valid email</div>
+              </div>
+            </div>
+
+            <!-- Password -->
+            <!-- <div class="mb-3">
+             
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i>Password</span>
+                <input type="password" id="pass" name="password" class="form-control" placeholder="••••••••" required>
+                 <span class="password-toggle" onclick="togglePassword1()">👁️</span>
+                <div class="invalid-feedback">Password is required</div>
+              </div>
+            </div> -->
+            <div class="mb-3">
+  <!-- <label class="form-label">Password</label>
+
+  <div class="input-group">
+    <span class="input-group-text">
+      <i class="bi bi-lock"></i>
+    </span>
+
+    <input
+      type="password"
+      id="pass"
+      name="password"
+      class="form-control"
+      placeholder="password"
+      required
+    />
+
+    
+    <button
+      type="button"
+      class="input-group-text password-toggle"
+      onclick="togglePassword1()"
+    >
+      <i class="bi bi-eye"></i>
+    </button>
+  </div>
+
+  <div class="invalid-feedback">Password is required</div> -->
+  <!-- <label class="form-label">Password</label>
+
+<div class="input-group">
+  <span class="input-group-text">
+    <i class="bi bi-lock"></i>
+  </span>
+
+  <input
+    type="password"
+    id="pass"
+    name="password"
+    class="form-control"
+    placeholder="password"
+    required
+  />
+
+  
+  <button
+    type="button"
+    class="input-group-text password-toggle"
+    onclick="togglePassword1()"
+  >
+    <i class="bi bi-eye" id="eyeIcon"></i>
+  </button>
+</div>
+
+<div class="invalid-feedback">Password is required</div> -->
+<label class="form-label">Password</label>
+<div class="input-group">
+  <span class="input-group-text">
+    <i class="bi bi-lock"></i>
+  </span>
+
+  <input
+    type="password"
+    id="pass"
+    name="password"
+    class="form-control"
+    placeholder="password"
+    required
+  />
+
+  <button
+    type="button"
+    class="btn btn-outline-secondary password-toggle1"
+    onclick="togglePassword1()"
+  >
+    <i class="bi bi-eye-slash" id="eyeIcon"></i>
+  </button>
+</div>
+
+
+</div>
+
+
+
+
+            <!-- Remember Me -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="rememberMe">
+                <label class="form-check-label" for="rememberMe">Remember me</label>
+              </div>
+              <a href="#" class="text-decoration-none" style="font-size: 0.85rem;">Forgot password?</a>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-lg rounded-3 d-flex align-items-center justify-content-center" id="loginBtn">
+                <span class="spinner-border spinner-border-sm me-2 d-none" id="loginSpinner" role="status" aria-hidden="true"></span>
+                <span id="loginText">Login</span>
+              </button>
+            </div>
+          </form>
         </div>
 
-        <button type="submit" class="btn btn-primary px-4 p-1">login</button>
-      </form>
+        <div class="card-footer text-center bg-light rounded-bottom-4">
+          <small class="text-muted">© 2026 Mobile Repair Services</small>
+        </div>
+      </div>
     </div>
   </div>
+</div>
+
+
+ 
 <% } %>
 
 
@@ -313,19 +442,35 @@ body {
 
 
 <% if (currentRestaurant) { %>
-      <!-- <div class="shopClose"alt="photos" style="margin: auto;">
-          <a href="/mobileShop/yourShop/logout" class="signu" style="   text-decoration: none;   color: success;margin: auto; ">Close Your Shop</a>
-  </div> -->
-  <div class="shopClose">
+  <!-- <div class="shopClose">
   <a href="/mobileShop/yourShop/logout" class="close-shop-btn">
     🚫 Close Your Shop
   </a>
 </div>
-<!-- <h3>Connect to live orders</h3> -->
  <div class="live-orders-header">
   <h3>⚡ Connect to Live Orders</h3>
   <p class="subtitle">Receive real-time notifications from your customers</p>
+</div> -->
+<!-- CLOSE SHOP BAR -->
+<div class="container my-3">
+  <a href="/mobileShop/yourShop/logout"
+     class=" btn btn-danger  btn-md" style="
+text-align: center;">
+    ⛔ Close Shop
+  </a>
 </div>
+
+<!-- LIVE ORDERS CARD -->
+<div class="container mb-5">
+  <div class="live-orders-card text-center">
+    <div class="icon">⚡</div>
+    <h4 class="title">Connect to Live Orders</h4>
+    <p class="subtitle">Receive real-time notifications from your customers</p>
+  </div>
+</div>
+
+
+
 
 
   
@@ -341,9 +486,105 @@ body {
 <!-- Firebase v8 (compat) CDN - MUST be before firebase-config.js -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+<script>
+  const form1 = document.getElementById('loginForm');
+  const spinner1 = document.getElementById('loginSpinner');
+  const text1 = document.getElementById('loginText');
+  const btn1 = document.getElementById('loginBtn');
 
-<!-- Your Firebase config (see file below) -->
+  form1.addEventListener('submit', (e) => {
+    // If form is invalid, stop spinner
+    if (!form1.checkValidity()) {
+      e.preventDefault();
+      e.stopPropagation();
+      form1.classList.add('was-validated');
+      return;
+    }
+
+    // Form is valid → show spinner
+    spinner1.classList.remove('d-none');
+    text1.textContent = 'Processing...';
+    btn1.disabled = true;
+  });
+
+  
+</script>
+
+
+
+
+
+ <!-- login eye  -->
+  <!-- <script>
+function togglePassword1() {
+  const password = document.getElementById('pass');
+  const icon = document.querySelector('.password-toggle i');
+
+  if (password.type === 'password') {
+    password.type = 'text';
+    icon.classList.replace('bi-eye', 'bi-eye-slash');
+  } else {
+    password.type = 'password';
+    icon.classList.replace('bi-eye-slash', 'bi-eye');
+  }
+}
+</script> -->
+
+
+<script>
+  function togglePassword() {
+    const password = document.getElementById('password');
+    password.type = password.type === 'password' ? 'text' : 'password';
+  }
+
+  const form = document.getElementById('restaurantForm');
+  const spinner = document.getElementById('registerSpinner');
+  const text = document.getElementById('registerText');
+  const btn = document.getElementById('registerBtn');
+
+  form.addEventListener('submit', async (event) => {
+    // if (!form.checkValidity()) return;
+    if (!form.checkValidity()) {
+      event.preventDefault(); // STOP submit
+      event.stopPropagation(); 
+      return;
+    }
+    spinner.classList.remove('d-none');
+    text.textContent = 'Creating Account...';
+    btn.disabled = true;
+  });
+</script>
+<script>
+function togglePassword() {
+  const password = document.getElementById('password');
+  const icon = document.getElementById('toggleIcon');
+
+  if (password.type === 'password') {
+    password.type = 'text';
+    icon.classList.replace('bi-eye-slash', 'bi-eye');
+  } else {
+    password.type = 'password';
+    icon.classList.replace('bi-eye', 'bi-eye-slash');
+  }
+}
+</script>
+<!-- login -->
+<script>function togglePassword1() {
+  const pass = document.getElementById("pass");
+  const icon = document.getElementById("eyeIcon");
+
+  if (pass.type === "password") {
+    pass.type = "text";
+     icon.classList.replace("bi-eye-slash", "bi-eye");
+  } else {
+    pass.type = "password";
+  
+     icon.classList.replace("bi-eye", "bi-eye-slash");
+  }
+}</script>
+
+
 <script src="/js/firebase-config.js"></script>
 
-<!-- Main client logic -->
+
 <script src="/js/mobileShops.js"></script>

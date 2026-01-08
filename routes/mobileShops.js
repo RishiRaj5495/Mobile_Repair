@@ -43,8 +43,11 @@ router.post('/register', async (req, res, next) => {
   }
   res.status(200).json({
     success: true,
-    message: "Welcome to the app!"
+     redirectUrl: "/mobileShops",
+    message: "Welcome to the app!",
+    
   });
+
 
   });
 

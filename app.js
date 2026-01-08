@@ -52,8 +52,8 @@ socketSetup(io);
 
 // SECRET =695579334c509796d8ed20b04a18e3fd1aaf05fbd05031c08d66b530daeb7196d8176ea409f48aa5
 //58c0ee88cc9c89cbba0501e8e44bc89cad29fb9ed6237c50 
-const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
-// const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
+// const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
+const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
 main()
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.log("DB error:", err));
