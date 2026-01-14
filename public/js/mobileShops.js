@@ -1,59 +1,39 @@
-// async function registerForNotifications() {
-//     try {
-//         console.log("Requesting Notification Permission...");
-//         const permission = await Notification.requestPermission();
 
-//         if (permission !== "granted") {
-//             alert("Enable notifications to receive new order alerts");
-//             return;
-//         }
+/////////////////
+let socket;
 
-//         // Get FCM token
-//         const fcmToken = await messaging.getToken({
-//             vapidKey: "YOUR_VAPID_PUBLIC_KEY"
-//         });
+document.addEventListener("DOMContentLoaded", async () => {
 
-//         console.log("Restaurant FCM Token:", fcmToken);
+  socket = io();
 
-//         // OPTIONAL: send FCM token to backend
-//         await fetch("/api/restaurants/saveToken", {
-//             method: "POST",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify({ fcmToken })
-//         });
+  socket.on("connect", () => {
+    console.log("Shop socket connected:", socket.id);
 
-//     } catch (err) {
-//         console.error("FCM Token Error:", err);
-//     }
-// }
+    // Join order room ONLY if order page
+    if (typeof CURRENT_ORDER_ID !== "undefined") {
+      socket.emit("join_order", CURRENT_ORDER_ID);
+      console.log("Shop joined order room:", CURRENT_ORDER_ID);
+    }
 
-// registerForNotifications(); 
-// let socket;
+    // existing restaurant join (dashboard)
+    socket.emit("restaurant:join", RESTAURANT_ID);
+  });
 
-// document.getElementById("join").addEventListener("click", () => {
-//     const restId = document.getElementById("restId").value;
+  socket.on("new_order", order => {
+    showOrder(order);
+  });
 
-//     if (!restId) return alert("Enter restaurant ID");
+  socket.on("order_status_changed", order => {
+    updateOrderUI(order);
+  });
 
-//     socket = io();
-
-//     socket.emit("restaurant:join", restId);
-
-//     socket.on("new_order", (order) => {
-//         showOrder(order);
-//     });
-
-//     socket.on("order_status_changed", (order) => {
-//         updateOrderUI(order);
-//     });
-// });
+});
 
 
-// public/js/mobileShops.js
+/////////////
 
-// Register service worker for background messages
-// import { messaging } from "./firebase-config.js";
-// import { getToken } from "firebase/messaging";
+
+
 console.log("Messaging from config =", window.messaging);
 
 
@@ -72,15 +52,14 @@ async function registerForNotifications(restaurantIdForUpdate) {
     }
 
     const vapidKey = 'BMx1qpsIH7bQ7JKNmFYADmgIdSMJOV6KSxpKLX4pUm7spE0WfCaE9yBx7CmN4BWvc8RNvhs3nlpiME_sPaAyZps'; // replace with your public VAPID key
-    // const fcmToken = await messaging.getToken({ vapidKey });
-    // const fcmToken = await getToken(messaging, { vapidKey });
+    
     const fcmToken = await messaging.getToken({ vapidKey: vapidKey });
 
     console.log('FCM token', fcmToken);
 
     if (!fcmToken) return null;
 
-    // If restaurantIdForUpdate provided -> save token for that restaurant
+   
     if (restaurantIdForUpdate) {
       await fetch(`/api/restaurants/${restaurantIdForUpdate}/token`, {
         method: 'POST',
@@ -96,28 +75,7 @@ async function registerForNotifications(restaurantIdForUpdate) {
   }
 }
 
-// Handle registration form (first time register restaurant)
-// document.getElementById('restaurantForm')?.addEventListener('submit', async (e) => {
-//   e.preventDefault();
-//   console.log("Rishi");
-//   const name = document.getElementById('name').value;
-//   const address = document.getElementById('address').value;
-//   const mobile = document.getElementById('mobile').value;
 
-//   // ask permission and get token
-//   const token = await registerForNotifications();
-//   const payload = { name, address, mobile, fcmToken: token };
-
-//   const res = await fetch('/api/restaurants/register', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify(payload)
-//   });
-//   const data = await res.json();
-//   alert(data.message || 'Registered');
-// });
-
-// =================================================new----------------------------------
 document.getElementById('restaurantForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   console.log("Rishi",e);
@@ -126,7 +84,7 @@ document.getElementById('restaurantForm')?.addEventListener('submit', async (e) 
   const password = document.getElementById("password").value;
   const phone = document.getElementById("phone").value;
   const address = document.getElementById("address").value;
-  // ask permission and get token
+ 
 
   const token = await registerForNotifications();
   const payload = { name, email, password, phone, address, fcmToken: token };
@@ -144,120 +102,24 @@ document.getElementById('restaurantForm')?.addEventListener('submit', async (e) 
     body: JSON.stringify(payload)
   });
   const data = await res.json();
-  if (data.success) {
-        window.location.href = data.redirectUrl; // ✅ redirect works
-      } else {
-        alert(data.message || 'Registered');
-        btn.disabled = false;
-      }
+ if (data?.success === true && data?.redirectUrl) {
+  window.location.href = data.redirectUrl;
+} else {
+  alert(data?.message ?? 'Registered');
+resetBtn();
+}
+function resetBtn() {
+  spinner.classList.add('d-none');
+  text.textContent = 'Create Account';
+  btn.disabled = false;
+}
+
   // alert(data.message || 'Registered');
 });
 
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   const form = document.getElementById("restaurantForm");
 
-//   if (!form) {
-//     console.error("Form not found");
-//     return;
-//   }
-
-//   form.addEventListener("submit", async (e) => {
-//     e.preventDefault();
-//     console.log("Rishi");
-
-//     const payload = {
-//       name: document.getElementById("name").value,
-//       email: document.getElementById("email").value,
-//       password: document.getElementById("password").value,
-//       phone: document.getElementById("phone").value,
-//       address: document.getElementById("address").value,
-//       fcmToken: await registerForNotifications()
-//     };
-
-//        const res = await fetch('/api/restaurants/register', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify(payload)
-//   });
-//   const data = await res.json();
-//   alert(data.message || 'Registered');
-
-
-
-
-
-
-//   });
-
-
-
-
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Socket + join logic
-// let socket;
-// document.getElementById('join')?.addEventListener('click', async () => {
-//   const restId = document.getElementById('restId').value;
-//   if (!restId) return alert('Enter restaurant ID');
-
-//   // when joining, ask for permission and update token for that known rest id
-//   await registerForNotifications(restId);
-
-//   // setup socket (connect once)
-//   if (!socket) {
-//     socket = io();
-//     socket.on('new_order', order => showOrder(order));
-//     socket.on('order_status_changed', order => updateOrderUI(order));
-//   }
-
-//   socket.emit('restaurant:join', restId);
-//   alert('Connected to live orders for ' + restId);
-// });
-
-let socket;
+// let socket;   map
 
 document.addEventListener("DOMContentLoaded", async () => {
   if (!RESTAURANT_ID) {
@@ -286,43 +148,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 
-
-
-
-
-
-
-
-// function showOrder(order) {
-//   const div = document.createElement('div');
-//   div.className = 'order-box';
-//   div.id = `order_${order._id}`;
-//   div.innerHTML = `
-//     <h3>New Order #${order._id}</h3>
-//     <p>Customer Name: ${order.customerFirstName || ''}$${" "} ${order.customerLastName || ''}</p>
-//      <p>Customer Phone: ${order.customerPhone || ''}</p>
-//        <p>Customer Email: ${order.customerEmail || ''}</p>
-//        <p>Customer Address: ${order.customerAddress || ''}$${"| "}Customer Pincode ${order.customerPincode || ''}</p>
-//              <p>State: ${order.customerState || ''}$${"| "}City : ${order.customerCity || ''}</p>
-
-//        <p>Issue Video:</p>
-//   ${
-//     order.video && order.video.url
-//       ? `<video controls width="300" margin="auto">
-//            <source src="${order.video.url}" type="video/mp4">
-//          </video>`
-//       : '<p>No video provided</p>'
-//   }
-//     <p>Forwarded To Shop: ${order.restaurant.name || ''}</p>
-//     <p>Shop Address: ${order.restaurant.address || ''}</p>
-//     <p>Shop Mobile: ${order.restaurant.mobile || ''}</p>
-//     <button onclick="acceptOrder('${order._id}')">Accept</button>
-//     <button onclick="rejectOrder('${order._id}')">Reject</button>
-//   `;
-//   document.getElementById('orders').appendChild(div);
-// }
-
-
 function showOrder(order) {
   const div = document.createElement('div');
   div.className = 'order-box';
@@ -345,16 +170,24 @@ function showOrder(order) {
       </div>
 
       <!-- RIGHT : Video -->
-      <div class="order-right">
-        <strong>📹 Issue Video</strong>
-        ${
-          order.video && order.video.url
-            ? `<video controls>
-                 <source src="${order.video.url}" type="video/mp4">
-               </video>`
-            : `<p class="no-video">No video provided</p>`
-        }
-      </div>
+
+<div class="order-right" style="display: flex;
+    flex-direction: column;
+    align-items: anchor-center;">
+  <div class="video-title"  style=" font-weight: 600;
+  margin-bottom: 6px;" >📹 Issue Video</div>
+
+  ${
+    order.video && order.video.url
+      ? `<video controls>
+           <source src="${order.video.url}" type="video/mp4">
+         </video>`
+      : `<p class="no-video">No video provided</p>`
+  }
+</div>
+
+
+
 
     </div>
 
@@ -364,10 +197,15 @@ function showOrder(order) {
       <p><strong>Shop Mobile:</strong> ${order.restaurant?.mobile || ''}</p>
     </div>
 
-    <div class="order-actions">
-      <button class="accept" onclick="acceptOrder('${order._id}')">Accept</button>
-      <button class="reject" onclick="rejectOrder('${order._id}')">Reject</button>
-    </div>
+
+    <p id="status_${order._id}"><strong>Status:</strong> Pending</p>
+
+<div class="order-actions" id="actions_${order._id}">
+  <button class="accept" onclick="acceptOrder('${order._id}')">Accept</button>
+  <button class="reject" onclick="rejectOrder('${order._id}')">Reject</button>
+  
+</div>
+
   `;
 
   document.getElementById('orders').appendChild(div);
@@ -376,16 +214,41 @@ function showOrder(order) {
 
 
 function updateOrderUI(order) {
-  const div = document.getElementById(`order_${order._id}`);
-  if (!div) return;
-  div.innerHTML += `<p>Status Updated: ${order.status}</p>`;
+  const statusEl = document.getElementById(`status_${order._id}`);
+  const actionsEl = document.getElementById(`actions_${order._id}`);
+
+  if (!statusEl) return;
+
+  statusEl.innerHTML = `<strong>Status:</strong> ${order.status}`;
+
+  // remove buttons after accept/reject
+  if (actionsEl) {
+    actionsEl.remove();
+  }
 }
 
+
+
+
+
+
+// function acceptOrder(orderId) {
+//   console.log("Status Socket =", socket);
+//   if (!socket) return;
+//   socket.emit('order:updateStatus', { orderId, status: 'Accepted' });
+// }
+
 function acceptOrder(orderId) {
-  console.log("Status Socket =", socket);
-  if (!socket) return;
-  socket.emit('order:updateStatus', { orderId, status: 'Accepted' });
+  fetch(`/orders/${orderId}/accept`, {
+    method: "POST"
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to accept order");
+      window.location.href = `/delivery/${orderId}`;
+    })
+    .catch(err => console.error(err));
 }
+
 
 function rejectOrder(orderId) {
     console.log("Status Socket =", socket);

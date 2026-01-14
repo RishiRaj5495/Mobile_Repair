@@ -14,6 +14,10 @@ customerState: { type: String, required: true },
 customerCountry: { type: String, required: true },
 customerPhone: { type: String, required: true },
 restaurant: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant', required: true },
+/////////////
+  customerLocation: { lat: { type: Number },lng: { type: Number }},
+
+////////////////
  video: {
       url : String,
       filename : String,
@@ -25,5 +29,8 @@ createdAt: { type: Date, default: Date.now }
 
 
 module.exports = mongoose.model('Order', orderSchema);
+
+
+
 
 
