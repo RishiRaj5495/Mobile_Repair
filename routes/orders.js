@@ -1,78 +1,3 @@
-// const express = require('express');
-// const router = express.Router();
-// const Order = require('../Models/orders.js');
-// const Restaurant = require('../Models/mobileShops.js');
-// const admin = require('firebase-admin');
-// const sockets = require('../sockets'); // our sockets module patched earlier
-
-// const { admin, io } = require("../app"); 
-// // initialize firebase admin
-// if (!admin.apps.length) {
-// const serviceAccount = require(process.env.FIREBASE_SERVICE_ACCOUNT_PATH|| './firebase-admin.json');
-// admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
-// }
-
-
-// // Create a new order (admin or customer)
-// router.post('/', async (req, res) => {
-// try {
-// const { customerName, customerPhone, restaurantId, items } = req.body;
-// const total = items.reduce((s, it) => s + (it.price || 0) * (it.qty || 1), 0);
-
-
-// const order = await Order.create({ customerName, customerPhone, restaurant: restaurantId, items, total });
-
-
-// // Notify restaurant in real-time via socket
-// sockets.io && sockets.io.emitToRestaurant(restaurantId, 'new_order', order);
-
-
-// // Also send FCM push to restaurant device if token exists
-// const rest = await Restaurant.findById(restaurantId);
-// if (rest && rest.fcmToken) {
-// const message = {
-// token: rest.fcmToken,
-// notification: { title: 'New Order Received', body: `Order ${order._id} - ${order.total}` },
-// data: { orderId: String(order._id) }
-// };
-
-
-// admin.messaging().send(message).catch(err => console.error('FCM send error', err));
-// }
-
-
-// res.json({ message: 'Order created', order });
-// } catch (e) {
-// console.error(err);
-// // res.status(500).json({ error: err.message });
-// req.flash("success", e.message);
-// }
-// });
-
-
-// // Update order status (restaurant accepts/declines)
-// router.post('/:id/status', async (req, res) => {
-// try {
-// const { status } = req.body;
-// const order = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true }).populate('restaurant');
-
-
-// // notify customer (here we'll emit an event - your customer app can listen via socket too)
-// if (order) {
-// // Notify restaurant room and possibly customer room
-// sockets.io && sockets.io.emitToRestaurant(order.restaurant._id, 'order_status_changed', order);
-
-
-// // For demo: you could also send an FCM to customer if you have their token
-// res.json({ message: 'Status updated', order });
-// } else {
-// res.status(404).json({ error: 'Order not found' });
-// }
-// } catch (e) {
-// // res.status(500).json({ error: err.message });
-// req.flash("success", e.message);
-// }
-// });
 
 
 // module.exports = router;
@@ -93,14 +18,11 @@ const { admin, io } = require("../app"); // import firebase admin + sockets
 
 router.post("/",upload.single("video"), async (req, res) => {
   try {
-    const { customerFirstName, customerLastName,customerPhone, customerEmail, customerAddress, customerCity,  customerState, customerPincode, customerCountry, restaurantId} = req.body;
+    const { customerFirstName, customerLastName,customerPhone, customerEmail, customerAddress, customerCity,  customerState, customerPincode, customerCountry, restaurantId,lat,lng} = req.body;
     console.log("Creating order for restaurant:", req.body.restaurantId);
   
 
-    // const total = items.reduce(
-    //   (sum, item) => sum + (item.price || 0) * (item.qty || 1),
-    //   0
-    // );
+
     const restaurant = await Restaurant.findById(restaurantId);
 console.log("Restaurant found:", restaurant);
  
@@ -110,7 +32,6 @@ console.log("Restaurant found:", restaurant);
       customerFirstName,
       customerLastName,
       customerPhone,
-      
       customerEmail,
       customerAddress,
       customerCity,
@@ -118,6 +39,10 @@ console.log("Restaurant found:", restaurant);
       customerPincode,
       customerCountry,
       restaurant:restaurantId,
+   customerLocation: {
+        lat: lat ? Number(lat) : null,
+        lng: lng ? Number(lng) : null
+      },
         video: {
     url: req.file?.path || null,
     filename: req.file?.filename || null
@@ -157,10 +82,17 @@ console.log("Order with populated restaurant:", order);
       });
     }
 
-    res.json({ message: "Order created", order });
+  res.json({
+  success: true,
+  redirectUrl: `/orders/${order._id}/track`,
+  message: "Issue Forwarded",
+  order
+});
+
+
 
   } catch (e) {
-    console.error("Order error:", e);
+    console.error("Forwarding error:", e);
     res.status(500).json({ error: e.message });
  
  
@@ -197,4 +129,21 @@ router.post("/:id/status", async (req, res) => {
   }
 });
 
+
+
+router.get("/:orderId/track", async (req, res) => {
+  const { orderId } = req.params;
+
+  const order = await Order.findById(orderId);
+  if (!order) return res.send("Order not found");
+
+  res.render("listings/orderTracs.ejs", { order });
+});
+
+
+
+
+
 module.exports = router;
+
+

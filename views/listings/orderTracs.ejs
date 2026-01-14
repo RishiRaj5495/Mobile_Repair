@@ -1,0 +1,66 @@
+<!-- ===== HEAD ===== -->
+ <% layout("/layouts/boilerPlate") %>
+
+<!-- <head>
+  <link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css"
+/> -->
+
+<style>
+  #map {
+    height: 400px;
+    width: 100%;
+    border-radius: 12px;
+  }
+</style>
+<!-- </head> -->
+
+
+  
+
+  <!-- ===== BODY ===== -->
+<div id="map"></div>
+
+<p>📏 Distance: <span id="distance">--</span></p>
+<p>⏱ ETA: <span id="eta">--</span></p>
+
+
+<!-- Leaflet -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Routing -->
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
+<!-- Socket -->
+<script src="/socket.io/socket.io.js"></script>
+
+<!-- Variables -->
+
+
+<script>
+  const ORDER_ID = "<%= order._id %>";
+  console.log("ORDER_ID:", ORDER_ID);
+  const CUSTOMER_LAT = "<%= order.customerLocation && order.customerLocation.lat ? order.customerLocation.lat : 25.4358 %>";
+  console.log("CUSTOMER_LAT:", CUSTOMER_LAT);
+  const CUSTOMER_LNG = "<%= order.customerLocation && order.customerLocation.lng ? order.customerLocation.lng : 81.8463 %>";
+  console.log("CUSTOMER_LNG:", CUSTOMER_LNG);
+</script>
+
+<script src="/js/orderTracks.js"></script>
+
+
+
+
+
+
+
+
+<!-- 
+</body> -->
+

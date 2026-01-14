@@ -31,6 +31,8 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const User = require("./Models/users.js");
+const Order = require("./Models/orders.js");
+
 const Restaurant = require("./Models/mobileShops.js");
 const LocalStrategy = require("passport-local");
 const bodyParser = require('body-parser');//
@@ -47,13 +49,9 @@ const io = require("socket.io")(server, {
 // serve admin and restaurant pages
 //connect sockets
 socketSetup(io);
-////
 
-
-// SECRET =695579334c509796d8ed20b04a18e3fd1aaf05fbd05031c08d66b530daeb7196d8176ea409f48aa5
-//58c0ee88cc9c89cbba0501e8e44bc89cad29fb9ed6237c50 
-const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
-// const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
+// const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
+const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
 main()
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.log("DB error:", err));
@@ -236,11 +234,22 @@ const ordersRouter = require('./routes/orders.js');//
 const restaurantsRouter = require('./routes/mobileShops.js');//
 const fcmRouter = require("./routes/fcm.js");
 app.use("/api/fcm", fcmRouter);                // save token / testing endpoints
-
+app.use("/orders", ordersRouter);//
 app.use('/api/orders', ordersRouter);//
 app.use('/api/restaurants', restaurantsRouter);//
 app.use('/mobileShop', restaurantsRouter);//
 
+
+app.get("/delivery/:orderId", async (req, res) => {
+  const order = await Order.findById(req.params.orderId);
+  res.render("listings/deliveryLive.ejs", { order });
+});
+app.post("/orders/:id/accept", async (req, res) => {
+  await Order.findByIdAndUpdate(req.params.id, {
+    status: "accepted"
+  });
+  res.sendStatus(200);
+});
 
 
   
@@ -250,6 +259,13 @@ app.use('/mobileShop', restaurantsRouter);//
 io.on("connection", (socket) => {
   console.log("Restaurant connected", socket.id);
 });
+
+
+
+
+
+
+
 
 
 const firebaseKeyPath = process.env.RENDER
@@ -294,3 +310,7 @@ server.listen(8080, () => {
 });
 
  
+
+
+
+

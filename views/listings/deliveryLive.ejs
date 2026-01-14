@@ -1,0 +1,41 @@
+<% layout("/layouts/boilerPlate") %>
+
+<style>
+  #map {
+    height: 400px;
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 20px;
+  }
+</style>
+
+<h3>🚴 Delivery Live Location</h3>
+<p>Status: <span id="status">Waiting for GPS...</span></p>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+  const ORDER_ID = "<%= order._id %>";
+  const socket = io();
+
+  socket.on("connect", () => {
+    socket.emit("join_order", ORDER_ID);
+  });
+
+  navigator.geolocation.watchPosition(
+    (pos) => {
+      document.getElementById("status").innerText = "📡 Sending location...";
+
+      socket.emit("delivery:location", {
+        orderId: ORDER_ID,
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude
+      });
+    },
+    (err) => {
+      document.getElementById("status").innerText = "❌ GPS permission denied";
+    },
+    { enableHighAccuracy: true }
+  );
+</script>
+
