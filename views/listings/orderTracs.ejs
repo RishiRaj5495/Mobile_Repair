@@ -1,7 +1,7 @@
 <!-- ===== HEAD ===== -->
  <% layout("/layouts/boilerPlate") %>
 
-<!-- <head>
+
   <link
   rel="stylesheet"
   href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -10,7 +10,7 @@
 <link
   rel="stylesheet"
   href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css"
-/> -->
+/>
 
 <style>
   #map {
@@ -19,7 +19,7 @@
     border-radius: 12px;
   }
 </style>
-<!-- </head> -->
+
 
 
   
@@ -36,6 +36,8 @@
 
 <!-- Routing -->
 <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+<script src="https://unpkg.com/leaflet.marker.slideto"></script>    
+
 
 <!-- Socket -->
 <script src="/socket.io/socket.io.js"></script>
@@ -46,9 +48,9 @@
 <script>
   const ORDER_ID = "<%= order._id %>";
   console.log("ORDER_ID:", ORDER_ID);
-  const CUSTOMER_LAT = "<%= order.customerLocation && order.customerLocation.lat ? order.customerLocation.lat : 25.4358 %>";
+  const CUSTOMER_LAT = Number("<%= order.customerLocation && order.customerLocation.lat ? order.customerLocation.lat : 25.4358 %>");
   console.log("CUSTOMER_LAT:", CUSTOMER_LAT);
-  const CUSTOMER_LNG = "<%= order.customerLocation && order.customerLocation.lng ? order.customerLocation.lng : 81.8463 %>";
+  const CUSTOMER_LNG =  Number("<%= order.customerLocation && order.customerLocation.lng ? order.customerLocation.lng : 81.8463 %>");
   console.log("CUSTOMER_LNG:", CUSTOMER_LNG);
 </script>
 

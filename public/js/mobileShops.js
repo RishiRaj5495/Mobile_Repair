@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // existing restaurant join (dashboard)
-    socket.emit("restaurant:join", RESTAURANT_ID);
+    // socket.emit("restaurant:join", RESTAURANT_ID); new'''''''''''''''''''''''''''''''''''''''''''''''
   });
 
   socket.on("new_order", order => {

@@ -2,6 +2,8 @@
  if(process.env.NODE_ENV !== "production") {
   require('dotenv').config();
     }
+   
+
  const admin = require("firebase-admin");
 
 
@@ -149,16 +151,6 @@ app.use(bodyParser.json());
 
 
 
-// app.use((req,res,next) => {
-
-// res.locals.success = req.flash("success");
-// res.locals.error = req.flash("error");
-// res.locals.currentUser = req.user; 
-// next();
-// });   
-
-
-
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -238,8 +230,6 @@ app.use("/orders", ordersRouter);//
 app.use('/api/orders', ordersRouter);//
 app.use('/api/restaurants', restaurantsRouter);//
 app.use('/mobileShop', restaurantsRouter);//
-
-
 app.get("/delivery/:orderId", async (req, res) => {
   const order = await Order.findById(req.params.orderId);
   res.render("listings/deliveryLive.ejs", { order });
@@ -250,15 +240,39 @@ app.post("/orders/:id/accept", async (req, res) => {
   });
   res.sendStatus(200);
 });
+const etaRoutes = require("./routes/eta.js");
+app.use("/", etaRoutes);
+
+// global.connectedRestaurants = new Set();
 
 
-  
 
+// io.on("connection", (socket) => {
+//   console.log("Restaurant connected", socket.id);
+// });
 
+// io.on("connection", (socket) => {
+//   console.log("Socket connected:", socket.id);
 
-io.on("connection", (socket) => {
-  console.log("Restaurant connected", socket.id);
-});
+//   socket.on("join_restaurant", (restaurantId) => {
+//     socket.join(restaurantId);
+//     connectedRestaurants.add(restaurantId);
+//     console.log("Restaurant joined:", restaurantId);
+//   });
+
+//   socket.on("disconnect", () => {
+//     console.log("Socket disconnected:", socket.id);
+
+//     // Remove restaurant if no socket left in room
+//     connectedRestaurants.forEach((id) => {
+//       const room = io.sockets.adapter.rooms.get(id);
+//       if (!room || room.size === 0) {
+//         connectedRestaurants.delete(id);
+//       }
+//     });
+//   });
+// });
+
 
 
 
@@ -276,22 +290,7 @@ admin.initializeApp({
   credential: admin.credential.cert(firebaseKeyPath),
 });
 
-
-  
-//   main()
-// .then(() => {
-//   console.log("MongoDb connection successful Rishi Raj Chandra");
-// })
-// .catch((err) => console.log (err));
-
-
-// async function main(){
-
-//   await mongoose.connect(, {
-   
-//   });
-// }
-
+// Error handling middleware
 
 app.use((err,req,res,next) =>{
   let {message ="Not valid",statusCode = 400} = err;
@@ -305,6 +304,7 @@ app.use((err,req,res,next) =>{
 //   });
 app.locals.admin = admin;
 app.locals.io = io;
+ // app.locals.GOOGLE_MAPS_FRONTEND_KEY = process.env.GOOGLE_MAPS_FRONTEND_KEY;
 server.listen(8080, () => {
   console.log("Server + Socket.io running on port 8080");
 });
