@@ -82,19 +82,7 @@ form.addEventListener('submit', async (e) => {
 //   formData.append("lat", pos.coords.latitude);
 //   formData.append("lng", pos.coords.longitude);
 // });
-navigator.geolocation.getCurrentPosition(
-  (pos) => {
-    formData.append("lat", pos.coords.latitude);
-    formData.append("lng", pos.coords.longitude);
 
-    // ✅ SEND AFTER LOCATION
-    xhr.send(formData);
-  },
-  (err) => {
-    alert("Location permission required");
-    resetSubmitBtn();
-  }
-);
 
 
 
@@ -138,7 +126,19 @@ function resetSubmitBtn() {
   btnText.textContent = 'Forward Request';
   submitBtn.disabled = false;
 }
-  
+  navigator.geolocation.getCurrentPosition(
+  (pos) => {
+    formData.append("lat", pos.coords.latitude);
+    formData.append("lng", pos.coords.longitude);
+
+    // ✅ SEND AFTER LOCATION
+    xhr.send(formData);
+  },
+  (err) => {
+    alert("Location permission required");
+    resetSubmitBtn();
+  }
+);
 
   
 });

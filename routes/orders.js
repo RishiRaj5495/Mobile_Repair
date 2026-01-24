@@ -12,7 +12,7 @@ const multer = require("multer");
 const {storage} = require("../cloudConfig.js"); // path of your cloudinary file
 const upload = multer({ storage });
 const Restaurant = require("../Models/mobileShops.js");
-const { admin, io } = require("../app"); // import firebase admin + sockets
+// const { admin, io } = require("../app"); // import firebase admin + sockets
 
 // Create a new order
 
@@ -61,10 +61,10 @@ console.log("Order with populated restaurant:", order);
       io.emitToRestaurant(restaurantId, "new_order", order);
     }
 
-    // 🔥 PUSH NOTIFICATION (FCM)
+    // 🔥 PUSH NOTIFICATION (FCM)   && !connectedRestaurants.has(restaurantId)
     const rest = await Restaurant.findById(restaurantId);
-     const admin = req.app.locals.admin;
-    if (rest?.fcmToken && admin) {
+     const admin = req.app.locals.admin;      
+    if (rest?.fcmToken && admin) {   
       const message = {
         token: rest.fcmToken,
         notification: {
@@ -141,9 +141,46 @@ router.get("/:orderId/track", async (req, res) => {
 });
 
 
+////////////
+
+// router.get("/get-eta", async (req, res) => {
+//   const { dLat, dLng, cLat, cLng } = req.query;
+
+//   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+
+//   const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${dLat},${dLng}&destinations=${cLat},${cLng}&key=${apiKey}`;
+
+//   try {
+//     const response = await fetch(url);
+//     const data = await response.json();
+
+//     const element = data.rows[0].elements[0];
+
+//     if (element.status === "OK") {
+//       res.json({
+//         distanceText: element.distance.text,
+//         durationText: element.duration.text,
+//         distanceMeters: element.distance.value
+//       });
+//     } else {
+//       res.status(400).json({ error: "Route not found" });
+//     }
+
+//   } catch (err) {
+//     console.error("ETA API error:", err);
+//     res.status(500).json({ error: "Failed to fetch ETA" });
+//   }
+// });
 
 
 
+
+
+
+
+
+
+///////////////////////
 module.exports = router;
 
 
