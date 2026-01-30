@@ -232,8 +232,9 @@ app.use('/api/restaurants', restaurantsRouter);//
 app.use('/mobileShop', restaurantsRouter);//
 app.get("/delivery/:orderId", async (req, res) => {
   const order = await Order.findById(req.params.orderId);
-  res.render("listings/deliveryLive.ejs", { order });
+  res.render("listings/viewTechnician.ejs", { order });
 });
+
 app.post("/orders/:id/accept", async (req, res) => {
   await Order.findByIdAndUpdate(req.params.id, {
     status: "accepted"

@@ -72,7 +72,7 @@ console.log("Order with populated restaurant:", order);
           body: `Order ${order._id}`,
         },
         data: { orderId: String(order._id) },
-        webpush: { fcmOptions: { link: `/orders/${order._id}` } }
+        webpush: { fcmOptions: { link: `/delivery/${order._id}` } }
       };
 
       admin.messaging().send(message)
