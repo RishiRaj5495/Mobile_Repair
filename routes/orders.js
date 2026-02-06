@@ -14,21 +14,43 @@ const upload = multer({ storage });
 const Restaurant = require("../Models/mobileShops.js");
 // const { admin, io } = require("../app"); // import firebase admin + sockets
 
-// Create a new order
 
+router.post("/:id/accept", async (req, res) => {
+  console.log("Accepting order:", req.params.id);
+  await Order.findByIdAndUpdate(req.params.id, {
+    status: "accepted"
+  });
+  res.sendStatus(200);
+});
+
+
+router.post("/:id/reject", async (req, res) => {
+  console.log("Rejecting order:", req.params.id);
+  await Order.findByIdAndUpdate(req.params.id, {
+    status: "rejected"
+  });
+  res.sendStatus(200);
+});
+
+// Create a new order
 router.post("/",upload.single("video"), async (req, res) => {
   try {
     const { customerFirstName, customerLastName,customerPhone, customerEmail, customerAddress, customerCity,  customerState, customerPincode, customerCountry, restaurantId,lat,lng} = req.body;
     console.log("Creating order for restaurant:", req.body.restaurantId);
-  
-
-
     const restaurant = await Restaurant.findById(restaurantId);
 console.log("Restaurant found:", restaurant);
  
  console.log("Received video file:", req.file);
  // cloudinary video URL
+let ticketId;
+let exists = true;
+
+while (exists) {
+  ticketId = "RN-" + Math.floor(100000 + Math.random() * 900000);
+  exists = await Order.exists({ ticketId });
+}
     let order = await Order.create({
+        ticketId,
       customerFirstName,
       customerLastName,
       customerPhone,
@@ -50,7 +72,7 @@ console.log("Restaurant found:", restaurant);
     });
 
  
-order = await Order.findById(order._id).populate("restaurant");
+order = await Order.findById(order._id).populate("restaurant").sort({ createdAt: -1 });
 
 console.log("Order with populated restaurant:", order);
 
@@ -84,7 +106,7 @@ console.log("Order with populated restaurant:", order);
 
   res.json({
   success: true,
-  redirectUrl: `/orders/${order._id}/track`,
+  redirectUrl: `/api/orders/${order._id}/track`,
   message: "Issue Forwarded",
   order
 });
@@ -94,40 +116,36 @@ console.log("Order with populated restaurant:", order);
   } catch (e) {
     console.error("Forwarding error:", e);
     res.status(500).json({ error: e.message });
- 
- 
- 
- 
   }
 
    
 });
 
+
+
 // Update order status (Accept / Decline)
-router.post("/:id/status", async (req, res) => {
-  try {
-    const { status } = req.body;
+// router.post("/:id/status", async (req, res) => {
+//   try {
+//     const { status } = req.body;
 
-    const order = await Order.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true }
-    ).populate("restaurant");
+//     const order = await Order.findByIdAndUpdate(
+//       req.params.id,
+//       { status },
+//       { new: true }
+//     ).populate("restaurant");
 
-    if (!order) return res.status(404).json({ error: "Order not found" });
+//     if (!order) return res.status(404).json({ error: "Order not found" });
+//     if (io.emitToRestaurant) {
+//       io.emitToRestaurant(order.restaurant._id, "order_status_changed", order);
+//     }
 
-    // 🔥 Notify restaurant dashboard
-    if (io.emitToRestaurant) {
-      io.emitToRestaurant(order.restaurant._id, "order_status_changed", order);
-    }
+//     res.json({ message: "Status updated", order });
 
-    res.json({ message: "Status updated", order });
-
-  } catch (e) {
-    console.error("Status update error:", e);
-    res.status(500).json({ error: e.message });
-  }
-});
+//   } catch (e) {
+//     console.error("Status update error:", e);
+//     res.status(500).json({ error: e.message });
+//   }
+// });
 
 
 
@@ -141,36 +159,24 @@ router.get("/:orderId/track", async (req, res) => {
 });
 
 
-////////////
+//////////
+//hm ye route is liye garha h kyuki mobile shop dashboard pr live orders dikhane h to jb wo apna id dega to uske hisab se orders fetch kr lenge
+router.get("/mobileDashboard/:restaurantId", async (req, res) => {
+  try {
+    const { restaurantId } = req.params;
+    const orders = await Order.find({
+      restaurant: restaurantId,
+      status: { $in: ["pending", "accepted"] }
+    })
+      .populate("restaurant")
+      .sort({ createdAt: -1 });
 
-// router.get("/get-eta", async (req, res) => {
-//   const { dLat, dLng, cLat, cLng } = req.query;
-
-//   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
-
-//   const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${dLat},${dLng}&destinations=${cLat},${cLng}&key=${apiKey}`;
-
-//   try {
-//     const response = await fetch(url);
-//     const data = await response.json();
-
-//     const element = data.rows[0].elements[0];
-
-//     if (element.status === "OK") {
-//       res.json({
-//         distanceText: element.distance.text,
-//         durationText: element.duration.text,
-//         distanceMeters: element.distance.value
-//       });
-//     } else {
-//       res.status(400).json({ error: "Route not found" });
-//     }
-
-//   } catch (err) {
-//     console.error("ETA API error:", err);
-//     res.status(500).json({ error: "Failed to fetch ETA" });
-//   }
-// });
+    res.json(orders);
+  } catch (err) {
+    console.error("Fetch orders error:", err);
+    res.status(500).json({ message: "Failed to fetch orders" });
+  }
+});
 
 
 

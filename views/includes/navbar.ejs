@@ -16,7 +16,7 @@
     <span class="homie">Home</span>
   </a>
   
-  <div class="contact" style="flex-wrap: wrap;">
+  <!-- <div class="contact" style="flex-wrap: wrap;">
     <span style=" color: rgb(53, 175, 28);">Contact  </span>
     <span style=" color: rgb(53, 175, 28);"> : 9628465495,</span><span style=" color: rgb(53, 175, 28);">9307159365</span>
    <div class="call-icon" alt="call-icon">
@@ -24,16 +24,29 @@
       call
       </span>
 
-
-
-      <!-- <span class="calls">Call</span> -->
-  </div></div>
+  </div></div> -->
 
 <!-- ////// -->
-      <div class="clickToRepair" style="display:none;">
-          <a href="/admin" class="clickToRepair" style="   text-decoration: none; min-width: 140px;  color: inherit; border: black 2px;">Click To Repair</a>
+      <% if (!currentRestaurant) { %>
+      <div class="clickToRepai" >
+          <a href="/mobileshops" class="clickToRepair" style="   text-decoration: none; min-width: 140px;  color: inherit; border: black 2px;">Technician Login / Register</a>
   </div>
+<% } %>
 
+      <% if (currentRestaurant) { %>
+      <div class="clickToRepair" >
+          <a href="/mobileshops" class="clickToRepair" style="   text-decoration: none; min-width: 140px;  color: inherit; border: black 2px;"> 🏪 Visit Your Shop</a>
+  </div>
+<% } %>
+ <% if (currentRestaurant) { %>
+  <div class="containerz my-3" >
+  <a href="/mobileShop/yourShop/logout"
+     class=" btn btn-danger  btn-md" style="
+text-align: center;">
+    ⛔ Close Shop
+  </a>
+</div>
+<% } %>
   <!-- //// -->
   <div class="right-nav">
 
@@ -44,7 +57,7 @@
           <a href="/users/logout" class="signu" style="   text-decoration: none;   color: inherit; ">log out</a>
   </div>
       <% } %>
-   <% if(!currentUser) { %>
+   <% if(!currentRestaurant && !currentUser) { %>
   <div class="share" alt="share-link">
     
 <a href="/users/login" class="ma" style=" text-decoration: none;   color: inherit; "> Login</a>

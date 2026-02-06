@@ -222,65 +222,20 @@ const usersRouter = require("./routes/users.js");
 
 
 app.use("/users", usersRouter);
-const ordersRouter = require('./routes/orders.js');//
-const restaurantsRouter = require('./routes/mobileShops.js');//
+const ordersRouter = require('./routes/orders.js');
+const restaurantsRouter = require('./routes/mobileShops.js');
 const fcmRouter = require("./routes/fcm.js");
-app.use("/api/fcm", fcmRouter);                // save token / testing endpoints
-app.use("/orders", ordersRouter);//
-app.use('/api/orders', ordersRouter);//
-app.use('/api/restaurants', restaurantsRouter);//
-app.use('/mobileShop', restaurantsRouter);//
+app.use("/api/fcm", fcmRouter);  // save token / testing endpoints
+app.use('/api/orders', ordersRouter);
+app.use('/api/restaurants', restaurantsRouter);
+app.use('/mobileShop', restaurantsRouter);
 app.get("/delivery/:orderId", async (req, res) => {
   const order = await Order.findById(req.params.orderId);
   res.render("listings/viewTechnician.ejs", { order });
 });
 
-app.post("/orders/:id/accept", async (req, res) => {
-  await Order.findByIdAndUpdate(req.params.id, {
-    status: "accepted"
-  });
-  res.sendStatus(200);
-});
 const etaRoutes = require("./routes/eta.js");
 app.use("/", etaRoutes);
-
-// global.connectedRestaurants = new Set();
-
-
-
-// io.on("connection", (socket) => {
-//   console.log("Restaurant connected", socket.id);
-// });
-
-// io.on("connection", (socket) => {
-//   console.log("Socket connected:", socket.id);
-
-//   socket.on("join_restaurant", (restaurantId) => {
-//     socket.join(restaurantId);
-//     connectedRestaurants.add(restaurantId);
-//     console.log("Restaurant joined:", restaurantId);
-//   });
-
-//   socket.on("disconnect", () => {
-//     console.log("Socket disconnected:", socket.id);
-
-//     // Remove restaurant if no socket left in room
-//     connectedRestaurants.forEach((id) => {
-//       const room = io.sockets.adapter.rooms.get(id);
-//       if (!room || room.size === 0) {
-//         connectedRestaurants.delete(id);
-//       }
-//     });
-//   });
-// });
-
-
-
-
-
-
-
-
 
 
 const firebaseKeyPath = process.env.RENDER

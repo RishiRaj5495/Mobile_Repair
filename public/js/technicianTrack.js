@@ -62,7 +62,7 @@ function updateTechnicianMarker(lat, lng) {
     technicianMarker.slideTo(newLatLng, { duration: 1000 });
   }
 
-  calculateDistanceAndETA([lat, lng]);
+ calculateDistanceAndETA([lat, lng]);
 }
 
 // ETA + DISTANCE

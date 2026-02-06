@@ -1,13 +1,24 @@
 
-/////////////////
-let socket;
 
+let socket;
+let orders = [];
 document.addEventListener("DOMContentLoaded", async () => {
 
-  socket = io();
+    if (!RESTAURANT_ID) {
+    console.error("Restaurant ID missing");
+    return;
+  }
+await registerForNotifications(RESTAURANT_ID);
+await loadExistingOrders();
+socket = io();
+
+ 
+
 
   socket.on("connect", () => {
     console.log("Shop socket connected:", socket.id);
+     socket.emit("restaurant:join", RESTAURANT_ID);
+    console.log("Restaurant connected:", RESTAURANT_ID);
 
     // Join order room ONLY if order page
     if (typeof CURRENT_ORDER_ID !== "undefined") {
@@ -15,22 +26,32 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log("Shop joined order room:", CURRENT_ORDER_ID);
     }
 
-    // existing restaurant join (dashboard)
-    // socket.emit("restaurant:join", RESTAURANT_ID); new'''''''''''''''''''''''''''''''''''''''''''''''
+   
   });
+///
 
-  socket.on("new_order", order => {
-    showOrder(order);
-  });
+socket.on("new_order", order => {
+  if (!document.getElementById(`order_${order._id}`)) {
+    orders.unshift(order);
+    renderOrder(order, "top"); // latest on top
+  }
+});
+
+///////
+//   socket.on("new_order", order => {
+//   if (!document.getElementById(`order_${order._id}`)) {
+//     showOrder(order);
+//   }
+// });
 
   socket.on("order_status_changed", order => {
     updateOrderUI(order);
   });
-
+ 
 });
 
 
-/////////////
+
 
 
 
@@ -119,101 +140,7 @@ function resetBtn() {
 
 
 
-// let socket;   map
-
-document.addEventListener("DOMContentLoaded", async () => {
-  if (!RESTAURANT_ID) {
-    console.error("Restaurant ID missing");
-    return;
-  }
-
-  // 1. Register FCM token
-  await registerForNotifications(RESTAURANT_ID);
-
-  // 2. Connect socket
-  socket = io();
-
-  socket.on("connect", () => {
-    socket.emit("restaurant:join", RESTAURANT_ID);
-    console.log("Restaurant connected:", RESTAURANT_ID);
-  });
-
-  socket.on("new_order", order => {
-    showOrder(order);
-  });
-
-  socket.on("order_status_changed", order => {
-    updateOrderUI(order);
-  });
-});
-
-
-function showOrder(order) {
-  const div = document.createElement('div');
-  div.className = 'order-box';
-  div.id = `order_${order._id}`;
-
-  div.innerHTML = `
-    <h3>🆕 New Order #${order._id}</h3>
-
-    <div class="order-body">
-
-      <!-- LEFT : Customer details -->
-      <div class="order-left">
-        <p><strong>Customer:</strong> ${order.customerFirstName || ''} ${order.customerLastName || ''}</p>
-        <p><strong>Phone:</strong> ${order.customerPhone || 'N/A'}</p>
-        <p><strong>Email:</strong> ${order.customerEmail || 'N/A'}</p>
-        <p><strong>Address:</strong> ${order.customerAddress || ''}</p>
-        <p><strong>State:</strong> ${order.customerState || ''} | 
-           <strong>City:</strong> ${order.customerCity || ''}</p>
-        <p><strong>Pincode:</strong> ${order.customerPincode || ''}</p>
-      </div>
-
-      <!-- RIGHT : Video -->
-
-<div class="order-right" style="display: flex;
-    flex-direction: column;
-    align-items: anchor-center;">
-  <div class="video-title"  style=" font-weight: 600;
-  margin-bottom: 6px;" >📹 Issue Video</div>
-
-  ${
-    order.video && order.video.url
-      ? `<video controls>
-           <source src="${order.video.url}" type="video/mp4">
-         </video>`
-      : `<p class="no-video">No video provided</p>`
-  }
-</div>
-
-
-
-
-    </div>
-
-    <div class="shop-info">
-      <p><strong>Forwarded To Shop:</strong> ${order.restaurant?.name || ''}</p>
-      <p><strong>Shop Address:</strong> ${order.restaurant?.address || ''}</p>
-      <p><strong>Shop Mobile:</strong> ${order.restaurant?.mobile || ''}</p>
-    </div>
-
-
-    <p id="status_${order._id}"><strong>Status:</strong> Pending</p>
-
-<div class="order-actions" id="actions_${order._id}">
-  <button class="accept" onclick="acceptOrder('${order._id}')">Accept</button>
-  <button class="reject" onclick="rejectOrder('${order._id}')">Reject</button>
-  
-</div>
-
-  `;
-
-  document.getElementById('orders').appendChild(div);
-}
-
-
-
-function updateOrderUI(order) {
+  function updateOrderUI(order) {
   const statusEl = document.getElementById(`status_${order._id}`);
   const actionsEl = document.getElementById(`actions_${order._id}`);
 
@@ -238,8 +165,8 @@ function updateOrderUI(order) {
 //   socket.emit('order:updateStatus', { orderId, status: 'Accepted' });
 // }
 
-function acceptOrder(orderId) {
-  fetch(`/orders/${orderId}/accept`, {
+  async function acceptOrder(orderId) {
+    await  fetch(`/api/orders/${orderId}/accept`, {
     method: "POST"
   })
     .then(res => {
@@ -248,13 +175,82 @@ function acceptOrder(orderId) {
     })
     .catch(err => console.error(err));
 }
+    async function rejectOrder(orderId) {
+      console.log("Rejecting order:", orderId);
 
-
-function rejectOrder(orderId) {
+      await fetch(`/api/orders/${orderId}/reject`, {
+        method: "POST"
+      })
+  
     console.log("Status Socket =", socket);
-  if (!socket) return;
+     if (!socket) return;
   socket.emit('order:updateStatus', { orderId, status: 'Rejected' });
+     }
+
+
+async function loadExistingOrders() {
+  console.log("Star loadExistingOrders");
+  try {
+    const res = await fetch(`/api/orders/mobileDashboard/${RESTAURANT_ID}`);
+    const orders = await res.json();
+
+ console.log("Filter order", orders);
+    // orders.forEach(order => showOrder(order));
+    orders.forEach(order => renderOrder(order));
+
+
+  } catch (err) {
+    console.error("Failed to load existing orders", err);
+  }
 }
 
+//////////////
 
 
+
+
+
+function renderOrder(order, position = "bottom") {
+  const div = document.createElement('div');
+  div.className = 'order-box';
+  div.id = `order_${order._id}`;
+
+  div.innerHTML = `
+    <h3>🆕 Repair Request ${order.ticketId}</h3>
+
+    <div class="order-body">
+      <div class="order-left">
+        <p><strong>Customer:</strong> ${order.customerFirstName} ${order.customerLastName}</p>
+        <p><strong>Phone:</strong> ${order.customerPhone}</p>
+        <p><strong>Email:</strong> ${order.customerEmail}</p>
+        <p><strong>Address:</strong> ${order.customerAddress}</p>
+        <p><strong>State:</strong> ${order.customerState} |
+           <strong>City:</strong> ${order.customerCity}</p>
+        <p><strong>Pincode:</strong> ${order.customerPincode}</p>
+      </div>
+
+      <div class="order-right">
+        ${
+          order.video?.url
+            ? `<video controls src="${order.video.url}"></video>`
+            : `<p class="no-video">No video provided</p>`
+        }
+      </div>
+    </div>
+
+    <p id="status_${order._id}"><strong>Status:</strong> ${order.status}</p>
+
+    <div class="order-actions" id="actions_${order._id}">
+      <button class="accept"  onclick="acceptOrder('${order._id}')">Accept</button>
+      <button class="reject" onclick="rejectOrder('${order._id}')">Reject</button>
+    </div>
+  `;
+
+  const container = document.getElementById('orders');
+
+  position === "top" 
+    ? container.prepend(div)   // 🔥 new order
+    : container.appendChild(div); // old orders
+}
+
+///////////////

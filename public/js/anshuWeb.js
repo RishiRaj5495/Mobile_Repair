@@ -64,7 +64,8 @@ function priceList(){
           
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger  btn-md">Call Now</button> 
+          <a href="/listings" type="button" class="btn btn-danger  btn-md">Click to repair</a> 
+
         </div>
       </div>
     </div>
