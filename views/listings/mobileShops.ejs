@@ -131,81 +131,8 @@ min-width: 120px;
 </style>
 
 
-<!-- <h1>Restaurant Dashboard (RepairNow)</h1>
-
-<label>Restaurant ID: <input id="restId" /></label>
-<button id="join">Connect</button>
-
-<div id="orders"></div>  -->
-
- <!-- Load your JS logic -->
- <!-- <script src="/socket.io/socket.io.js"></script>
- <script src="https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.9.4/firebase-messaging.js"></script>
-<script src="/js/firebase-config.js"></script>
-<script src="/js/mobileShops.js"></script>  -->
-
-
-<!-- <h1 style="text-align: center;">Mobileshop Dashboard (RepairNow)</h1> -->
- <!-- <div class="dashboard-header">
-  <h1>
-    <span class="brand">RepairNow</span>
-    <span class="title">Mobile Shop Dashboard</span>
-  </h1>
-  <p class="subtitle">Manage orders, repairs, and live updates in one place</p>
-</div>
-
-
-<h3>Register (first time)</h3> -->
-<!-- <form id="restaurantForm">
-  <input  type="text"  id="name" name="name" placeholder="Restaurant Name" required />
-  <input  type="text"  id="address" name="address"     placeholder="Address" required />
-  <input type="number"  id="mobile"  name="mobile"    placeholder="Mobile" required />
-  <button type="submit">Register & Save Token</button>
-</form> -->
-
-<!-- <form id="restaurantForm">
-  <input type="text" id="name" name="name" placeholder="Username" required />
-  <input type="email" id="email" name="email"  placeholder="Email" required />
-  <input type="password" id="password" name="password"  placeholder="Password" required />
-  <input type="number" id="phone"  name="phone" placeholder="Phone" required />
-  <input type="text" id="address" name="address"  placeholder="Address" required />
-  <button type="submit">Sign Up</button>
-</form> -->
-  <!-- Dashboard Header -->
-<!-- Dashboard Header -->
-
-<!-- Register Section -->
-
-
-
-<!-- <label>Restaurant ID: <input id="restId" /></label> -->
-
-<!-- ----------------------------------------------------------------------- -->
- <!-- <label>Restaurant ID: <input id="restId" /></label>
-<button id="join">Connect</button> -->
-
-
   <% if(!currentRestaurant) { %>
-<!-- 
-     <div class="page-container">
-  <div class="register-container">
-    <h3>Register <span>(first time)</span></h3>
 
-    <form id="restaurantForm">
-      <input type="text" id="name" name="name" placeholder="Shop Name" required />
-      <input type="email" id="email" name="email" placeholder="Email Address" required />
-      <input type="number" id="phone" name="phone" placeholder="Phone Number" required />
-      <input type="password" id="password" name="password" placeholder="Password" required />
-      <input type="text" id="address" name="address" placeholder="Shop Address" required />
-
-      <button type="submit">Create Account</button>
-    </form>
-  </div>
-
-  <hr class="section-divider" />
-</div> -->
-<!-- ////////////////////////// -->
 <div class="container min-vh-100 d-flex align-items-center justify-content-center">
   <div class="row w-100 justify-content-center">
     <div class="col-md-8 col-lg-6">
@@ -442,23 +369,6 @@ min-width: 120px;
 
 
 <% if (currentRestaurant) { %>
-  <!-- <div class="shopClose">
-  <a href="/mobileShop/yourShop/logout" class="close-shop-btn">
-    🚫 Close Your Shop
-  </a>
-</div>
- <div class="live-orders-header">
-  <h3>⚡ Connect to Live Orders</h3>
-  <p class="subtitle">Receive real-time notifications from your customers</p>
-</div> -->
-<!-- CLOSE SHOP BAR -->
-<div class="container my-3">
-  <a href="/mobileShop/yourShop/logout"
-     class=" btn btn-danger  btn-md" style="
-text-align: center;">
-    ⛔ Close Shop
-  </a>
-</div>
 
 <!-- LIVE ORDERS CARD -->
 <div class="container mb-5">
@@ -475,8 +385,9 @@ text-align: center;">
 
   
 <div id="orders"></div>
-  <script>
-    const RESTAURANT_ID = "<%= currentRestaurant._id %>";
+
+   <script>
+    window.RESTAURANT_ID = "<%= currentRestaurant._id %>";
   </script>
 <% } %>
 

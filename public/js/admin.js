@@ -2,18 +2,6 @@
 
 // SOCKET CONNECTION
 const socket = io();
-
-// socket.on('connect', () => {
-//   console.log("Admin socket connected:", socket.id);
-// });
-
-// socket.on('disconnect', () => {
-//   console.log("Admin socket DISCONNECTED");
-// });
-/////////////////////////////////
-
-
-
 socket.on("connect", () => {
   console.log("Customer socket connected:", socket.id);
 
@@ -26,7 +14,7 @@ socket.on("connect", () => {
 socket.on("disconnect", () => {
   console.log("Customer socket disconnected");
 });
-/////////////////
+
 
 
 

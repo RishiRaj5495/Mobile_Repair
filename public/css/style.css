@@ -16,20 +16,23 @@ padding: 0;
 .a{
   width: 100%;
 }
-#navigation-bar{
 
-align-items: center;
-  height: 57px;
-  background-color: rgba(128, 128, 128, 0.021);
- 
-  box-shadow :0 0 1px rgb(134, 134, 134);
-  display: flex;
-  margin-top: 0px ;
-
+#navigation-bar {
   position: fixed;
   top: 0;
+  left: 0;
+  width: 100%;                 /* Make full width */
+  height: 57px;
+  /* background-color: rgba(128, 128, 128, 0.021); */
+  box-shadow: 0 0 1px rgb(134, 134, 134);
+    background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(5px); 
 
-  
+  display: flex;
+  justify-content: space-between;  /* Equal spacing L–C–R */
+  align-items: center;
+  padding: 0 20px;                 /* Side spacing */
+  z-index: 999;                    /* Stay above other content */
 }
 .repair-box {
   background: linear-gradient(135deg, #ff9800, #ff5722);
@@ -49,23 +52,7 @@ align-items: center;
 }
 
 /* NAVBAR */
-#navigation-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;                 /* Make full width */
-  height: 57px;
-  /* background-color: rgba(128, 128, 128, 0.021); */
-  box-shadow: 0 0 1px rgb(134, 134, 134);
-    background-color: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(5px); 
 
-  display: flex;
-  justify-content: space-between;  /* Equal spacing L–C–R */
-  align-items: center;
-  padding: 0 20px;                 /* Side spacing */
-  z-index: 999;                    /* Stay above other content */
-}
 
 /* Push the remaining page content down */
 body {
@@ -114,6 +101,7 @@ min-width: 372px;
   margin-inline-start: auto;
   margin-right: 5px;
   display: flex;
+  margin-left: 0px;
 }
 .call-icon{
   /* height: 20px; */

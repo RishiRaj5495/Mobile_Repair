@@ -24,8 +24,14 @@ restaurant: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant', required:
     },
 total: Number,
 status: { type: String, enum: ['pending','accepted','declined','preparing','picked','delivered','cancelled'], default: 'pending' },
-createdAt: { type: Date, default: Date.now }
-});
+
+ticketId: {
+  type: String,
+  required: true,
+  unique: true
+},
+
+},{ timestamps: true }) ;
 
 
 module.exports = mongoose.model('Order', orderSchema);
