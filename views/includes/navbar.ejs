@@ -1,12 +1,129 @@
 
+  <style>
+    .outline-btn {
+  border: 2px solid #2563eb;
+  color: #2563eb;
+  padding: 8px 16px;
+  border-radius: 999px;
+  transition: 0.3s ease;
+  font-weight: 500;
+}
+
+.outline-btn:hover {
+ background: #2563eb;
+  color: white;
+}
+
+#navigation-bar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 64px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  z-index: 1000;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 20px;
+  text-decoration: none;
+  color: #2563eb;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Buttons */
+.nav-btn {
+  padding: 8px 18px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.25s ease;
+}
+
+.primary-btn {
+  background: #2563eb;
+  color: white;
+}
+
+.primary-btn:hover {
+  background: #1e40af;
+}
+
+.danger-btn {
+  background: #ef4444;
+  color: white;
+}
+
+.danger-btn:hover {
+  background: #dc2626;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: #2563eb;
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* ===================== */
+/* MOBILE RESPONSIVE */
+/* ===================== */
+
+@media (max-width: 768px) {
+
+  .nav-links {
+    position: absolute;
+    top: 64px;
+    right: 0;
+    background: white;
+    width: 220px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 15px;
+    box-shadow: -4px 4px 12px rgba(0,0,0,0.1);
+    display: none;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+    </style>
   
   
   
   
   
-  
-  
-  <div id="navigation-bar" >
+  <!-- <div id="navigation-bar" >
   <a   href="/" class="home" alt="Home" style="text-decoration: none;">
 
     <span class="material-symbols-outlined myclass">
@@ -15,18 +132,7 @@
    
     <span class="homie">Home</span>
   </a>
-  
-  <!-- <div class="contact" style="flex-wrap: wrap;">
-    <span style=" color: rgb(53, 175, 28);">Contact  </span>
-    <span style=" color: rgb(53, 175, 28);"> : 9628465495,</span><span style=" color: rgb(53, 175, 28);">9307159365</span>
-   <div class="call-icon" alt="call-icon">
-    <span class="material-symbols-outlined">
-      call
-      </span>
 
-  </div></div> -->
-
-<!-- ////// -->
       <% if (!currentRestaurant) { %>
       <div class="clickToRepai" >
           <a href="/mobileshops" class="clickToRepair" style="   text-decoration: none; min-width: 140px;  color: inherit; border: black 2px;">Technician Login / Register</a>
@@ -38,6 +144,8 @@
           <a href="/mobileshops" class="clickToRepair" style="   text-decoration: none; min-width: 140px;  color: inherit; border: black 2px;"> 🏪 Visit Your Shop</a>
   </div>
 <% } %>
+
+  <div class="right-nav">
  <% if (currentRestaurant) { %>
   <div class="containerz my-3" >
   <a href="/mobileShop/yourShop/logout"
@@ -47,9 +155,6 @@ text-align: center;">
   </a>
 </div>
 <% } %>
-  <!-- //// -->
-  <div class="right-nav">
-
 
           <% if(currentUser){ %>
        
@@ -71,25 +176,31 @@ text-align: center;">
 
 <div class="right-nav1" style="margin-left: 50px;;">
 
-  <!-- Hamburger Icon -->
+
   <div class="hamburger" id="hamburger">
     ☰
   </div>
 
-  <!-- Hamburger Menu -->
+
   <div class="hamburger-menu" id="hamburgerMenu">
+     <% if (currentRestaurant) { %>
+  <div class="containerz my-3" >
+  <a href="/mobileShop/yourShop/logout"
+     class=" btn btn-danger  btn-md" style="
+text-align: center;">
+    ⛔ Close Shop
+  </a>
+</div>
+<% } %>
 
     <% if (currentUser) { %>
       <a href="/users/logout" class="menu-item">Log out</a>
     <% } %>
 
-    <% if (!currentUser) { %>
+    <% if (!currentRestaurant &&!currentUser) { %>
       <a href="/users/login" class="menu-item">Login</a>
       <a href="/users/signup" class="menu-item">Sign up</a>
     <% } %>
-
-    <!-- Future buttons go here -->
-    <!-- <a href="/profile" class="menu-item">Profile</a> -->
 
   </div>
 
@@ -110,4 +221,74 @@ text-align: center;">
 </script>
 
   </div>
+ -->
+<nav id="navigation-bar">
 
+  <!-- LEFT -->
+  <a href="/" class="brand">
+    <span class="material-symbols-outlined">home</span>
+    <span class="brand-name">RepairNow</span>
+  </a>
+
+  <!-- DESKTOP MENU -->
+  <div class="nav-links" id="navLinks">
+
+    <% if (currentRestaurant) { %>
+      <a href="/mobileshops" class="nav-btn primary-btn">
+        🏪 Visit Shop
+      </a>
+
+      <a href="/mobileShop/yourShop/logout"
+         class="nav-btn danger-btn">
+         ⛔ Close Shop
+      </a>
+    <% } %>
+
+    <% if (currentUser) { %>
+      <a href="/users/logout" class="nav-link">Logout</a>
+    <% } %>
+
+    <!-- <% if (!currentRestaurant && !currentUser) { %>
+      <a href="/users/login" class="nav-link">Login</a>
+      <a href="/users/signup" class="nav-btn primary-btn">
+        Sign up
+      </a>
+    <% } %> -->
+<% if (!currentRestaurant && !currentUser) { %>
+
+  <a href="/users/login" class="nav-link">Login</a>
+
+  <a href="/users/signup" class="nav-btn primary-btn">
+    Sign up
+  </a>
+
+  <a href="/mobileshops" class="nav-btn outline-btn">
+    🛠 Technician Login / Register
+  </a>
+
+<% } %>
+
+
+  </div>
+
+  <!-- HAMBURGER -->
+  <div class="hamburger" id="hamburger">
+    ☰
+  </div>
+<script>
+  const hamburger = document.getElementById("hamburger");
+  const navLinks = document.getElementById("navLinks");
+
+  hamburger.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!hamburger.contains(e.target) && 
+        !navLinks.contains(e.target)) {
+      navLinks.classList.remove("active");
+    }
+  });
+</script>
+
+</nav>
