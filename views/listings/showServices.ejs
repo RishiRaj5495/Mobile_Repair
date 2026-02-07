@@ -3,17 +3,36 @@
 
 
 <style>
+  .shop-card {
+  transition: 0.3s ease;
+}
+
+.shop-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.primary-btn {
+  background: #2563eb;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  transition: 0.3s ease;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.primary-btn:hover {
+  background: #1d4ed8;
+
+  color: white;
+   transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
 
 
-/* jjjjjjjjjjjjjjjjjjjjjjjjjj */
-  .mainContent {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-   
-    row-gap:10;
-    
-    
-  }
+
+
   .no-shadow  {
     border: none;
   }
@@ -28,146 +47,133 @@
   }
 </style>
 
+<div class="container py-5">
 
-<div id="grid">
-  <div class="a" style="background: rgba(180, 180, 180, 0.25); padding: 30px; border-radius: 12px; ">
-  <div class="center">
+  <div class="row g-4">
 
-    
-   <div id="shopName">RepairNow</div> 
+    <!-- LEFT SIDEBAR -->
+    <div class="col-lg-4">
 
-   <div class="myElement  repair">
-          <a href="/admin" class="myElement repair2"  style="text-decoration: none;   color: inherit; width: 95px; border: black 2px;">Click To Repair</a>
-  </div>
+      <div class="card shadow-sm border-0 p-4">
 
-  </div>
-<br><br>
-  <div class="leftBar">
-    <Address>
-     
-     
-    
-      
-      <div>
-        <span><i class="fa-solid fa-location-dot" id="ptaGar"></i> </span>
-        <span>Address : 116/68C/157 Himmatganj </span><br> <span class="Prayagraj">Prayagraj,</span></div>
-        <div>
-       <div id="time">
-        </div>          
-           Opening : <p id="clock">10 'o clock</p> </div>
-    
-    </Address></div>
-<!-- <div style="background: linear-gradient(135deg, #ff9800, #ff5722); padding: 25px; border-radius: 10px; text-align: center; color: white; margin-bottom: 15px; width: 400px;margin-left: auto; margin-right: auto;">
-  <h2 style="font-weight: 700; margin-bottom: 8px;">📱 Got a Damaged Phone?</h2>
-  <p style="font-size: 17px; margin: 0;">
-    Upload a short video of your damaged mobile and get an instant repair estimate — fast, easy & hassle-free! 🔧✨
-  </p>
-</div> -->
-<div class="repair-box" >
-  <h2>📱 Got a Damaged Phone?</h2>
-  <p>
-    Upload a short video of your damaged mobile and get an instant repair estimate — fast, easy & hassle-free! 🔧✨
+        <h2 class="fw-bold text-primary mb-3">RepairNow</h2>
+
+        <p class="mb-2">
+          <i class="fa-solid fa-location-dot text-danger"></i>
+          116/68C/157 Himmatganj, Prayagraj
+        </p>
+
+        <p class="mb-3">
+          <strong>Opening:</strong> 10 o’clock
+        </p>
+
+        <!-- <div class="bg-warning bg-gradient text-dark p-3 rounded mb-3">
+          <h5 class="fw-bold">📱 Got a Damaged Phone?</h5>
+          <p class="small mb-0">
+            Upload a short video and get instant repair estimate — fast & hassle-free!
+          </p>
+        </div> -->
+        <div class="p-3 rounded-4 shadow-sm"
+     style="background: linear-gradient(135deg, #ffcc00, #ff9900);">
+  <h6 class="fw-bold mb-2">📱 Got a Damaged Phone?</h6>
+  <p class="small mb-0">
+    Upload a short video and get instant repair estimate — fast & hassle-free!
   </p>
 </div>
 
-
-    <!-- <img src="images/charger.jpg" alt="charger" class="charger"> -->
-<div id="carouselExampleAutoplaying" class="carousel slide videoClass" data-bs-ride="carousel" style="width: 400px; ">
-  <div class="carousel-inner">
-
-    <div class="carousel-item active">
-      <video class="d-block w-100" autoplay muted loop>
-        <source src="videos/video1.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="carousel-item">
-      <video class="d-block w-100" autoplay muted loop>
-        <source src="videos/video2.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="carousel-item">
-      <video class="d-block w-100" autoplay muted loop>
-        <source src="videos/video3.mp4" type="video/mp4">
-      </video>
-    </div>
-
-  </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon"></span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-    <span class="carousel-control-next-icon"></span>
-  </button>
-</div>
-
-
-
-    <br><br>
-   
-
-    
-  </div>
-  <div id="b" >
-    <div id="contents">
-
-  <div class="content"id="firstItem" onclick="accessories()">Accssories </div>
-  <div class="content"id="secondItem">Review & Rating</div>
-  <div class="content"id="thirdItem" onclick="priceList()">Price list </div>
-    </div>
-
-    <div class="mainContent">
-   
-
-<div class="repair-list-container"  style=" width: 800px;  margin: 20px 0px; padding: 2rem;">
-  <% for (let restaurant of restaurants) { %>
-    <div class="card repair-card mb-4" style="padding: 0rem 2.5rem;">
-      <div class="card-body">
-
-        <div class="d-flex justify-content-between align-items-start mb-2">
-          <h5 class="fw-bold mb-0"><%= restaurant.name %></h5>
-          <span class="rating-pill">
-            <%= restaurant.rating || "4.5" %> ★
-          </span>
-         
-
-        </div>
-
-        <p class="text-muted mb-1">
-          <strong>Address:</strong> <%= restaurant.address %>
-        </p>
-        <p class="text-muted mb-3">
-          <strong>Mobile:</strong> <%= restaurant.phone %>
-        </p>
-
-        <div class="text-end">
-           <!-- <a href="/admin" class="btn btn-danger btn-sm px-4"> Forward your issue</a> -->
-           <a href="/admin/<%= restaurant._id %>"
-   class="btn btn-danger btn-sm px-4">
-   Forward your issue
-</a>
-
-          
-         
-         
-        </div>
 
       </div>
-    </div>
-  <% } %>
-</div>
-
-
-
-
-</div>
-
- 
-    
-</div>
 
     </div>
-<script src="/js/probList.js"></script>
- <script src="/js/product.js"></script>
- <script src="/js/anshuWeb.js"></script>
+
+
+    <!-- RIGHT CONTENT -->
+    <div class="col-lg-8">
+
+      <!-- Tabs -->
+      <div class="d-flex gap-3 mb-4">
+        <button class="btn btn-dark px-4" id="accessoriesBtn">Accessories</button>
+        <button class="btn btn-outline-dark px-4">Review & Rating</button>
+        <button class="btn btn-outline-dark px-4"  id="accessoriesBtn1">Price List</button>
+      </div>
+
+
+      <!-- Repair Cards -->
+      <div class="row g-4 priceListContainer">
+
+        <% for (let restaurant of restaurants) { %>
+
+          <div class="col-md-6">
+
+            <div class="card shop-card h-100 shadow-sm border-0">
+
+              <div class="card-body">
+
+                <div class="d-flex justify-content-between mb-2">
+                  <h5 class="fw-bold mb-0"><%= restaurant.name %></h5>
+                  <span class="badge rounded-pill px-3 py-2 bg-success-subtle text-success fw-semibold">
+                    <%= restaurant.rating || "4.5" %> ★
+                  </span>
+                </div>
+
+                <p class="text-muted small">
+                  <strong>Address:</strong> <%= restaurant.address %>
+                </p>
+
+                <!-- <div class="text-end">
+                  <a href="/admin/<%= restaurant._id %>"
+                     class="btn-danger">
+                     Forward your issue
+                  </a>
+                </div> -->
+<div class="mt-3">
+  <a href="/admin/<%= restaurant._id %>" class="primary-btn">
+    Forward your issue
+  </a>
+</div>
+
+
+
+              </div>
+
+            </div>
+
+          </div>
+
+        <% } %>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const accessoriesBtn = document.getElementById("accessoriesBtn");
+
+  if (accessoriesBtn) {
+    accessoriesBtn.addEventListener("click", () => {
+      renderPriceList(problem);
+    });
+  }
+});
+document.addEventListener("DOMContentLoaded", () => {
+
+  const accessoriesBtn = document.getElementById("accessoriesBtn1");
+
+  if (accessoriesBtn) {
+    accessoriesBtn.addEventListener("click", () => {
+      renderProducts(product);
+    });
+  }
+
+});
+
+
+
+</script>
+
