@@ -6,7 +6,6 @@
 
  const admin = require("firebase-admin");
 
-
 // const {isLogged,isOwner,validateListing} = require("./middlewear.js");
 const {isLogged} = require("./middlewear.js");
   const express = require("express");
@@ -48,12 +47,13 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST"],
   },
 });
-// serve admin and restaurant pages
-//connect sockets
+io.use((socket, next) => {
+  sessionMiddleware(socket.request, {}, next);
+});
 socketSetup(io);
 
-const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
-// const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
+// const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
+const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
 main()
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.log("DB error:", err));
@@ -61,8 +61,6 @@ main()
 async function main() {
   await mongoose.connect(dbUrl);
 }
-
-
 const store = MongoStore.create({
   mongoUrl: dbUrl,
    collectionName: "sessions",
@@ -90,30 +88,13 @@ const sessionOptions = {
 
 
 
-// const sessionOptions = {
-//   // store,
-// secret : process.env.SECRET,
-//   resave : false,         
-//   saveUninitialized : true ,
-//   cookie: {
-//     expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 1 day
-//     maxAge: 7 * 24 * 60 * 60 * 1000, // 1 day
-//     httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
- 
-//   },
 
-
-// };
-
-
-// middlewares
-app.use(session(sessionOptions));
+// app.use(session(sessionOptions));//old
+const sessionMiddleware = session(sessionOptions);///mmm//
+app.use(sessionMiddleware);///mmm///
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-//  passport.use(new LocalStrategy(User.authenticate())); 
-//  passport.serializeUser(User.serializeUser());
-//  passport.deserializeUser(User.deserializeUser());
 passport.use('user-local',
   new LocalStrategy(User.authenticate())
 );
