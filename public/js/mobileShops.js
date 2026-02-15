@@ -155,16 +155,6 @@ function resetBtn() {
 }
 
 
-
-
-
-
-// function acceptOrder(orderId) {
-//   console.log("Status Socket =", socket);
-//   if (!socket) return;
-//   socket.emit('order:updateStatus', { orderId, status: 'Accepted' });
-// }
-
   async function acceptOrder(orderId) {
     await  fetch(`/api/orders/${orderId}/accept`, {
     method: "POST"
@@ -175,18 +165,28 @@ function resetBtn() {
     })
     .catch(err => console.error(err));
 }
-    async function rejectOrder(orderId) {
-      console.log("Rejecting order:", orderId);
 
-      await fetch(`/api/orders/${orderId}/reject`, {
-        method: "POST"
-      })
-  
-    console.log("Status Socket =", socket);
-     if (!socket) return;
-  socket.emit('order:updateStatus', { orderId, status: 'Rejected' });
-     }
 
+async function rejectOrder(orderId) {
+  try {
+    console.log("Rejecting order:", orderId);
+
+    const res = await fetch(`/api/orders/${orderId}/reject`, {
+      method: "POST"
+    });
+
+    if (!res.ok) throw new Error("Failed to reject order");
+
+    if (socket) {
+      socket.emit('order:updateStatus', { orderId, status: 'Rejected' });
+    } 
+
+    window.location.reload();
+
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 async function loadExistingOrders() {
   console.log("Star loadExistingOrders");
