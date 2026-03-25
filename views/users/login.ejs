@@ -110,6 +110,20 @@
     </div>
   </div>
 </div>
+<!-- <script>
+  const loginForm = document.getElementById("loginForm");
+  const loginBtn = document.getElementById("loginBtn");
+  const spinner = loginBtn.querySelector(".spinner-border");
+  const text = loginBtn.querySelector(".btn-text");
+
+  loginForm.addEventListener("submit", function () {
+    if (loginForm.checkValidity()) {
+      loginBtn.disabled = true;
+      spinner.classList.remove("d-none");
+      text.textContent = "Logging in...";
+    }
+  });
+</script> -->
 <script>
   const loginForm = document.getElementById("loginForm");
   const loginBtn = document.getElementById("loginBtn");
@@ -122,5 +136,12 @@
       spinner.classList.remove("d-none");
       text.textContent = "Logging in...";
     }
+  });
+
+  // ✅ BEST VERSION: Always reset (back button + refresh both handled)
+  window.addEventListener("pageshow", function () {
+    loginBtn.disabled = false;
+    spinner.classList.add("d-none");
+    text.textContent = "Login";
   });
 </script>

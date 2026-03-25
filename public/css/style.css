@@ -2,6 +2,7 @@
 
 *{
   font-family: "Lexend Deca", serif;
+    transition: all 0.2s ease-in-out;
   font-optical-sizing: auto;
   font-weight: weight;
   font-style : normal;
@@ -24,7 +25,10 @@
 body {
   padding-top: 57px; 
 
-    background: #f5f7fb;
+    /* background: #f5f7fb; */
+      background: #f8fafc;
+  font-family: 'Inter', sans-serif;
+  
 }
 
 .cards {
@@ -322,9 +326,24 @@ body {
 
 
 
+.price-card {
+  border-radius: 12px;
+  transition: 0.3s;
+}
 
+.price-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
 
+.premium-modal {
+  border-radius: 15px;
+}
 
-
-
+.price-section {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 10px;
+}
+/* /////////////////////////////////// */
 

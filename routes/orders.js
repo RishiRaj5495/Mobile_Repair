@@ -16,7 +16,7 @@ const Restaurant = require("../Models/mobileShops.js");
 
 
 router.post("/:id/accept", async (req, res) => {
-  console.log("Accepting order:", req.params.id);
+
   await Order.findByIdAndUpdate(req.params.id, {
     status: "accepted"
   });
@@ -25,7 +25,7 @@ router.post("/:id/accept", async (req, res) => {
 
 
 router.post("/:id/reject", async (req, res) => {
-  console.log("Rejecting order:", req.params.id);
+  
   await Order.findByIdAndUpdate(req.params.id, {
     status: "rejected"
   });
@@ -36,11 +36,11 @@ router.post("/:id/reject", async (req, res) => {
 router.post("/",upload.single("video"), async (req, res) => {
   try {
     const { customerFirstName, customerLastName,customerPhone, customerEmail, customerAddress, customerCity,  customerState, customerPincode, customerCountry, restaurantId,lat,lng} = req.body;
-    console.log("Creating order for restaurant:", req.body.restaurantId);
+   
     const restaurant = await Restaurant.findById(restaurantId);
-console.log("Restaurant found:", restaurant);
+
  
- console.log("Received video file:", req.file);
+
  // cloudinary video URL
 let ticketId;
 let exists = true;
@@ -90,7 +90,7 @@ console.log("Order with populated restaurant:", order);
       const message = {
         token: rest.fcmToken,
         notification: {
-          title: "New Order Received",
+          title: "New  Request",
           body: `Order ${order._id}`,
         },
         data: { orderId: String(order._id) },
@@ -114,7 +114,7 @@ console.log("Order with populated restaurant:", order);
 
 
   } catch (e) {
-    console.error("Forwarding error:", e);
+ 
     res.status(500).json({ error: e.message });
   }
 
@@ -173,20 +173,11 @@ router.get("/mobileDashboard/:restaurantId", async (req, res) => {
 
     res.json(orders);
   } catch (err) {
-    console.error("Fetch orders error:", err);
+    
     res.status(500).json({ message: "Failed to fetch orders" });
   }
 });
 
-
-
-
-
-
-
-
-
-///////////////////////
 module.exports = router;
 
 

@@ -242,7 +242,7 @@ function renderOrder(order, position = "bottom") {
 
     <div class="order-actions" id="actions_${order._id}">
       <button class="accept"  onclick="acceptOrder('${order._id}')">Accept</button>
-      <button class="reject" onclick="rejectOrder('${order._id}')">Reject</button>
+      <button class="reject" onclick="rejectOrder('${order._id}')">Remove</button>
     </div>
   `;
 

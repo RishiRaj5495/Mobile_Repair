@@ -52,8 +52,8 @@ io.use((socket, next) => {
 });
 socketSetup(io);
 
-const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
-// const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
+// const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
+const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
 main()
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.log("DB error:", err));
@@ -88,8 +88,6 @@ const sessionOptions = {
 
 
 
-
-// app.use(session(sessionOptions));//old
 const sessionMiddleware = session(sessionOptions);///mmm//
 app.use(sessionMiddleware);///mmm///
 app.use(flash());
@@ -154,11 +152,9 @@ app.use((req, res, next) => {
 
 
 app.get("/", async(req, res) => {
-  console.log("You are awesome");
+res.set("Cache-Control", "no-store");
    const restaurants = await Restaurant.find();
-  // console.log("ls"+listings); 
   res.render("listings/showServices.ejs", { restaurants } );
-
 });
 
 app.get('/mobileShops', (req, res) => {
@@ -166,30 +162,26 @@ app.get('/mobileShops', (req, res) => {
 });
 
 
-
-// app.get('/admin',isLogged, (req, res) => {
-//     res.render('listings/admin.ejs');
-// });
-
 app.get('/admin/:id', isLogged, async (req, res) => {
   const { id } = req.params;
-
-
   const restaurant = await Restaurant.findById(id);
-  console.log(restaurant)
-
   res.render('listings/admin.ejs', { id });
 
 
   
 });
 
+app.get("/shop/:id", isLogged,async (req, res) => {
+  
+  const restaurant = await Restaurant.findById(req.params.id);
+  res.render("listings/singleShops.ejs", { restaurant });
+});
 
 
 app.get("/listings", async(req, res) => {
+res.set("Cache-Control", "no-store");
   console.log("You are awesome");
    const restaurants = await Restaurant.find();
-  // console.log("ls"+listings); 
   res.render("listings/showServices.ejs", { restaurants } );
 });
 
@@ -199,8 +191,6 @@ app.get("/listings", async(req, res) => {
 
 
 const usersRouter = require("./routes/users.js");
-// const { Console } = require('console');
-
 
 app.use("/users", usersRouter);
 const ordersRouter = require('./routes/orders.js');
@@ -231,17 +221,12 @@ admin.initializeApp({
 
 app.use((err,req,res,next) =>{
   let {message ="Not valid",statusCode = 400} = err;
-//  res.status(statusCode).send(message);
-// console.log("my errr"+err);
+
  res.render("error.ejs",{err});
 });
-
-//  app.listen(8080, () => {
-//     console.log("Server is running on port 8080");
-//   });
 app.locals.admin = admin;
 app.locals.io = io;
- // app.locals.GOOGLE_MAPS_FRONTEND_KEY = process.env.GOOGLE_MAPS_FRONTEND_KEY;
+
 server.listen(8080, () => {
   console.log("Server + Socket.io running on port 8080");
 });

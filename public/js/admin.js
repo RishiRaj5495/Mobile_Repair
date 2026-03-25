@@ -1,24 +1,20 @@
 
-
-// SOCKET CONNECTION
-const socket = io();
+window.socket = io();
 socket.on("connect", () => {
   console.log("Customer socket connected:", socket.id);
-
   if (typeof ORDER_ID !== "undefined") {
     socket.emit("join_order", ORDER_ID);
     console.log("Joined order room:", ORDER_ID);
   }
 });
-
 socket.on("disconnect", () => {
   console.log("Customer socket disconnected");
 });
-
-
-
-
 const form = document.getElementById('orderForm');
+
+if (form) {
+
+
 
 form.addEventListener('submit', async (e) => {
  e.preventDefault();
@@ -64,23 +60,8 @@ form.addEventListener('submit', async (e) => {
 
   formData.append('restaurantId', restaurantId); // IMPORTANT
   formData.append('video', video);
-////////
-
-// navigator.geolocation.getCurrentPosition((pos) => {
-//   formData.append("lat", pos.coords.latitude);
-//   formData.append("lng", pos.coords.longitude);
-// });
-
-
-
-
-
-
-////////////
 const xhr = new XMLHttpRequest();
 xhr.open("POST", "/api/orders");
-
-// UPLOAD PROGRESS
 xhr.upload.onprogress = function (e) {
   if (e.lengthComputable) {
     const percent = Math.round((e.loaded / e.total) * 100);
@@ -88,27 +69,24 @@ xhr.upload.onprogress = function (e) {
   }
 };
 
-// SUCCESS RESPONSE
 xhr.onload = function () {
   const data = JSON.parse(xhr.responseText);
   console.log("Order Response:", data);
 
   if (data?.success === true && data?.redirectUrl) {
-    window.location.href = data.redirectUrl;
+    // window.location.href = data.redirectUrl;
+     window.location.replace(data.redirectUrl);
   } else {
     alert('Order created: ' + (data.order ? data.order._id : 'Check console'));
     resetSubmitBtn();
   }
 };
-
-// ERROR
 xhr.onerror = function () {
   alert("Upload failed");
   resetSubmitBtn();
 };
 
-// SEND DATA
-// xhr.send(formData);
+
 function resetSubmitBtn() {
   spinner.classList.add('d-none');
   btnText.textContent = 'Forward Request';
@@ -119,7 +97,6 @@ function resetSubmitBtn() {
     formData.append("lat", pos.coords.latitude);
     formData.append("lng", pos.coords.longitude);
 
-    // ✅ SEND AFTER LOCATION
     xhr.send(formData);
   },
   (err) => {
@@ -127,10 +104,11 @@ function resetSubmitBtn() {
     resetSubmitBtn();
   }
 );
-
-  
 });
-///////////////////////////////
+}
+
+
+
 
 
 

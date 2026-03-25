@@ -30,10 +30,15 @@ const registerUser = await User.register(newUser,password);
     req.flash("success", e.message);
      res.redirect("/users/signup");
     }};
+module.exports.loginPage = (req, res) => { 
+  res.set("Cache-Control", "no-store");
 
-  module.exports.loginPage =  (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.redirect("/listings");
+  }
+
   res.render("users/login.ejs");
-  };
+};
   module.exports.loginAuthentication = async (req, res) => {
   req.flash("success", "Welcome back!");
   // res.redirect("/listings");
