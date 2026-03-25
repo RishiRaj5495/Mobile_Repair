@@ -6,20 +6,33 @@ module.exports = function(io) {
 
 ///new
 
+  // io.use((socket, next) => {
+  //   const session = socket.request.session;
+
+  //   if (
+  //     session &&
+  //     session.passport &&
+  //     session.passport.user
+  //   ) {
+  //     socket.user = session.passport.user;
+  //     return next();
+  //   }
+
+  //   next(new Error("Unauthorized Socket"));
+  // });
   io.use((socket, next) => {
-    const session = socket.request.session;
+  const session = socket.request.session;
 
-    if (
-      session &&
-      session.passport &&
-      session.passport.user
-    ) {
-      socket.user = session.passport.user;
-      return next();
-    }
+  if (
+    session &&
+    session.passport &&
+    session.passport.user
+  ) {
+    socket.user = session.passport.user;
+  }
 
-    next(new Error("Unauthorized Socket"));
-  });
+  next(); // allow everyone
+});
 
 ///new
 io.emitToRestaurant = (restaurantId, event, payload) => {
@@ -36,8 +49,38 @@ console.log('socket connected', socket.id);
 // socket.join(`restaurant_${restaurantId}`);
 // });old-------
 //////new
+
+    // socket.on("joinShop", (shopId) => {     //////r
+    //   socket.join(`shop_${shopId}`);   //////r
+    // });
+    socket.on("joinShop", (shopId) => {
+
+  const room = `shop_${shopId}`;
+  socket.join(room);
+
+  // console.log(`Socket ${socket.id} joined ${room}`);
+
+});
+
+// socket.on('restaurant:join', (restaurantId) => {
+//   const user = socket.user;
+
+//   if (user.type === "Restaurant" && user.id === restaurantId) {
+//     socket.join(`restaurant_${restaurantId}`);
+//     console.log("Restaurant joined its room");
+//   } else {
+//     console.log("Unauthorized restaurant join attempt");
+//   }
+// });
+
 socket.on('restaurant:join', (restaurantId) => {
+
   const user = socket.user;
+
+  if (!user) {
+    console.log("No user session");
+    return;
+  }
 
   if (user.type === "Restaurant" && user.id === restaurantId) {
     socket.join(`restaurant_${restaurantId}`);
@@ -45,8 +88,9 @@ socket.on('restaurant:join', (restaurantId) => {
   } else {
     console.log("Unauthorized restaurant join attempt");
   }
+
 });
-//////new
+
 socket.on('disconnect', () => {
 console.log('socket disconnected', socket.id);
 });
@@ -89,7 +133,7 @@ socket.on("order:updateStatus", async ({ orderId, status }) => {
   try {
     const user = socket.user;
 
-    if (user.type !== "Restaurant") {
+    if (!user || user.type !== "Restaurant") {
       console.log("Unauthorized status update attempt");
       return;
     }
@@ -118,14 +162,8 @@ socket.on("order:updateStatus", async ({ orderId, status }) => {
     console.error("order:updateStatus error:", err);
   }
 });
-//new
+
 
 });
-
-
-
-
-
-
 
 };

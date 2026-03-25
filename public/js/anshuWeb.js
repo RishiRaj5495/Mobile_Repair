@@ -1,87 +1,109 @@
+const priceDetails = {
+  1: [ // Data Recovery
+    { title: "Accidental Delete Recovery", price: "₹1,000 – ₹3,000" },
+    { title: "Formatted Phone Recovery", price: "₹3,000 – ₹8,000" },
+    { title: "Dead Phone / Chip Level Recovery", price: "₹8,000 – ₹20,000" }
+  ],
+
+  2: [ // Mic Repair
+    { title: "Mic Cleaning", price: "₹300 – ₹600" },
+    { title: "Mic Replacement", price: "₹800 – ₹1,500" }
+  ],
+
+  3: [ // Overheating
+    { title: "Software Optimization", price: "₹500 – ₹1,000" },
+    { title: "Battery Replacement", price: "₹1,200 – ₹2,500" },
+    { title: "Motherboard Issue", price: "₹2,000 – ₹6,000" }
+  ],
+
+  4: [ // Network Issue
+    { title: "Software / Setting Fix", price: "₹400 – ₹800" },
+    { title: "Antenna Replacement", price: "₹1,000 – ₹2,500" }
+  ],
+
+  5: [ // Memory Slot
+    { title: "Slot Cleaning", price: "₹300 – ₹600" },
+    { title: "Slot Replacement", price: "₹1,200 – ₹2,500" }
+  ],
+
+  6: [ // Camera
+    { title: "Camera Cleaning", price: "₹400 – ₹800" },
+    { title: "Front Camera Replacement", price: "₹1,000 – ₹2,500" },
+    { title: "Rear Camera Replacement", price: "₹1,500 – ₹5,000" }
+  ],
+
+  7: [ // Power Button
+    { title: "Button Cleaning", price: "₹300 – ₹600" },
+    { title: "Button Replacement", price: "₹800 – ₹1,500" }
+  ],
+
+  8: [ // SIM Slot
+    { title: "SIM Slot Cleaning", price: "₹300 – ₹600" },
+    { title: "SIM Slot Replacement", price: "₹1,000 – ₹2,000" }
+  ],
+
+  9: [ // Water Damage
+    { title: "Basic Cleaning", price: "₹800 – ₹1,500" },
+    { title: "Component Replacement", price: "₹2,000 – ₹6,000" }
+  ],
+
+  10: [ // Screen
+    { title: "Display Glass Replacement", price: "₹1,200 – ₹3,000" },
+    { title: "Full Display Replacement", price: "₹2,500 – ₹8,000" }
+  ],
+
+  11: [ // Battery
+    { title: "Battery Replacement", price: "₹1,000 – ₹2,500" }
+  ],
+
+  12: [ // Charging Port
+    { title: "Port Cleaning", price: "₹300 – ₹600" },
+    { title: "Port Replacement", price: "₹800 – ₹1,800" }
+  ],
+
+  13: [ // Back Glass
+    { title: "Back Glass Replacement", price: "₹1,500 – ₹4,000" }
+  ],
+
+  14: [ // Virus
+    { title: "Virus / Malware Removal", price: "₹400 – ₹1,000" }
+  ],
+
+  15: [ // Speaker
+    { title: "Speaker Cleaning", price: "₹300 – ₹600" },
+    { title: "Speaker Replacement", price: "₹800 – ₹2,000" }
+  ],
+
+  16: [ // Auto Switch Off
+    { title: "Software Fix", price: "₹500 – ₹1,000" },
+    { title: "Battery / Hardware Fix", price: "₹1,500 – ₹4,000" }
+  ]
+};
+
+function getMinimumRange(id) {
+  const prices = priceDetails[id];
+  if (!prices) return "₹500 – ₹1,000";
+
+  let min = Infinity;
+  let max = 0;
+
+  prices.forEach(item => {
+    const numbers = item.price.match(/\d+/g);
+    if (numbers) {
+      const low = parseInt(numbers[0]);
+      const high = parseInt(numbers[1]);
+
+      if (low < min) {
+        min = low;
+        max = high;
+      }
+    }
+  });
+
+  return `₹${min} – ₹${max}`;
+}
 
 
-// let add_PriceList_Item = document.querySelector('.mainContent');
-
-// let innHtml = '';
-
-// function priceList(){
-
-//  problem.forEach(item => {
-
-//  innHtml += ` 
-
-// <div class="content1">
-
-//         <div class="item_Content">
-//           <div class="problemView"><h4 class="problem_Name">${item.problem_Name}</h4>
-//   </div>
-//        <div class="image_And_Problem">
-//        <div class="image_data">
-//        <span class="problem">
-//        ${item.problem_Dotted}
-        
-//        </span><br>
-       
-//       </div>
-//     </div>
-//     </div>
-
-//     <!-- lll -->
-
-
-// <!-- Button trigger modal -->
-// <button type="button" class="btn btn-sm button btn-outline-primary no-shadow" data-bs-target="#exampleModal${item.ID}" data-bs-toggle="modal">
-//   view more
-// </button>
-  
-//   <!-- Modal -->
-//   <div class="modal fade" id="exampleModal${item.ID}"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-//     <div class="modal-dialog">
-//       <div class="modal-content">
-//         <div class="modal-header">
-//           <h5 class="modal-title" id="exampleModalLabel"> 
-           
-//           ${item.problem_Name}
-//           </h5>
-//           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-//         </div>
-//         <div class="modal-body">
-
-//         <div class="image">
-//           <img src=" ${item.Image}" alt="micRepair" class="micRepair">
-//           </div>
-
-
-//           <div class="image_data">
-//             <span class="problem1">
-//            ${item.problem_Full}
-
-
-         
-//             </span>
-           
-//            </div>
-          
-//         </div>
-//         <div class="modal-footer">
-//           <a href="/listings" type="button" class="btn btn-danger  btn-md">Click to repair</a> 
-
-//         </div>
-//       </div>
-//     </div>
-//   </div>
-//   <!-- lll -->
-//   </div>
- 
-//  `
-
-// }
-
-// )
-
-//   add_PriceList_Item.innerHTML = innHtml;
-
-// }
 const container = document.querySelector('.priceListContainer');
 
 function renderPriceList(data) {
@@ -98,7 +120,8 @@ function renderPriceList(data) {
             ${item.problem_Dotted}
           </p>
 
-          <button 
+
+            <button 
             class="btn btn-sm btn-outline-primary mt-3"
             data-bs-toggle="modal"
             data-bs-target="#exampleModal${item.ID}">
@@ -132,6 +155,9 @@ function createModal(item) {
               </div>
               <div class="col-md-7">
                 <p class="text-muted">${item.problem_Full}</p>
+
+
+
                 <a href="/listings" class="primary-btn mt-3 d-inline-block">
                   Click to Repair
                 </a>
@@ -144,6 +170,4 @@ function createModal(item) {
   `;
 }
 
-
-// Accessories----------------------------->
 

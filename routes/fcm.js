@@ -15,7 +15,6 @@ router.post("/restaurants/:id/token", async (req, res) => {
 
     res.json({ message: "Token saved", rest });
   } catch (e) {
-    console.error(e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -36,7 +35,6 @@ router.post("/send-test", async (req, res) => {
     const result = await admin.messaging().send(message);
     res.json({ message: "Sent", result });
   } catch (e) {
-    console.error(e);
     res.status(500).json({ error: e.message });
   }
 });

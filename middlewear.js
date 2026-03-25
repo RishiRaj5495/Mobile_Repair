@@ -5,8 +5,6 @@ const ExpressError = require("./utils/ExpressError.js");
 
 module.exports.isLogged = (req, res, next) => {
   // console.log(req);
- 
-
   if (!req.isAuthenticated()) {
      req.session.redirectUrl = req.originalUrl; // Save the original URL to redirect after login
     req.flash("error", "You must be signed in first!");
@@ -16,6 +14,7 @@ module.exports.isLogged = (req, res, next) => {
     next();
 
 };
+
 module.exports.isLoggedInForMobileshop = (req, res, next) => {
   if (req.isAuthenticated && req.isAuthenticated()) {
     return next();

@@ -111,4 +111,5 @@ const problem = [
   problem_Full :'Phones that turn off automatically without warning can indicate hardware or software malfunctions, such as overheating, battery faults, or system errors. Mobile auto switch-off repair services aim to identify the root cause through comprehensive diagnostics. Technicians may address battery-related issues, clean internal components, or repair faulty circuits. Additionally, they may resolve software glitches through updates or reinstallation. This service ensures that your phone operates reliably without unexpected interruptions.',
   Image : 'images/image17.jpg'
 }
-]
+];
+

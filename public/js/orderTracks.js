@@ -38,20 +38,6 @@ socket.on("delivery:location", ({ lat, lng }) => {
   updateDeliveryMarker(lat, lng);
 });
 
-// UPDATE DELIVERY
-// function updateDeliveryMarker(lat, lng) {
-//   const deliveryLatLng = [lat, lng];
-
-//   if (!deliveryMarker) {
-//     deliveryMarker = L.marker(deliveryLatLng).addTo(map)
-//       .bindPopup("🛵 Delivery");
-//   } else {
-//     deliveryMarker.setLatLng(deliveryLatLng);
-//   }
-
-//    drawRoute(deliveryLatLng);
-//   calculateDistanceAndETA(deliveryLatLng);
-// }
 
 let lastPosition = null;
 
@@ -90,85 +76,6 @@ if (shouldFetchETA(lat, lng)) {
 
 }
 
-// ROUTE DRAW
-// function drawRoute(deliveryLatLng) {
-//   if (routingControl) {
-//     map.removeControl(routingControl);
-//   }
-
-//   routingControl = L.Routing.control({
-//     waypoints: [
-//       L.latLng(deliveryLatLng),
-//       L.latLng(customerLatLng)
-//     ],
-//     addWaypoints: false,
-//     draggableWaypoints: false,
-//     show: false
-//   }).addTo(map);
-// }
-
-// DISTANCE + ETA
-// function calculateDistanceAndETA(deliveryLatLng) {
-//   const distanceKm = haversine(deliveryLatLng, customerLatLng);
-//   const avgSpeed = 30; // km/h (assumed)
-//   const etaMin = Math.round((distanceKm / avgSpeed) * 60);
-
-//   document.getElementById("distance").innerText =
-//     distanceKm.toFixed(2) + " km";
-
-//   document.getElementById("eta").innerText =
-//     etaMin + " mins";
-
-//   checkNearbyAlert(distanceKm * 1000);
-// }
-
-// HAVERSINE FORMULA
-// function haversine([lat1, lon1], [lat2, lon2]) {
-//   const R = 6371;
-//   const dLat = deg2rad(lat2 - lat1);
-//   const dLon = deg2rad(lon2 - lon1);
-//   const a =
-//     Math.sin(dLat / 2) ** 2 +
-//     Math.cos(deg2rad(lat1)) *
-//       Math.cos(deg2rad(lat2)) *
-//       Math.sin(dLon / 2) ** 2;
-
-//   return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-// }
-
-// function deg2rad(deg) {
-//   return deg * (Math.PI / 180);
-// }
-
-// NEARBY ALERT
-
-// async function calculateDistanceAndETA(deliveryLatLng) {
-//   const [dLat, dLng] = deliveryLatLng;
-//   const [cLat, cLng] = customerLatLng;
-
-//   const apiKey = "YOUR_GOOGLE_MAPS_API_KEY"; // replace with your key
-
-//   const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${dLat},${dLng}&destinations=${cLat},${cLng}&key=${apiKey}`;
-
-//   try {
-//     const res = await fetch(url);
-//     const data = await res.json();
-
-//     const element = data.rows[0].elements[0];
-
-//     if (element.status === "OK") {
-//       const distanceText = element.distance.text;
-//       const durationText = element.duration.text;
-
-//       document.getElementById("distance").innerText = distanceText;
-//       document.getElementById("eta").innerText = durationText;
-
-//       checkNearbyAlert(element.distance.value);
-//     }
-//   } catch (err) {
-//     console.error("ETA API error:", err);
-//   }
-// }
 
 
 let lastEtaFetch = 0;

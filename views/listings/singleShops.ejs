@@ -1,0 +1,439 @@
+
+
+<% layout("/layouts/boilerPlate") %>
+
+<style>
+body {
+  background: #f4f7fb;
+}
+
+/* LEFT CARD */
+.shop-card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.badge-soft {
+  background: #eef2ff;
+  color: #2563eb;
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  margin-left: 8px;
+}
+
+.rating-box {
+  background: #fff4db;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.location-box {
+  background: #f1f5f9;
+  padding: 12px;
+  border-radius: 12px;
+  margin-top: 15px;
+}
+
+/* REVIEW SECTION */
+.review-card {
+  background: white;
+  border-radius: 15px;
+  padding: 18px;
+  margin-bottom: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+}
+
+.review-stars {
+  color: #f59e0b;
+}
+
+/* STAR INPUT */
+.star {
+  font-size: 28px;
+  cursor: pointer;
+  color: #d1d5db;
+  transition: 0.2s;
+}
+
+.star.active {
+  color: #f59e0b;
+}
+
+/* RIGHT FORM */
+.form-card {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+}
+
+.form-header {
+  background: linear-gradient(135deg,#2563eb,#1d4ed8);
+  color: white;
+  padding: 25px;
+}
+
+.form-body {
+  background: white;
+  padding: 30px;
+}
+
+.form-control {
+  border-radius: 12px;
+  background: #f1f5f9;
+  border: none;
+  padding: 12px;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  background: #e2e8f0;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg,#2563eb,#1d4ed8);
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  color: white;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(37,99,235,0.3);
+}
+.rating-box{
+  font-weight: 600;
+  font-size: 16px;
+}
+</style>
+
+<div class="container my-5">
+  <div class="row g-4">
+
+    <!-- LEFT SIDE -->
+    <div class="col-lg-5">
+
+      <div class="shop-card mb-4">
+
+  <!-- Shop name + rating -->
+  <div class="d-flex justify-content-between align-items-center">
+    <h3 class="fw-bold mb-0">
+      <%= restaurant.name %>
+    </h3>
+
+    <div class="rating-box">
+      <span id="avgRating"><%= restaurant.averageRating || 0 %></span> ⭐
+    </div>
+  </div>
+
+  <!-- Categories below -->
+  <div class="mt-2">
+    <span class="badge-soft">Accessories</span>
+    <span class="badge-soft">Parts</span>
+  </div>
+
+  <!-- Reviews -->
+  <div class="mt-2 text-muted">
+    <%= restaurant.totalRatings || 0 %> Reviews
+  </div>
+
+  <!-- Address -->
+  <div class="location-box">
+    <i class="fa-solid fa-location-dot text-primary"></i>
+    <%= restaurant.address %>
+  </div>
+
+</div>
+
+
+      <div class="shop-card mb-4">
+
+        <h5 class="fw-bold mb-3">Leave a Review</h5>
+
+        <p class="small text-muted">Tap to rate your experience</p>
+
+        <div id="starContainer" class="mb-3">
+          <span class="star" data-value="1">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="5">★</span>
+        </div>
+
+        <textarea id="feedbackComment"
+          class="form-control mb-3"
+          placeholder="Write your feedback..."></textarea>
+
+        <button id="submitRating" class="btn btn-light border">
+          Submit Review
+        </button>
+
+      </div>
+
+      <!-- Customer Feedback -->
+      <h5 class="fw-bold mb-3">Customer Feedback</h5>
+
+      <% if (restaurant.reviews && restaurant.reviews.length > 0) { %>
+        <% restaurant.reviews.forEach(r => { %>
+          <div class="review-card">
+            <div class="d-flex justify-content-between align-items-center">
+              <strong><%= r.user?.username || "Anonymous" %></strong>
+              <div class="review-stars">
+                <% for(let i=1;i<=5;i++){ %>
+                  <% if(i <= r.value){ %> ★ <% } else { %> ☆ <% } %>
+                <% } %>
+              </div>
+            </div>
+            <p class="small text-muted mt-2 mb-0">
+              "<%= r.comment %>"
+            </p>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="text-muted">No reviews yet.</p>
+      <% } %>
+
+    </div>
+
+    <!-- RIGHT SIDE FORM -->
+    <div class="col-lg-7">
+
+      <div class="form-card">
+
+        <div class="form-header">
+          <h4 class="fw-bold mb-1">Forwarding Your Issue</h4>
+          <p class="small mb-0">Provide your details so we can assist you faster</p>
+        </div>
+
+        <div class="form-body">
+
+          <form id="orderForm" enctype="multipart/form-data" novalidate>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <input type="text" id="customerFirstName"
+                  placeholder="First Name"
+                  class="form-control" required>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <input type="text" id="customerLastName"
+                  placeholder="Last Name"
+                  class="form-control" required>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <input type="number" id="customerPhone"
+                  placeholder="Phone"
+                  class="form-control" required>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <input type="email" id="customerEmail"
+                  placeholder="Email"
+                  class="form-control" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <input type="text" id="customerAddress"
+                placeholder="Address"
+                class="form-control" required>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <input type="text" id="customerCity"
+                  placeholder="City"
+                  class="form-control" required>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <input type="text" id="customerState"
+                  placeholder="State"
+                  class="form-control" required>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <input type="number" id="customerPincode"
+                  placeholder="Pincode"
+                  class="form-control" required>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <input type="text" id="customerCountry"
+                  placeholder="Country"
+                  class="form-control" required>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <input type="file" id="video"
+                class="form-control"
+                accept="video/*" required>
+            </div>
+
+            <input type="hidden" id="restId" value="<%= restaurant._id %>">
+
+            <button id="place" type="submit" class="submit-btn w-100">
+              <span class="btn-text">Submit Details</span>
+              <span class="spinner-border spinner-border-sm ms-2 d-none"></span>
+            </button>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/admin.js"></script>
+
+<script>
+const shopId = "<%= restaurant._id %>";
+const isLoggedIn = <%= currentUser ? true : false %>;
+socket.emit("joinShop", shopId);
+
+const avgRatingEl = document.getElementById("avgRating");
+const reviewContainer = document.querySelector(".review-card")?.parentElement;
+
+socket.on("ratingUpdated", (data) => {
+  animateNumber(avgRatingEl, parseFloat(avgRatingEl.innerText), parseFloat(data.averageRating), 500);
+});
+
+/* ⭐ Animated Number */
+function animateNumber(element, start, end, duration) {
+  let startTime = null;
+
+  function animation(currentTime) {
+    if (!startTime) startTime = currentTime;
+    const progress = Math.min((currentTime - startTime) / duration, 1);
+    element.innerText = (start + (end - start) * progress).toFixed(1);
+    if (progress < 1) requestAnimationFrame(animation);
+  }
+
+  requestAnimationFrame(animation);
+}
+
+/* ⭐ STAR RATING ANIMATION */
+let selectedRating = 0;
+const stars = document.querySelectorAll(".star");
+
+stars.forEach((star, index) => {
+
+  star.addEventListener("mouseover", () => {
+    stars.forEach((s, i) => {
+      s.classList.toggle("active", i <= index);
+      s.style.transform = i <= index ? "scale(1.2)" : "scale(1)";
+    });
+  });
+
+  star.addEventListener("mouseout", () => {
+    stars.forEach((s, i) => {
+      s.classList.toggle("active", i < selectedRating);
+      s.style.transform = "scale(1)";
+    });
+  });
+
+  star.addEventListener("click", () => {
+    selectedRating = star.dataset.value;
+    stars.forEach((s, i) => {
+      s.classList.toggle("active", i < selectedRating);
+    });
+  });
+
+});
+document.getElementById("submitRating").addEventListener("click", async (e) => {
+  
+
+
+ e.preventDefault();  
+
+
+  if (!selectedRating) {
+    alert("Please select rating");
+    return;
+  }
+
+  const comment = document.getElementById("feedbackComment").value;
+
+  const res = await fetch(`/mobileShop/${shopId}/rate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json",
+       "x-page-url": window.location.pathname
+     },
+       
+
+    body: JSON.stringify({
+      value: Number(selectedRating),
+      comment: comment
+    })
+  });
+  if (res.status === 401) {
+  // alert("Please login first");
+  window.location.href = "/users/login";
+  return;
+}
+  const data = await res.json();
+
+  if (data.success) {
+
+    /* ⭐ Create new review card dynamically */
+    const newCard = document.createElement("div");
+    newCard.className = "review-card";
+    newCard.style.opacity = "0";
+    newCard.style.transform = "translateY(20px)";
+
+    let starsHTML = "";
+    for (let i = 1; i <= 5; i++) {
+      starsHTML += i <= selectedRating ? "★" : "☆";
+    }
+
+    newCard.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center">
+        <strong>You</strong>
+        <div class="review-stars">${starsHTML}</div>
+      </div>
+      <p class="small text-muted mt-2 mb-0">
+        "${comment}"
+      </p>
+    `;
+
+    document.querySelector(".col-lg-5").appendChild(newCard);
+
+    /* Animate in */
+    setTimeout(() => {
+      newCard.style.transition = "all 0.4s ease";
+      newCard.style.opacity = "1";
+      newCard.style.transform = "translateY(0)";
+    }, 50);
+
+    /* Reset form */
+    document.getElementById("feedbackComment").value = "";
+    selectedRating = 0;
+    stars.forEach(s => s.classList.remove("active"));
+  }
+
+});
+</script>
+
+
+
+
+
