@@ -112,6 +112,11 @@ body {
   font-weight: 600;
   font-size: 16px;
 }
+
+
+.error-shake {
+  animation: shake 0.3s;
+}
 </style>
 
 <div class="container my-5">
@@ -166,6 +171,9 @@ body {
           <span class="star" data-value="4">★</span>
           <span class="star" data-value="5">★</span>
         </div>
+        <div id="ratingError" class="text-danger small mt-1 d-none">
+  Please select a rating
+</div>
 
         <textarea id="feedbackComment"
           class="form-control mb-3"
@@ -356,6 +364,8 @@ stars.forEach((star, index) => {
     stars.forEach((s, i) => {
       s.classList.toggle("active", i < selectedRating);
     });
+  ratingError.classList.add("d-none");
+  starContainer.classList.remove("border", "border-danger", "rounded", "p-2");
   });
 
 });
@@ -366,12 +376,30 @@ document.getElementById("submitRating").addEventListener("click", async (e) => {
  e.preventDefault();  
 
 
-  if (!selectedRating) {
-    alert("Please select rating");
-    return;
-  }
+  // if (!selectedRating) {
+  //   alert("Please select rating");
+  //   return;
+  // }
 
-  const comment = document.getElementById("feedbackComment").value;
+
+const ratingError = document.getElementById("ratingError");
+const starContainer = document.getElementById("starContainer");
+
+if (!selectedRating) {
+  ratingError.classList.remove("d-none");
+
+  starContainer.classList.add("border", "border-danger", "rounded", "p-2");
+
+  starContainer.classList.add("error-shake");
+  setTimeout(() => {
+    starContainer.classList.remove("error-shake");
+  }, 300);
+
+  starContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  return;
+}
+  const comment = document.getElementById("feedbackComment").value.trim();
 
   const res = await fetch(`/mobileShop/${shopId}/rate`, {
     method: "POST",
@@ -393,7 +421,7 @@ document.getElementById("submitRating").addEventListener("click", async (e) => {
   const data = await res.json();
 
   if (data.success) {
-
+showFlashMessage("Review submitted successfully ⭐", "success");
     /* ⭐ Create new review card dynamically */
     const newCard = document.createElement("div");
     newCard.className = "review-card";
@@ -433,7 +461,33 @@ document.getElementById("submitRating").addEventListener("click", async (e) => {
 });
 </script>
 
+<script>
+function showFlashMessage(message, type = "success") {
+  const flash = document.createElement("div");
 
+  flash.className = `
+    position-fixed top-0 start-50 translate-middle-x mt-3 px-4 py-2
+    rounded shadow fw-semibold
+  `;
 
+  flash.style.zIndex = "9999";
 
+  if (type === "success") {
+    flash.style.background = "#e0f2fe";
+    flash.style.color = "#0369a1";
+  } else {
+    flash.style.background = "#fee2e2";
+    flash.style.color = "#991b1b";
+  }
 
+  flash.innerText = message;
+
+  document.body.appendChild(flash);
+
+  setTimeout(() => {
+    flash.style.transition = "opacity 0.5s";
+    flash.style.opacity = "0";
+    setTimeout(() => flash.remove(), 500);
+  }, 3000);
+}
+</script>
