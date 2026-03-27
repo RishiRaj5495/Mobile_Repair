@@ -158,6 +158,7 @@ res.set("Cache-Control", "no-store");
 });
 
 app.get('/mobileShops', (req, res) => {
+  res.set("Cache-Control", "no-store");
     res.render('listings/mobileShops.ejs');
 });
 
