@@ -14,16 +14,66 @@ const form = document.getElementById('orderForm');
 
 if (form) {
 
+form.addEventListener("input", (e) => {
+  const input = e.target;
 
+  // ignore elements without id (safety)
+  if (!input.id) return;
+
+  const error = document.getElementById(input.id + "Error");
+
+  // ✅ Handle normal inputs
+  if (input.type !== "file") {
+    if (input.value.trim()) {
+      input.classList.remove("border", "border-danger");
+      if (error) error.classList.add("d-none");
+    }
+  }
+
+  // ✅ Hide global error
+  document.getElementById("formError").classList.add("d-none");
+});
 
 form.addEventListener('submit', async (e) => {
  e.preventDefault();
-  if (!form.checkValidity()) {
-    form.classList.add('was-validated');
-    return; 
+   let isValid = true;
+
+  const fields = [
+    "customerFirstName",
+    "customerLastName",
+    "customerPhone",
+    "customerEmail",
+    "customerAddress",
+    "customerCity",
+    "customerState",
+    "customerPincode",
+    "customerCountry",
+    "video"
+  ];
+
+  fields.forEach(id => {
+    const input = document.getElementById(id);
+    const error = document.getElementById(id + "Error");
+
+    const value = input.type === "file"
+      ? input.files.length
+      : input.value.trim();
+
+    if (!value) {
+      error.classList.remove("d-none");
+      input.classList.add("border", "border-danger");
+      isValid = false;
+    } else {
+      error.classList.add("d-none");
+      input.classList.remove("border", "border-danger");
+    }
+  });
+
+  if (!isValid) {
+    showFormError("Please fill all required fields correctly");
+    return;
   }
 
-  form.classList.add('was-validated');
     const submitBtn = document.getElementById("place");
   const spinner = submitBtn.querySelector(".spinner-border");
   const btnText = submitBtn.querySelector(".btn-text");
@@ -60,6 +110,7 @@ form.addEventListener('submit', async (e) => {
 
   formData.append('restaurantId', restaurantId); // IMPORTANT
   formData.append('video', video);
+
 const xhr = new XMLHttpRequest();
 xhr.open("POST", "/api/orders");
 xhr.upload.onprogress = function (e) {
@@ -77,12 +128,12 @@ xhr.onload = function () {
     // window.location.href = data.redirectUrl;
      window.location.replace(data.redirectUrl);
   } else {
-    alert('Order created: ' + (data.order ? data.order._id : 'Check console'));
+showFormError("Something went wrong. Please try again.");
     resetSubmitBtn();
   }
 };
 xhr.onerror = function () {
-  alert("Upload failed");
+showFormError("Upload failed. Please try again.");
   resetSubmitBtn();
 };
 
@@ -100,7 +151,7 @@ function resetSubmitBtn() {
     xhr.send(formData);
   },
   (err) => {
-    alert("Location permission required");
+ showFormError("Please allow location access to continue.");
     resetSubmitBtn();
   }
 );

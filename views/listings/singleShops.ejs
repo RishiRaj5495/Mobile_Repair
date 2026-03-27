@@ -117,6 +117,13 @@ body {
 .error-shake {
   animation: shake 0.3s;
 }
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
 </style>
 
 <div class="container my-5">
@@ -214,7 +221,8 @@ body {
     <div class="col-lg-7">
 
       <div class="form-card">
-
+  
+  <div id="formError" class="alert alert-danger d-none mb-3 shadow-sm"></div>
         <div class="form-header">
           <h4 class="fw-bold mb-1">Forwarding Your Issue</h4>
           <p class="small mb-0">Provide your details so we can assist you faster</p>
@@ -229,12 +237,20 @@ body {
                 <input type="text" id="customerFirstName"
                   placeholder="First Name"
                   class="form-control" required>
+                    <div class="text-danger small mt-1 d-none" id="customerFirstNameError">
+    First name is required
+  </div>
               </div>
+
 
               <div class="col-md-6 mb-3">
                 <input type="text" id="customerLastName"
                   placeholder="Last Name"
                   class="form-control" required>
+                    <div class="text-danger small mt-1 d-none" id="customerLastNameError">
+    Last name is required
+  </div>
+
               </div>
             </div>
 
@@ -243,12 +259,19 @@ body {
                 <input type="number" id="customerPhone"
                   placeholder="Phone"
                   class="form-control" required>
+                    <div class="text-danger small mt-1 d-none" id="customerPhoneError">
+    Valid phone number is required
+  </div>
+
               </div>
 
               <div class="col-md-6 mb-3">
                 <input type="email" id="customerEmail"
                   placeholder="Email"
                   class="form-control" required>
+                    <div class="text-danger small mt-1 d-none" id="customerEmailError">
+    Valid email is required
+  </div>  
               </div>
             </div>
 
@@ -256,6 +279,9 @@ body {
               <input type="text" id="customerAddress"
                 placeholder="Address"
                 class="form-control" required>
+                    <div class="text-danger small mt-1 d-none" id="customerAddressError">
+    Address is required
+             </div>         
             </div>
 
             <div class="row">
@@ -263,12 +289,17 @@ body {
                 <input type="text" id="customerCity"
                   placeholder="City"
                   class="form-control" required>
+                    <div class="text-danger small mt-1 d-none" id="customerCityError">
+    City is required
+    </div>
               </div>
 
               <div class="col-md-6 mb-3">
                 <input type="text" id="customerState"
                   placeholder="State"
                   class="form-control" required>
+                    <div class="text-danger small mt-1 d-none" id="customerStateError">
+    State is required
               </div>
             </div>
 
@@ -277,12 +308,17 @@ body {
                 <input type="number" id="customerPincode"
                   placeholder="Pincode"
                   class="form-control" required>
+                    <div class="text-danger small mt-1 d-none" id="customerPincodeError">
+    Valid pincode is required
+    </div>
               </div>
 
               <div class="col-md-6 mb-3">
                 <input type="text" id="customerCountry"
                   placeholder="Country"
                   class="form-control" required>
+                    <div class="text-danger small mt-1 d-none" id="customerCountryError">
+    Country is required
               </div>
             </div>
 
@@ -290,6 +326,9 @@ body {
               <input type="file" id="video"
                 class="form-control"
                 accept="video/*" required>
+                  <div class="text-danger small mt-1 d-none" id="videoError">
+    Video evidence is required
+    </div>
             </div>
 
             <input type="hidden" id="restId" value="<%= restaurant._id %>">
@@ -461,7 +500,7 @@ showFlashMessage("Review submitted successfully ⭐", "success");
 });
 </script>
 
-<script>
+<script> // flash message for rating
 function showFlashMessage(message, type = "success") {
   const flash = document.createElement("div");
 
@@ -489,5 +528,20 @@ function showFlashMessage(message, type = "success") {
     flash.style.opacity = "0";
     setTimeout(() => flash.remove(), 500);
   }, 3000);
+}
+</script>
+<script>
+
+function showFormError(message) {
+  const errorBox = document.getElementById("formError");
+
+  errorBox.textContent = message;
+  errorBox.classList.remove("d-none");
+
+  // Shake effect
+  errorBox.classList.add("error-shake");
+  setTimeout(() => errorBox.classList.remove("error-shake"), 300);
+
+  errorBox.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 </script>
