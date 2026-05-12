@@ -1,6 +1,7 @@
 # RepairNow – Full Stack Mobile Repair Service Platform
 
 RepairNow is a doorstep mobile repair platform that allows users to upload phone issue videos, book trusted technicians, track real-time location, and receive secure repair services without visiting repair shops.
+[Live Demo](your-link) • [GitHub Repository](your-link)
 
 ![Node.js](https://img.shields.io/badge/Node.js-Backend-green)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Database-green)
