@@ -18,3 +18,23 @@ RepairNow is a doorstep mobile repair platform that allows users to upload phone
 - Firebase push notifications
 - Customer feedback & reviews
 
+- ## Screenshots
+
+### Homepage & Repair Shop Listings
+![Homepage](images/Homepage.png)
+
+### Customer Issue Reporting & Video Upload
+![Customer Form](images/customerForm.png)
+
+### Customer Login
+![Customer Login](images/customerLogin.png)
+
+### Customer Signup
+![Customer Signup](images/customerSighup.png)
+
+### Technician Dashboard
+![Technician Dashboard](images/technicianDashboard.png)
+
+### Technician Registration
+![Technician Register](images/technicianRegister.png)
+
