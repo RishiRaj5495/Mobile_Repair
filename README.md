@@ -20,6 +20,19 @@ Deployment: Render
 - Verified technician system
 - Firebase push notifications
 - Customer feedback & reviews
+  
+---
+
+## Technical Highlights
+
+- Built secure RESTful APIs using Node.js and Express.js
+- Implemented real-time communication and live tracking using Socket.io
+- Integrated Google Directions API and Distance Matrix API for ETA calculation
+- Designed scalable MongoDB schemas with indexing and relational references
+- Implemented Firebase Admin push notifications for live service updates
+- Applied MVC architecture and production deployment practices using Render
+
+---
 
 ## Screenshots
 
