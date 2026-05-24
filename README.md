@@ -54,6 +54,8 @@ Deployment: Render
 ### Technician Registration
 <img src="images/technicianRegister.png" width="800"/>
 
+---
+
 ## 🛠️ Installation
 
 ### Clone the repository
