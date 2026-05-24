@@ -81,4 +81,38 @@ npm install
 ```bash
 nodemon app.js
 ```
+---
+
+## 🔐 Environment Variables
+
+Create a `.env` file in the root directory and add:
+
+```env
+SECRET=your_secret_key
+
+FIREBASE_SERVICE_ACCOUNT_PATH=path_to_service_account.json
+
+FRONTEND_URL=your_frontend_url
+
+CLOUD_NAME=your_cloudinary_name
+CLOUD_API_KEY=your_cloudinary_api_key
+CLOUD_API_SECRET=your_cloudinary_api_secret
+
+MONGODB_URI=your_mongodb_connection_string
+
+FIREBASE_API_KEY=your_firebase_api_key
+FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_STORAGE_BUCKET=your_bucket.appspot.com
+FIREBASE_SENDER_ID=your_sender_id
+FIREBASE_APP_ID=your_app_id
+FIREBASE_MEASUREMENT_ID=your_measurement_id
+
+GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+
+GOOGLE_APPLICATION_CREDENTIALS=path_to_google_credentials.json
+
+GEMINI_API_KEY=your_gemini_api_key
+```
+
 
