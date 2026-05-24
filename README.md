@@ -79,7 +79,7 @@ npm install
 ### Start the server
 
 ```bash
-nodemon app.js
+npm run dev
 ```
 ---
 
