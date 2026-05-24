@@ -54,3 +54,29 @@ Deployment: Render
 ### Technician Registration
 <img src="images/technicianRegister.png" width="800"/>
 
+## 🛠️ Installation
+
+### Clone the repository
+
+```bash
+git clone https://github.com/RishiRaj5495/Mobile_Repair.git
+```
+
+### Navigate to project folder
+
+```bash
+cd Mobile_Repair
+```
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Start the server
+
+```bash
+nodemon app.js
+```
+
