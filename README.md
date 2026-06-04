@@ -22,6 +22,11 @@ Deployment: Render
   
 ---
 
+## Workflow
+<img src="images/Workflow.png" width="800" />
+
+---
+
 ## Technical Highlights
 
 - Built secure RESTful APIs using Node.js and Express.js
@@ -32,8 +37,6 @@ Deployment: Render
 - Applied MVC architecture and production deployment practices using Render
 
 ---
-## Workflow
-<img src="images/Workflow.png" width="800" />
 
 ## Screenshots
 
