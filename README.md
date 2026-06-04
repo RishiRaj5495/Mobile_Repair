@@ -32,6 +32,8 @@ Deployment: Render
 - Applied MVC architecture and production deployment practices using Render
 
 ---
+##Workflow
+<img src="images/Workflow.png"/>
 
 ## Screenshots
 
