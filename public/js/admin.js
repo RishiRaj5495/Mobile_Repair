@@ -7,6 +7,9 @@ socket.on("connect", () => {
     console.log("Joined order room:", ORDER_ID);
   }
 });
+
+
+
 socket.on("disconnect", () => {
   console.log("Customer socket disconnected");
 });

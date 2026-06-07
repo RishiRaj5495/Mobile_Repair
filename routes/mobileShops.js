@@ -184,5 +184,41 @@ console.log("Comment:", comment);
   }
 });
 
+router.post("/location", async (req, res) => {
+
+   try {
+
+      const { lat, lng } = req.body;
+      console.log("Received location update:", { lat, lng });
+
+      await Restaurant.findByIdAndUpdate(req.user._id, {
+
+         location: {
+            type: "Point",
+            coordinates: [lng, lat]
+         }
+
+      });
+
+      res.json({
+         success: true
+      });
+
+   } catch(err) {
+
+      console.log(err);
+
+      res.status(500).json({
+         success: false
+      });
+
+   }
+
+});
+
+
+
+
+
 
 module.exports = router;

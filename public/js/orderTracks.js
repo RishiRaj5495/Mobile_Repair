@@ -109,11 +109,6 @@ async function calculateDistanceAndETA(deliveryLatLng) {
 
 
 
-
-
-
-
-
 function checkNearbyAlert(distanceMeters) {
   if (distanceMeters < 500 && !alerted) {
     alerted = true;
