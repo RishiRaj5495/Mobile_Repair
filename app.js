@@ -65,9 +65,9 @@ const store = MongoStore.create({
   mongoUrl: dbUrl,
    collectionName: "sessions",
    autoRemove: "native",  
-  // crypto: {
-  //   secret: process.env.SECRET || "mysupersecret",
-  // },
+  crypto: {
+    secret: process.env.SECRET || "mysupersecret",
+  },
       
   touchAfter: 24 * 3600,
 });
