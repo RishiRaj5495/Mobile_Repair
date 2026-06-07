@@ -1,5 +1,6 @@
 // sockets.js — sets up namespaces/rooms and helpers
 const Order = require("./Models/orders"); 
+const Restaurant = require('./Models/mobileShops.js');
 
 
 module.exports = function(io) {
@@ -60,6 +61,18 @@ console.log('socket connected', socket.id);
 
   // console.log(`Socket ${socket.id} joined ${room}`);
 
+});
+socket.on("requestAllShops", async () => {
+  try {
+    const shops = await Restaurant.find();
+
+    shops.forEach(shop => {
+      socket.emit("new_shop", shop);
+    });
+
+  } catch (err) {
+    console.error("requestAllShops error:", err);
+  }
 });
 
 // socket.on('restaurant:join', (restaurantId) => {

@@ -1,6 +1,18 @@
 <% layout("/layouts/boilerPlate") %>
 
+
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .hidden { display: none; }
+    button { padding: 10px; margin-top: 10px; }
+    input { padding: 8px; margin: 5px 0; }
+  </style>
+
+
 <style>
+
+
+
   .shop-card {
   transition: 0.3s ease;
 }
@@ -71,6 +83,39 @@
   <p class="small mb-0">
     Upload a short video and get instant repair estimate — fast & hassle-free!
   </p>
+<!-- 
+<h1>📱 AI Mobile Repair Assistant</h1>
+
+<input type="file" id="videoInput" />
+<button onclick="uploadVideo()">Upload</button>
+
+<p id="loading" style="color: blue; display:none;">⏳ Processing...</p>
+
+
+<div id="analysis" class="hidden">
+  <h3>📝 Detected Speech</h3>
+  <p id="text"></p>
+
+  <h3>🔍 Detected Issue</h3>
+  <p id="issue"></p>
+</div>
+
+<div id="questionsDiv" class="hidden">
+  <h3>❓ Answer these questions</h3>
+  <form id="questionForm"></form>
+  <button onclick="submitAnswers()">Submit Answers</button>
+</div>
+
+
+<div id="result" class="hidden">
+  <h2>✅ Final Diagnosis</h2>
+  <p><b>Issue:</b> <span id="finalIssue"></span></p>
+  <p><b>Confidence:</b> <span id="confidence"></span></p>
+  <p><b>Fix:</b> <span id="fix"></span></p>
+  <p><b>Estimated Price:</b> <span id="price"></span></p>
+</div> -->
+
+  <!-- /////// -->
 </div>
 
 
@@ -84,15 +129,17 @@
 
 
       <div class="d-flex gap-3 mb-4">
+         <button class="btn btn-outline-dark px-4"  id="accessoriesBtn">Price List</button>
         <button class="btn btn-dark px-4" id="accessoriesBtn1">Accessories</button>
         <button class="btn btn-outline-dark px-4">Review & Rating</button>
-        <button class="btn btn-outline-dark px-4"  id="accessoriesBtn">Price List</button>
+       
       </div>
 
 
       <div class="row g-4 priceListContainer">
 
-        <% for (let restaurant of restaurants) { %>
+       <!-- ////////////////////////////// -->
+<% for (let restaurant of restaurants) { %>
 
           <div class="col-md-6">
 
@@ -134,7 +181,7 @@
           </div>
 
         <% } %>
-
+       <!-- //////////////////////////////////////////////// -->
       </div>
 
     </div>
@@ -143,7 +190,11 @@
 
 </div>
 
+
+
+
 <script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/admin.js"></script>
 <script>
   window.addEventListener("pageshow", function (event) {
@@ -200,7 +251,7 @@ socket.on("ratingUpdated", (data) => {
 </script>
 
 
-<script>
+<!-- <script>
 socket.on("new_shop", (restaurant) => {
 
     const container = document.querySelector(".priceListContainer");
@@ -238,4 +289,294 @@ socket.on("new_shop", (restaurant) => {
      socket.emit("joinShop", restaurant._id);
 
 });
+</script> -->
+<script>
+let globalText = "";
+let globalIssueData = {};
+
+// 🔹 Upload
+async function uploadVideo() {
+  const file = document.getElementById("videoInput").files[0];
+  if (!file) return alert("Upload video first");
+
+  document.getElementById("loading").style.display = "block";
+
+  const formData = new FormData();
+  formData.append("video", file);
+
+  try {
+    const res = await fetch("/AI-flow/upload-video", {
+      method: "POST",
+      body: formData
+    });
+ console.log("Status:", res.status);
+
+  const text = await res.text();
+  console.log("Raw response:", text);
+
+  const data = JSON.parse(text);
+  console.log("Parsed data:", data);
+
+    globalText = data.text;
+    globalIssueData = data.issueData;
+
+    document.getElementById("text").innerText = data.text;
+    document.getElementById("issue").innerText = data.issueData.issue;
+
+    document.getElementById("analysis").classList.remove("hidden");
+
+    // Questions UI (YES/NO buttons instead of text input)
+    const form = document.getElementById("questionForm");
+    form.innerHTML = "";
+
+    data.questions.forEach((q, i) => {
+      form.innerHTML += `
+        <div style="margin-bottom:10px;">
+          <p>${q}</p>
+          <button type="button" onclick="setAnswer(${i}, 'yes')">Yes</button>
+          <button type="button" onclick="setAnswer(${i}, 'no')">No</button>
+          <span id="ans${i}"></span>
+        </div>
+      `;
+    });
+
+    document.getElementById("questionsDiv").classList.remove("hidden");
+
+  } catch (err) {
+    alert("Error processing video");
+  } finally {
+    document.getElementById("loading").style.display = "none";
+  }
+}
+
+// store answers
+let answers = {};
+
+function setAnswer(index, value) {
+  answers[index] = value;
+  document.getElementById(`ans${index}`).innerText = `Selected: ${value}`;
+}
+
+// 🔹 Submit answers
+async function submitAnswers() {
+  if (Object.keys(answers).length === 0) {
+    return alert("Answer questions first");
+  }
+
+  document.getElementById("loading").style.display = "block";
+
+  try {
+    const res = await fetch("/refine-issue", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        text: globalText,
+        issueData: globalIssueData,
+        answers
+      })
+    });
+
+    const data = await res.json();
+
+    document.getElementById("finalIssue").innerText = data.finalIssue.final_issue;
+    document.getElementById("confidence").innerText = data.finalIssue.confidence;
+    document.getElementById("fix").innerText = data.finalIssue.recommended_fix;
+    document.getElementById("price").innerText = data.estimatedPrice;
+
+    document.getElementById("result").classList.remove("hidden");
+
+  } catch (err) {
+    alert("Error getting result");
+  } finally {
+    document.getElementById("loading").style.display = "none";
+  }
+}
+</script>
+<script>
+window.addEventListener("load", async () => {
+
+  const permission = await navigator.permissions.query({
+    name: "geolocation"
+  });
+
+  if(permission.state === "granted") {
+
+    // Location already allowed
+    getLocation();
+
+  } else {
+
+    Swal.fire({
+      icon: "warning",
+      title: "Location Access Needed",
+      text: "Please allow location access to see nearby technicians.",
+      confirmButtonText: "Got it"
+    }).then(() => {
+      getLocation();
+    });
+
+  }
+});
+
+function getLocation() {
+  navigator.geolocation.getCurrentPosition(
+
+    async (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      try {
+        const response = await fetch(
+          "/allNearbyTechnician/nearest-technicians",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ lat, lng })
+          }
+        );
+
+        const data = await response.json();
+
+        document.querySelector(".priceListContainer").innerHTML = "";
+        if (data.technicians && data.technicians.length > 0) {
+
+    // Nearby technicians found
+    renderTechnicians(data.technicians);
+
+  } else {
+
+
+        Swal.fire({
+      icon: "info",
+      title: "No technicians nearby",
+      text: "Showing other registered technicians for demonstration purposes."
+    });
+
+    // Option 1: Start receiving random shops
+const container = document.querySelector(".priceListContainer");
+
+container.insertAdjacentHTML(
+  "beforebegin",
+  `
+  <div class="alert alert-info mb-3" id="demoNotice">
+    <strong>Notice:</strong> No nearby technicians were found. The technicians shown below are other registered technicians for demonstration purposes.
+  </div>
+  `
+);
+
+socket.emit("requestAllShops");
+
+
+  }
+
+
+      } catch (err) {
+        console.error(err);
+      }
+    },
+
+    () => {
+      // Location denied
+      // Random shops continue through socket events
+    }
+
+  );
+}
+
+socket.on("new_shop", (restaurant) => {
+  const container = document.querySelector(".priceListContainer");
+
+    const card = document.createElement("div");
+    card.className = "col-md-6";
+
+    card.innerHTML = `
+      <div class="card shop-card h-100 shadow-sm border-0">
+        <div class="card-body">
+
+          <div class="d-flex justify-content-between mb-2">
+            <h5 class="fw-bold mb-0">${restaurant.name}</h5>
+
+            <span class="badge rounded-pill px-3 py-2 bg-success-subtle text-success fw-semibold">
+              0.0
+            </span> ★
+          </div>
+
+          <p class="text-muted small">
+            <strong>Address:</strong> ${restaurant.address}
+          </p>
+
+          <div class="mt-3">
+            <a href="/shop/${restaurant._id}" class="primary-btn">
+              Forward your issue
+            </a>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    container.prepend(card);
+     socket.emit("joinShop", restaurant._id);
+});
+</script>
+
+
+<script>
+
+function renderTechnicians(technicians) {
+
+   const container = document.querySelector(".priceListContainer");
+
+   container.innerHTML = "";
+
+   technicians.forEach((restaurant) => {
+
+      const card = document.createElement("div");
+
+      card.className = "col-md-6";
+
+      card.innerHTML = `
+
+         <div class="card shop-card h-100 shadow-sm border-0">
+
+            <div class="card-body">
+
+               <div class="d-flex justify-content-between mb-2">
+
+                  <h5 class="fw-bold mb-0">${restaurant.name}</h5>
+
+                  <span class="badge rounded-pill px-3 py-2 bg-success-subtle text-success fw-semibold">
+                     ${restaurant.averageRating || "0.0"} ★
+                  </span>
+
+               </div>
+
+               <p class="text-muted small">
+                  <strong>Address:</strong> ${restaurant.address}
+               </p>
+
+               <div class="mt-3">
+
+                  <a href="/shop/${restaurant._id}" class="primary-btn">
+                     Forward your issue
+                  </a>
+
+               </div>
+
+            </div>
+
+         </div>
+
+      `;
+
+      container.appendChild(card);
+
+   });
+
+}
+
 </script>

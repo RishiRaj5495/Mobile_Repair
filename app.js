@@ -52,8 +52,8 @@ io.use((socket, next) => {
 });
 socketSetup(io);
 
-const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
-// const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
+// const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
+const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
   main()
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.log("DB error:", err));
@@ -64,9 +64,11 @@ async function main() {
 const store = MongoStore.create({
   mongoUrl: dbUrl,
    collectionName: "sessions",
-  crypto: {
-    secret: process.env.SECRET,
-  },
+   autoRemove: "native",  
+  // crypto: {
+  //   secret: process.env.SECRET || "mysupersecret",
+  // },
+      
   touchAfter: 24 * 3600,
 });
 store.on("error", (err) => {
@@ -189,25 +191,35 @@ res.set("Cache-Control", "no-store");
 
 
 
-
-
+const AI_Flow= require("./routes/AI-flow.js");
+app.use("/AI-flow", AI_Flow);
 const usersRouter = require("./routes/users.js");
 
 app.use("/users", usersRouter);
 const ordersRouter = require('./routes/orders.js');
-const restaurantsRouter = require('./routes/mobileShops.js');
-const fcmRouter = require("./routes/fcm.js");
-app.use("/api/fcm", fcmRouter);  // save token / testing endpoints
 app.use('/api/orders', ordersRouter);
+const restaurantsRouter = require('./routes/mobileShops.js');
 app.use('/api/restaurants', restaurantsRouter);
 app.use('/mobileShop', restaurantsRouter);
+
+const fcmRouter = require("./routes/fcm.js");
+app.use("/api/fcm", fcmRouter);  // save token / testing endpoints
+
+const etaRoutes = require("./routes/eta.js");
+app.use("/", etaRoutes);
+
+const allNearbyTech = require("./routes/allNearbyTechnician.js");
+app.use("/allNearbyTechnician", allNearbyTech);
+
+
+
+
 app.get("/delivery/:orderId", async (req, res) => {
   const order = await Order.findById(req.params.orderId);
   res.render("listings/viewTechnician.ejs", { order });
 });
 
-const etaRoutes = require("./routes/eta.js");
-app.use("/", etaRoutes);
+
 
 
 const firebaseKeyPath = process.env.RENDER
@@ -220,11 +232,21 @@ admin.initializeApp({
 
 // Error handling middleware
 
-app.use((err,req,res,next) =>{
-  let {message ="Not valid",statusCode = 400} = err;
+// app.use((err,req,res,next) =>{
+//   let {message ="Not valid",statusCode = 400} = err;
 
- res.render("error.ejs",{err});
+//  res.render("error.ejs",{err});
+// });
+app.use((err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);   // ✅ VERY IMPORTANT
+  }
+
+  const { message = "Not valid", statusCode = 500 } = err;
+
+  return res.status(statusCode).render("error.ejs", { err });
 });
+
 app.locals.admin = admin;
 app.locals.io = io;
 
@@ -233,7 +255,26 @@ server.listen(8080, () => {
 });
 
  
+// const { GoogleGenAI } = require("@google/genai");
 
+// const ai = new GoogleGenAI({
+//   apiKey: process.env.GEMINI_API_KEY
+// });
+
+// async function test() {
+//   try {
+//     const res = await ai.models.generateContent({
+//       model: "gemini-2.5-flash",
+//       contents: "Say hello"
+//     });
+
+//     console.log("✅ SUCCESS:", res.text);
+//   } catch (err) {
+//     console.error("❌ ERROR:", err.message);
+//   }
+// }
+
+// test();
 
 
 

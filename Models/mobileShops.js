@@ -24,6 +24,22 @@ name: {
     type: String,
     default: null
   },
+
+  location: {
+
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point"
+    },
+
+    coordinates: {
+      type: [Number], // [lng, lat]
+      default: [0, 0]
+    }
+  },
+
+
 ratingBreakdown: {
   type: Map,
   of: Number,
@@ -36,6 +52,9 @@ ratingBreakdown: {
   }
 },
 },{ timestamps: true });
+
+
+restaurantSchema.index({ location: "2dsphere" });
 restaurantSchema.plugin(passportLocalMongoose, {
   usernameField: "email"
 });module.exports = mongoose.model('Restaurant', restaurantSchema);
