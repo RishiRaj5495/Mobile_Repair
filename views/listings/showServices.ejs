@@ -1,18 +1,57 @@
 <% layout("/layouts/boilerPlate") %>
 
 
-  <!-- <style>
-    body { font-family: Arial; padding: 20px; }
-    .hidden { display: none; }
-    button { padding: 10px; margin-top: 10px; }
-    input { padding: 8px; margin: 5px 0; }
-  </style> -->
-
-
 <style>
 
+.left-card{
+    background:#fff;
+    border-radius:24px;
+    padding:28px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    border:1px solid #e5e7eb;
+    height:fit-content;
+}
 
+/* Mobile */
+@media (max-width: 991px){
 
+    .left-card{
+        margin-bottom:25px;
+    }
+
+    .hero h2{
+        font-size:30px !important;
+    }
+
+    .upload-top{
+        flex-direction:column;
+        text-align:center;
+        align-items:center;
+    }
+
+    .upload-btn{
+        width:100%;
+    }
+
+}
+
+/* Small Mobile */
+@media (max-width: 576px){
+
+    .left-card{
+        padding:20px;
+    }
+
+    .hero h2{
+        font-size:20px !important;
+    }
+
+    .logo-section h1{
+        font-size:20px !important;
+    }
+
+}
+/* ///////////////////// */
   .shop-card {
   transition: 0.3s ease;
 }
@@ -61,69 +100,61 @@
   <div class="row g-4">
 
   
-    <div class="col-lg-4">
+    
+    <!-- LEFT SIDEBAR -->
+    <div class="col-lg-4 col-md-12">
 
-      <div class="card shadow-sm border-0 p-4">
+      <div class="left-card">
 
-        <h2 class="fw-bold text-primary mb-3">RepairNow</h2>
+        <!-- <div class="logo-section">
+          <h1>
+            <span class="blue">Repair</span><span class="black">Now</span>
+          </h1>
+          <div class="line"></div>
+        </div> -->
 
-        <p class="mb-2">
-          <i class="fa-solid fa-location-dot text-danger"></i>
-          116/68C/157 Himmatganj, Prayagraj
-        </p>
+        <div class="hero">
+          <h2>
+            Fixing your phone <br>
+            quickly with <br>
+            <span>RepairNow</span>
+          </h2>
 
-        <p class="mb-3">
-          <strong>Opening:</strong> 10 o’clock
-        </p>
+        </div>
 
-        
-        <div class="p-3 rounded-4 shadow-sm"
-     style="background: linear-gradient(135deg, #ffcc00, #ff9900);">
-  <h6 class="fw-bold mb-2">📱 Got a Damaged Phone?</h6>
-  <p class="small mb-0">
-    Upload a short video and get instant repair estimate — fast & hassle-free!
-  </p>
-<!-- 
-<h1>📱 AI Mobile Repair Assistant</h1>
+        <!-- <div class="quick-repair"> -->
+          <!-- <div class="icon-circle">⚡</div> -->
 
-<input type="file" id="videoInput" />
-<button onclick="uploadVideo()">Upload</button>
+          <!-- <div>
+            <h3>Quick Repair</h3>
+            <p>Fast, reliable and hassle-free service.</p>
+          </div> -->
+        <!-- </div> -->
 
-<p id="loading" style="color: blue; display:none;">⏳ Processing...</p>
+        <div class="upload-card">
 
+          <div class="upload-top">
 
-<div id="analysis" class="hidden">
-  <h3>📝 Detected Speech</h3>
-  <p id="text"></p>
+            <div class="phone-icon">
+              📱
+            </div>
 
-  <h3>🔍 Detected Issue</h3>
-  <p id="issue"></p>
-</div>
+            <div>
+              <h3>Got a Damaged Phone?</h3>
 
-<div id="questionsDiv" class="hidden">
-  <h3>❓ Answer these questions</h3>
-  <form id="questionForm"></form>
-  <button onclick="submitAnswers()">Submit Answers</button>
-</div>
+              <p>
+                Upload a short video and get an instant repair estimate.
+              </p>
+            </div>
+
+          </div>
 
 
-<div id="result" class="hidden">
-  <h2>✅ Final Diagnosis</h2>
-  <p><b>Issue:</b> <span id="finalIssue"></span></p>
-  <p><b>Confidence:</b> <span id="confidence"></span></p>
-  <p><b>Fix:</b> <span id="fix"></span></p>
-  <p><b>Estimated Price:</b> <span id="price"></span></p>
-</div> -->
-
-  <!-- /////// -->
-</div>
-
+        </div>
 
       </div>
 
     </div>
-
-
    
     <div class="col-lg-8">
 
@@ -138,7 +169,6 @@
 
       <div class="row g-4 priceListContainer">
 
-       <!-- ////////////////////////////// -->
 <% for (let restaurant of restaurants) { %>
 
           <div class="col-md-6">
