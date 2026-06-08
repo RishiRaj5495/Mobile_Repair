@@ -52,8 +52,8 @@ io.use((socket, next) => {
 });
 socketSetup(io);
 
-const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
-// const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
+// const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
+const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
   main()
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.log("DB error:", err));
@@ -65,9 +65,9 @@ const store = MongoStore.create({
   mongoUrl: dbUrl,
    collectionName: "sessions",
    autoRemove: "native",  
-  crypto: {
-    secret: process.env.SECRET || "mysupersecret",
-  },
+  // crypto: {
+  //   secret: process.env.SECRET || "mysupersecret",
+  // },
       
   touchAfter: 24 * 3600,
 });
