@@ -141,6 +141,9 @@ passport.deserializeUser(async (obj, done) => {
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get("/ping", (req, res) => {
+  res.status(200).send("alive");
+});
 
 
 
