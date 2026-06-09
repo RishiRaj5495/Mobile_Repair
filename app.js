@@ -50,19 +50,33 @@ const io = require("socket.io")(server, {
 io.use((socket, next) => {
   sessionMiddleware(socket.request, {}, next);
 });
-socketSetup(io);
+// socketSetup(io);
 
 const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
 // const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
-  main()
-  .then(() => console.log("MongoDB connection successful"))
-  .catch((err) => console.log("DB error:", err));
+  // main()
+  // .then(() => console.log("MongoDB connection successful"))
+  // .catch((err) => console.log("DB error:", err));
+  mongoose.connect(dbUrl)
+  .then(() => {
+    console.log("MongoDB connected");
+
+    server.listen(8080, () => {
+       socketSetup(io);
+      console.log("Server + Socket.io running on port 8080");
+    });
+
+  })
+  .catch(err => {
+    console.log("DB error:", err);
+  });
 
 async function main() {
   await mongoose.connect(dbUrl);
 }
 const store = MongoStore.create({
-  mongoUrl: dbUrl,
+  // mongoUrl: dbUrl,
+  client: mongoose.connection.getClient(),
    collectionName: "sessions",
    autoRemove: "native",  
   // crypto: {
@@ -191,8 +205,8 @@ res.set("Cache-Control", "no-store");
 
 
 
-const AI_Flow= require("./routes/AI-flow.js");
-app.use("/AI-flow", AI_Flow);
+// const AI_Flow= require("./routes/AI-flow.js");
+// app.use("/AI-flow", AI_Flow);
 const usersRouter = require("./routes/users.js");
 
 app.use("/users", usersRouter);
@@ -250,9 +264,9 @@ app.use((err, req, res, next) => {
 app.locals.admin = admin;
 app.locals.io = io;
 
-server.listen(8080, () => {
-  console.log("Server + Socket.io running on port 8080");
-});
+// server.listen(8080, () => {
+//   console.log("Server + Socket.io running on port 8080");
+// });
 
  
 // const { GoogleGenAI } = require("@google/genai");
