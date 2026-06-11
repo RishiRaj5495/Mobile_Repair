@@ -425,18 +425,22 @@ async function submitAnswers() {
 }
 </script>
 <script>
-window.addEventListener("load", async () => {
 
+window.addEventListener("load", checkPermission);
+
+// Re-check whenever user comes back to dashboard
+window.addEventListener("focus", checkPermission);
+
+async function checkPermission() {
   const permission = await navigator.permissions.query({
     name: "geolocation"
   });
 
-  if(permission.state === "granted") {
+  if (permission.state === "granted") {
 
-    // Location already allowed
     getLocation();
 
-  } else {
+  } else if (permission.state === "denied") {
 
     Swal.fire({
       icon: "warning",
@@ -447,9 +451,13 @@ window.addEventListener("load", async () => {
       getLocation();
     });
 
-  }
-});
+  } 
 
+  permission.onchange = checkPermission;
+}
+
+
+////////////////////////////////
 function getLocation() {
   navigator.geolocation.getCurrentPosition(
 
@@ -472,6 +480,8 @@ function getLocation() {
         const data = await response.json();
 
         document.querySelector(".priceListContainer").innerHTML = "";
+
+
         if (data.technicians && data.technicians.length > 0) {
 
     // Nearby technicians found
@@ -489,6 +499,7 @@ function getLocation() {
     // Option 1: Start receiving random shops
 const container = document.querySelector(".priceListContainer");
 
+
 container.insertAdjacentHTML(
   "beforebegin",
   `
@@ -505,14 +516,18 @@ socket.emit("requestAllShops");
 
 
       } catch (err) {
-        console.error(err);
+        
+  console.log(err);
+
+  document.querySelector(".priceListContainer").innerHTML = "";
+
+  document.getElementById("demoNotice")?.remove();
+
+  socket.emit("requestAllShops");
+
       }
     },
 
-    () => {
-      // Location denied
-      // Random shops continue through socket events
-    }
 
   );
 }
