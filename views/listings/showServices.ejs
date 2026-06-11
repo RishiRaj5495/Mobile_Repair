@@ -446,7 +446,13 @@ async function checkPermission() {
       icon: "warning",
       title: "Location Access Needed",
       text: "Please allow location access to see nearby technicians.",
-      confirmButtonText: "Got it"
+      // confirmButtonText: "Got it"
+         allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+
+
     }).then(() => {
       getLocation();
     });
@@ -478,6 +484,7 @@ function getLocation() {
         );
 
         const data = await response.json();
+           Swal.close(); // 🔥 CLOSE LOADER AFTER RESPONSE
 
         document.querySelector(".priceListContainer").innerHTML = "";
 
@@ -493,7 +500,11 @@ function getLocation() {
         Swal.fire({
       icon: "info",
       title: "No technicians nearby",
-      text: "Showing other registered technicians for demonstration purposes."
+      text: "Showing other registered technicians for demonstration purposes.",
+        // allowOutsideClick: false,
+    // didOpen: () => {
+    //   Swal.showLoading();
+    // }
     });
 
     // Option 1: Start receiving random shops
