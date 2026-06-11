@@ -446,11 +446,11 @@ async function checkPermission() {
       icon: "warning",
       title: "Location Access Needed",
       text: "Please allow location access to see nearby technicians.",
-      // confirmButtonText: "Got it"
-         allowOutsideClick: false,
-    didOpen: () => {
-      Swal.showLoading();
-    }
+      confirmButtonText: "Got it"
+    //      allowOutsideClick: false,
+    // didOpen: () => {
+    //   Swal.showLoading();
+    // }
 
 
     }).then(() => {
@@ -484,7 +484,7 @@ function getLocation() {
         );
 
         const data = await response.json();
-           Swal.close(); // 🔥 CLOSE LOADER AFTER RESPONSE
+          //  Swal.close(); // 🔥 CLOSE LOADER AFTER RESPONSE
 
         document.querySelector(".priceListContainer").innerHTML = "";
 
