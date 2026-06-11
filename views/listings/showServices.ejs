@@ -224,6 +224,24 @@
 
 
 <script src="/socket.io/socket.io.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+  // 🔥 ADD THIS FIRST
+  const socket = io("https://repairnow.onrender.com", {
+    transports: ["websocket", "polling"],
+    reconnection: true,
+    timeout: 10000
+  });
+
+  // NOW your socket events below
+  socket.on("connect", () => {
+    console.log("Socket connected");
+  });
+
+ 
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/admin.js"></script>
 <script>
