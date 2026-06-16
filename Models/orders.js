@@ -23,13 +23,37 @@ restaurant: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant', required:
       filename : String,
     },
 total: Number,
-status: { type: String, enum: ['pending','accepted','declined','preparing','picked','delivered','cancelled'], default: 'pending' },
+status: { type: String, enum:
+  [
+ 'pending_technician',
+ 'accepted',
+ 'travelling',
+ 'arrived',
+ 'repairing',
+ 'completed',
+ 'cancelled'
+]
+  , default: 'pending_technician' },
 
 ticketId: {
   type: String,
   required: true,
   unique: true
 },
+
+paymentStatus: {
+    type: String,
+    enum: ["pending", "paid", "refunded"],
+    default: "pending"
+},
+
+razorpayOrderId: String,
+
+razorpayPaymentId: String,
+
+
+
+
 
 },{ timestamps: true }) ;
 

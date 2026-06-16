@@ -53,10 +53,6 @@ io.use((socket, next) => {
 // socketSetup(io);
 
 const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
-// const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
-  // main()
-  // .then(() => console.log("MongoDB connection successful"))
-  // .catch((err) => console.log("DB error:", err));
   mongoose.connect(dbUrl)
   .then(() => {
     console.log("MongoDB connected");
@@ -227,6 +223,10 @@ app.use("/", etaRoutes);
 
 const allNearbyTech = require("./routes/allNearbyTechnician.js");
 app.use("/allNearbyTechnician", allNearbyTech);
+
+
+const bookingRoutes = require("./routes/booking.js");
+app.use("/api/orders/booking", bookingRoutes);
 
 
 

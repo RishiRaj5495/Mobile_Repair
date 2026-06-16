@@ -4,7 +4,12 @@
  if(process.env.NODE_ENV !== "production") {
   require('dotenv').config();
     }
-
+    const Razorpay = require("razorpay");
+    const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
+});
+const  crypto  = require("crypto");
 const express = require("express");
 const router = express.Router();
 const Order = require("../Models/orders.js");
@@ -33,50 +38,165 @@ router.post("/:id/reject", async (req, res) => {
 });
 
 // Create a new order
-router.post("/",upload.single("video"), async (req, res) => {
+console.log("RAZORPAY_KEY_SECRET:", process.env.RAZORPAY_KEY_SECRET);
+router.post("/verify-payment",upload.single("video"), async (req, res) => {
+  console.log("Payment verification request received with body:", req.body);
   try {
-    const { customerFirstName, customerLastName,customerPhone, customerEmail, customerAddress, customerCity,  customerState, customerPincode, customerCountry, restaurantId,lat,lng} = req.body;
+//     const { customerFirstName, customerLastName,customerPhone, customerEmail, customerAddress, customerCity,  customerState, customerPincode, customerCountry, restaurantId,lat,lng} = req.body;
    
-    const restaurant = await Restaurant.findById(restaurantId);
+//     const restaurant = await Restaurant.findById(restaurantId);
+
+// let ticketId;
+// let exists = true;
+
+// while (exists) {
+//   ticketId = "RN-" + Math.floor(100000 + Math.random() * 900000);
+//   exists = await Order.exists({ ticketId });
+// }
+//     let order = await Order.create({
+//         ticketId,
+//       customerFirstName,
+//       customerLastName,
+//       customerPhone,
+//       customerEmail,
+//       customerAddress,
+//       customerCity,
+//       customerState,
+//       customerPincode,
+//       customerCountry,
+//       restaurant:restaurantId,
+//    customerLocation: {
+//         lat: lat ? Number(lat) : null,
+//         lng: lng ? Number(lng) : null
+//       },
+//         video: {
+//     url: req.file?.path || null,
+//     filename: req.file?.filename || null
+//   }
+//     });
 
  
+// order = await Order.findById(order._id).populate("restaurant").sort({ createdAt: -1 });
 
- // cloudinary video URL
-let ticketId;
-let exists = true;
 
-while (exists) {
-  ticketId = "RN-" + Math.floor(100000 + Math.random() * 900000);
-  exists = await Order.exists({ ticketId });
-}
-    let order = await Order.create({
-        ticketId,
-      customerFirstName,
-      customerLastName,
-      customerPhone,
-      customerEmail,
-      customerAddress,
-      customerCity,
-      customerState,
-      customerPincode,
-      customerCountry,
-      restaurant:restaurantId,
-   customerLocation: {
-        lat: lat ? Number(lat) : null,
-        lng: lng ? Number(lng) : null
-      },
-        video: {
-    url: req.file?.path || null,
-    filename: req.file?.filename || null
-  }
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+ const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature
+    } = req.body;
+
+let expectedSignature;
+
+try {
+
+  console.log("Before signature generation");
+
+  expectedSignature = crypto
+    .createHmac(
+      "sha256",
+      process.env.RAZORPAY_KEY_SECRET
+    )
+    .update(
+      razorpay_order_id + "|" + razorpay_payment_id
+    )
+    .digest("hex");
+
+  console.log("Expected Signature:", expectedSignature);
+  console.log("Received Signature:", razorpay_signature);
+
+  if (expectedSignature !== razorpay_signature) {
+
+    return res.status(400).json({
+      success: false,
+      message: "Invalid payment signature"
     });
 
- 
-order = await Order.findById(order._id).populate("restaurant").sort({ createdAt: -1 });
+  }
 
-console.log("Order with populated restaurant:", order);
+  console.log("✅ Signature verified");
+
+} catch (err) {
+
+  console.error("SIGNATURE ERROR:", err);
+
+  return res.status(500).json({
+    success: false,
+    message: "Signature verification failed"
+  });
+
+}
+console.log("✅ Signature verified");
+    // 2️⃣ Get pending order from session
+    const pendingOrder = req.session.pendingOrder;
+
+    if (!pendingOrder) {
+
+      return res.status(400).json({
+        success: false,
+        message: "Pending order not found"
+      });
+
+    }
+console.log("Creating order...");
+console.log("Pending Order:", pendingOrder);
+let order;
+    // 3️⃣ Create final order
+try {
+
+  console.log("Before Order.create()");
+
+     order = await Order.create({
+
+    ...pendingOrder,
+
+    status: "pending_technician",
+
+    paymentStatus: "paid",
+
+    razorpayOrderId: razorpay_order_id,
+
+    razorpayPaymentId: razorpay_payment_id
+
+  });
+
+  console.log("After Order.create()");
+  console.log("Created order ID:", order._id);
+
+  order = await Order.findById(order._id)
+    .populate("restaurant");
+
+  console.log("After populate()");
+  console.log("Order created with Razorpay details:", order);
+
+} catch (err) {
+
+  console.error("❌ ORDER ERROR:");
+  console.error(err);
+  console.error(err.message);
+  console.error(err.stack);
+
+  return res.status(500).json({
+    success: false,
+    error: err.message
+  });
+
+}
+
+    // Clear pending order from session
+    // delete req.session.pendingOrder;
 
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+ const restaurantId = pendingOrder.restaurant;
+ console.log("Restaurant ID for notifications:", restaurantId);
     // 🔥 REAL-TIME UPDATE (Socket.io)
     const io = req.app.locals.io;
     if (io && io.emitToRestaurant) {
