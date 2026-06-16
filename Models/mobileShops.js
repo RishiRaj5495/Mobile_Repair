@@ -51,6 +51,7 @@ ratingBreakdown: {
     5: 0
   }
 },
+
 },{ timestamps: true });
 
 

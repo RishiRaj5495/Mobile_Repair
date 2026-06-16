@@ -115,7 +115,7 @@ form.addEventListener('submit', async (e) => {
   formData.append('video', video);
 
 const xhr = new XMLHttpRequest();
-xhr.open("POST", "/api/orders");
+xhr.open("POST", "/api/orders/booking/prepare");
 xhr.upload.onprogress = function (e) {
   if (e.lengthComputable) {
     const percent = Math.round((e.loaded / e.total) * 100);
@@ -123,21 +123,190 @@ xhr.upload.onprogress = function (e) {
   }
 };
 
-xhr.onload = function () {
-  const data = JSON.parse(xhr.responseText);
-  console.log("Order Response:", data);
+// xhr.onload = function () {
+//   const data = JSON.parse(xhr.responseText);
+//   console.log("Order Response:", data);
 
-  if (data?.success === true && data?.redirectUrl) {
-    // window.location.href = data.redirectUrl;
-     window.location.replace(data.redirectUrl);
-  } else {
-showFormError("Something went wrong. Please try again.");
+//   if (data?.success === true && data?.redirectUrl) {
+//      window.location.replace(data.redirectUrl);
+//   } else {
+// showFormError("Something went wrong. Please try again.");
+//     resetSubmitBtn();
+//   }
+// };
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+xhr.onload = async function () {
+
+  const data = JSON.parse(xhr.responseText);
+
+  console.log("Prepare Response:", data);
+
+  if (!data.success) {
+    showFormError(data.message || "Something went wrong.");
     resetSubmitBtn();
+    return;
   }
+
+  try {
+
+    const response = await fetch("/api/orders/booking/create-order", {
+      method: "POST"
+    });
+
+    const paymentData = await response.json();
+
+    console.log("Razorpay Order:", paymentData);
+
+    if (!paymentData.success) {
+      showFormError(paymentData.message);
+      resetSubmitBtn();
+      return;
+    }
+
+    const options = {
+      key: paymentData.key,
+
+      amount: paymentData.razorpayOrder.amount,
+
+      currency: paymentData.razorpayOrder.currency,
+
+      name: "RepairNow",
+
+      description: "Advance Booking Payment",
+
+      order_id: paymentData.razorpayOrder.id,
+
+      handler: async function (response) {
+ console.log("Payment Success:", response);
+        const verifyRes = await fetch(
+          "/api/orders/verify-payment",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              razorpay_order_id:
+               response.razorpay_order_id,
+
+              razorpay_payment_id:
+                response.razorpay_payment_id,
+
+              razorpay_signature:
+                response.razorpay_signature
+            })
+          }
+        );
+
+        const verifyData = await verifyRes.json();
+
+        if (verifyData.success) {
+
+          window.location.href =
+            verifyData.redirectUrl;
+
+        } else {
+
+          showFormError("Payment verification failed.");
+
+          resetSubmitBtn();
+
+        }
+          
+      },
+      modal: {
+    ondismiss: function () {
+
+      console.log("Payment popup closed by user");
+
+      showFormError("Payment cancelled.");
+
+      resetSubmitBtn();
+    }
+  },
+
+      prefill: {
+        name:
+          customerFirstName + " " + customerLastName,
+
+        email: customerEmail,
+
+        contact: customerPhone
+      },
+
+      theme: {
+        color: "#3399cc"
+      }
+    };
+
+    const rzp = new Razorpay(options);
+rzp.on("payment.failed", function (response) {
+
+  console.log("Payment Failed Full Response:", response);
+
+  console.log("Error:", response.error);
+
+  console.log("Description:", response.error.description);
+
+  console.log("Code:", response.error.code);
+
+  showFormError(
+    response.error.description || "Payment failed."
+  );
+
+  resetSubmitBtn();   // ⭐ Important
+});
+
+    rzp.open();
+
+  } catch (err) {
+
+    console.error(err);
+
+    showFormError("Unable to initiate payment.");
+
+    resetSubmitBtn();
+
+  }
+
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
 xhr.onerror = function () {
 showFormError("Upload failed. Please try again.");
   resetSubmitBtn();
+
+
+
+
 };
 
 
