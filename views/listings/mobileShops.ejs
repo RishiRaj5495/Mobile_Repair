@@ -154,40 +154,109 @@ min-width: 120px;
           <form id="restaurantForm" novalidate>
      <label class="form-label">Shop Name :</label>
             <div class="mb-3">
-              <input type="text" id="name" name="name" class="form-control" placeholder="Shop Name" required />
+              <!-- <input type="text" id="name" name="name" class="form-control" placeholder="Shop Name" required /> -->
+               <input
+  type="text"
+  id="name"
+  name="name"
+  class="form-control"
+  placeholder="Shop Name"
+  minlength="6"
+  maxlength="20"
+  required
+/>
+<div class="invalid-feedback">
+  Enter valid shop  name
+</div>
             </div>
+
+
         <label class="form-label">Email Address :</label>
             <div class="mb-3">
-              <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" required />
-              <div class="invalid-feedback">Please enter a valid email</div>
+           <input
+  type="email"
+  id="email"
+  name="email"
+  class="form-control"
+  placeholder="Email Address"
+  required
+/>
+<div class="invalid-feedback">
+  Please enter a valid email address.
+</div>
             </div>
 
             <div class="mb-3">
                <label class="form-label">Phone :</label>
-              <input type="number" id="phone" name="phone" class="form-control" placeholder="Phone Number" required />
-              <div class="invalid-feedback">Please enter a valid number</div>
+      <input
+  type="text"
+  id="phone"
+  name="phone"
+  class="form-control"
+  placeholder="Phone Number"
+  maxlength="10"
+  pattern="[0-9]{10}"
+  required
+/>
+<div class="invalid-feedback">
+  Phone number must be exactly 10 digits.
+</div>
             </div>
 
             <!-- Password with eye toggle -->
                <label class="form-label">Password :</label>
-         
+               
+<!--          
             <div class="mb-3 position-relative">
+      
+<input
+  type="password"
+  name="password"
+  id="password"
+  class="form-control"
+  placeholder="Create a strong password"
+   maxlength="50"
+  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$])[A-Za-z\d@#$]{8,}$"
+  required
+>
+
+<div class="invalid-feedback">
+  Password must be at least 8 characters long and include uppercase,
+  lowercase, number, and special character.
+
+  
+</div>
+         <span class="password-toggle" onclick="togglePassword()">
+    <i class="bi bi-eye-slash" id="toggleIcon"></i>
+  </span>
+ 
+</div> -->
+<div class="mb-3 position-relative">
+
   <input
     type="password"
-    id="password"
     name="password"
-    class="form-control"
-    placeholder="Password"
+    id="password"
+    class="form-control pe-5"
+    placeholder="Create a strong password"
+    maxlength="50"
+    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$])[A-Za-z\d@#$]{8,}$"
     required
-  />
+  >
 
   <span class="password-toggle" onclick="togglePassword()">
     <i class="bi bi-eye-slash" id="toggleIcon"></i>
   </span>
+
+  <div class="invalid-feedback">
+    Password must be at least 8 characters long and include uppercase,
+    lowercase, number, and special character.
+  </div>
+
 </div>
      <label class="form-label">Shop Address :</label>
             <div class="mb-3">
-              <input type="text" id="address" name="address" class="form-control" placeholder="Running Address" required />
+              <input type="text" id="address" name="address" class="form-control" placeholder="Running Address" minlength="10" maxlength="100" required />
               <div class="invalid-feedback">Please enter a running shop address</div>
             </div>
 
@@ -419,17 +488,81 @@ navigator.geolocation.getCurrentPosition(async (pos) => {
   const text = document.getElementById('registerText');
   const btn = document.getElementById('registerBtn');
 
-  form.addEventListener('submit', async (event) => {
-    // if (!form.checkValidity()) return;
-    if (!form.checkValidity()) {
-      event.preventDefault(); // STOP submit
-      event.stopPropagation(); 
-      return;
-    }
-    spinner.classList.remove('d-none');
-    text.textContent = 'Creating Account...';
-    btn.disabled = true;
+  // form.addEventListener('submit', async (event) => {
+  //   // if (!form.checkValidity()) return;
+  //   if (!form.checkValidity()) {
+  //     event.preventDefault(); // STOP submit
+  //     event.stopPropagation(); 
+  //     return;
+  //   }
+  //   spinner.classList.remove('d-none');
+  //   text.textContent = 'Creating Account...';
+  //   btn.disabled = true;
+  // });
+
+
+
+
+  const strongPassword =
+/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+
+form.addEventListener("submit", function (event) {
+
+  event.preventDefault();
+
+  let isValid = true;
+
+  const name = document.getElementById("name");
+  const email = document.getElementById("email");
+  const phone = document.getElementById("phone");
+  const password = document.getElementById("password");
+  const address = document.getElementById("address");
+
+  // Reset
+  form.querySelectorAll("input").forEach(input => {
+    input.classList.remove("is-invalid");
   });
+
+  // Shop Name
+  if (name.value.trim().length < 3) {
+    name.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Email
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+    email.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Phone
+  if (!/^\d{10}$/.test(phone.value.trim())) {
+    phone.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Password
+  if (!strongPassword.test(password.value.trim())) {
+    password.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Address
+  if (address.value.trim().length < 10) {
+    address.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  form.classList.add("was-validated");
+
+  if (!isValid) return;
+
+  spinner.classList.remove("d-none");
+  text.textContent = "Creating Account...";
+  btn.disabled = true;
+
+  form.submit();
+});
 </script>
 <script>
 function togglePassword() {

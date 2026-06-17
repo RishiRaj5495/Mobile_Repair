@@ -11,7 +11,7 @@ const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
-console.log("Razorpay instance created with key_id:", process.env.RAZORPAY_KEY_ID);
+
 
 
 const express = require("express");
@@ -24,10 +24,10 @@ const Restaurant = require("../Models/mobileShops.js");
 
 
 router.post(
-  "/prepare",
-  upload.single("video"),
+  "/prepare", upload.none(),
   async (req, res) => {
-    console.log("Received order preparation request with body:", req.body);
+  
+
 
     try {
 
@@ -55,7 +55,7 @@ if (!restaurant) {
   });
 }
 
-if (!req.file) {
+if (!req.body.videoUrl) {
   return res.status(400).json({
     success: false,
     message: "Issue video is required"
@@ -93,8 +93,7 @@ if (!req.file) {
         },
 
         video: {
-          url: req.file?.path || null,
-          filename: req.file?.filename || null
+          url: req.body.videoUrl || null
         },
           advanceAmount: 100
 
@@ -123,7 +122,7 @@ if (!req.file) {
 
 
 router.post("/create-order", async (req, res) => {
-console.log("Backend Key:", process.env.RAZORPAY_KEY_ID);
+
     try {
 
         if (!req.session.pendingOrder) {
