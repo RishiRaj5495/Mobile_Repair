@@ -162,14 +162,14 @@ try {
 
   });
 
-  console.log("After Order.create()");
-  console.log("Created order ID:", order._id);
+  // console.log("After Order.create()");
+  // console.log("Created order ID:", order._id);
 
   order = await Order.findById(order._id)
     .populate("restaurant");
 
-  console.log("After populate()");
-  console.log("Order created with Razorpay details:", order);
+  // console.log("After populate()");
+  // console.log("Order created with Razorpay details:", order);
 
 } catch (err) {
 

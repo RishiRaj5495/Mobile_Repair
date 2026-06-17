@@ -76,6 +76,27 @@ form.addEventListener('submit', async (e) => {
     showFormError("Please fill all required fields correctly");
     return;
   }
+  const phone = document.getElementById("customerPhone").value.trim();
+const pincode = document.getElementById("customerPincode").value.trim();
+const email = document.getElementById("customerEmail").value.trim();
+
+if (!/^\d{10}$/.test(phone)) {
+  showFormError("Phone number must be exactly 10 digits");
+  resetSubmitBtn();
+  return;
+}
+
+if (!/^\d{6}$/.test(pincode)) {
+  showFormError("Pincode must be exactly 6 digits");
+  resetSubmitBtn();
+  return;
+}
+
+if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  showFormError("Please enter a valid email");
+  resetSubmitBtn();
+  return;
+}
 
     const submitBtn = document.getElementById("place");
   const spinner = submitBtn.querySelector(".spinner-border");
@@ -97,8 +118,31 @@ form.addEventListener('submit', async (e) => {
   const customerCountry = document.querySelector('#customerCountry').value;
 
   const restaurantId = document.getElementById('restId').value;
-
+console.log("Customer First Name:", customerFirstName);
   const video = document.querySelector('#video').files[0];
+  const cloudinaryData = new FormData();
+
+cloudinaryData.append("file", video);
+
+cloudinaryData.append(
+  "upload_preset",
+  "repairnow_videos" // your upload preset
+);
+
+const cloudinaryRes = await fetch(
+  `https://api.cloudinary.com/v1_1/${window.CLOUDINARY_NAME}/video/upload`,
+  {
+    method: "POST",
+    body: cloudinaryData
+  }
+);
+
+const cloudinaryJson = await cloudinaryRes.json();
+
+
+const videoUrl = cloudinaryJson.secure_url;
+
+
 
   const formData = new FormData();
   formData.append('customerFirstName', customerFirstName);
@@ -112,7 +156,8 @@ form.addEventListener('submit', async (e) => {
   formData.append('customerCountry', customerCountry);
 
   formData.append('restaurantId', restaurantId); // IMPORTANT
-  formData.append('video', video);
+  // formData.append('video', video);
+  formData.append('videoUrl', videoUrl);
 
 const xhr = new XMLHttpRequest();
 xhr.open("POST", "/api/orders/booking/prepare");
@@ -123,17 +168,6 @@ xhr.upload.onprogress = function (e) {
   }
 };
 
-// xhr.onload = function () {
-//   const data = JSON.parse(xhr.responseText);
-//   console.log("Order Response:", data);
-
-//   if (data?.success === true && data?.redirectUrl) {
-//      window.location.replace(data.redirectUrl);
-//   } else {
-// showFormError("Something went wrong. Please try again.");
-//     resetSubmitBtn();
-//   }
-// };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -249,13 +283,13 @@ xhr.onload = async function () {
     const rzp = new Razorpay(options);
 rzp.on("payment.failed", function (response) {
 
-  console.log("Payment Failed Full Response:", response);
+  // console.log("Payment Failed Full Response:", response);
 
-  console.log("Error:", response.error);
+  // console.log("Error:", response.error);
 
-  console.log("Description:", response.error.description);
+  // console.log("Description:", response.error.description);
 
-  console.log("Code:", response.error.code);
+  // console.log("Code:", response.error.code);
 
   showFormError(
     response.error.description || "Payment failed."

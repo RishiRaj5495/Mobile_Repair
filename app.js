@@ -4,6 +4,7 @@
     }
    
 
+   console.log("Cloudinary Name:", process.env.CLOUD_NAME);
  const admin = require("firebase-admin");
 
 // const {isLogged,isOwner,validateListing} = require("./middlewear.js");
@@ -47,38 +48,41 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST"],
   },
 });
-io.use((socket, next) => {
+  io.use((socket, next) => {
   sessionMiddleware(socket.request, {}, next);
 });
 // socketSetup(io);
-
 const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
-  mongoose.connect(dbUrl)
-  .then(() => {
-    console.log("MongoDB connected");
+// const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
+mongoose.connect(dbUrl)
+.then(() => {
+  console.log("MongoDB connected");
 
-    server.listen(8080, () => {
-       socketSetup(io);
-      console.log("Server + Socket.io running on port 8080");
-    });
-
-  })
-  .catch(err => {
-    console.log("DB error:", err);
+  const store = MongoStore.create({
+    client: mongoose.connection.getClient(),
+    collectionName: "sessions",
+    autoRemove: "native",
+    touchAfter: 24 * 3600,
   });
 
-async function main() {
-  await mongoose.connect(dbUrl);
-}
+  store.on("error", (err) => {
+    console.log("Session store error:", err);
+  });
+
+  server.listen(8080, () => {
+    socketSetup(io);
+    console.log("Server + Socket.io running on port 8080");
+  });
+})
+.catch((err) => {
+  console.log("DB error:", err);
+});
+
+
 const store = MongoStore.create({
-  // mongoUrl: dbUrl,
   client: mongoose.connection.getClient(),
    collectionName: "sessions",
-   autoRemove: "native",  
-  // crypto: {
-  //   secret: process.env.SECRET || "mysupersecret",
-  // },
-      
+   autoRemove: "native",        
   touchAfter: 24 * 3600,
 });
 store.on("error", (err) => {
@@ -91,20 +95,47 @@ const sessionOptions = {
   saveUninitialized: false,
 
   cookie: {
-   expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+   expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
    maxAge: 7 * 24 * 60 * 60 * 1000,
    httpOnly: true,
 },
 
 };
 
+// const sessionMiddleware = session(sessionOptions);
+// app.use(sessionMiddleware);
 
 
-const sessionMiddleware = session(sessionOptions);///mmm//
-app.use(sessionMiddleware);///mmm///
-app.use(flash());
+  const sessionMiddleware = session(sessionOptions);
+
+  app.use(sessionMiddleware);
+  app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+
+  res.locals.currentUser = null;
+  res.locals.currentRestaurant = null;
+
+  if (req.user) {
+    if (req.user.constructor.modelName === "User") {
+      res.locals.currentUser = req.user;
+    } else if (req.user.constructor.modelName === "Restaurant") {
+      res.locals.currentRestaurant = req.user;
+    }
+  }
+
+  next();
+});
+
+
+
+
+
 passport.use('user-local',
   new LocalStrategy(User.authenticate())
 );
@@ -116,10 +147,6 @@ passport.use('restaurant-local',
 );
 
 // Serialize by ID + model type
-passport.serializeUser((entity, done) => {
-  done(null, { id: entity.id, type: entity.constructor.modelName });
-});
-
 passport.deserializeUser(async (obj, done) => {
   if (obj.type === 'User') {
     const user = await User.findById(obj.id);
@@ -145,26 +172,6 @@ app.get("/ping", (req, res) => {
 
 
 
-app.use((req, res, next) => {
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
-
-  res.locals.currentUser = null;
-  res.locals.currentRestaurant = null;
-
-  if (req.user) {
-    if (req.user.constructor.modelName === "User") {
-      res.locals.currentUser = req.user;
-    } else if (req.user.constructor.modelName === "Restaurant") {
-      res.locals.currentRestaurant = req.user;
-    }
-  }
-
-  next();
-});
-
-
-
 
 app.get("/", async(req, res) => {
 res.set("Cache-Control", "no-store");
@@ -178,19 +185,10 @@ app.get('/mobileShops', (req, res) => {
 });
 
 
-app.get('/admin/:id', isLogged, async (req, res) => {
-  const { id } = req.params;
-  const restaurant = await Restaurant.findById(id);
-  res.render('listings/admin.ejs', { id });
-
-
-  
-});
-
 app.get("/shop/:id", isLogged,async (req, res) => {
   
   const restaurant = await Restaurant.findById(req.params.id);
-  res.render("listings/singleShops.ejs", { restaurant });
+  res.render("listings/singleShops.ejs", { restaurant, cloudName: process.env.CLOUD_NAME});
 });
 
 
@@ -198,7 +196,7 @@ app.get("/listings", async(req, res) => {
 res.set("Cache-Control", "no-store");
   console.log("You are awesome");
    const restaurants = await Restaurant.find();
-  res.render("listings/showServices.ejs", { restaurants } );
+  res.render("listings/showServices.ejs", { restaurants} );
 });
 
 
@@ -246,14 +244,6 @@ const firebaseKeyPath = process.env.RENDER
 admin.initializeApp({
   credential: admin.credential.cert(firebaseKeyPath),
 });
-
-// Error handling middleware
-
-// app.use((err,req,res,next) =>{
-//   let {message ="Not valid",statusCode = 400} = err;
-
-//  res.render("error.ejs",{err});
-// });
 app.use((err, req, res, next) => {
   if (res.headersSent) {
     return next(err);   // ✅ VERY IMPORTANT

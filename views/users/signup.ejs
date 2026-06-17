@@ -16,49 +16,6 @@
 
 </style>
 <body>
-  <!-- <div class="row signupPage" style="margin-bottom: 20px;">
-    <div class="col-8 offset-2">
-      <h3>Sign Up</h3>
-      <form action="/users/signup" method="POST" novalidate class="needs-validation">
-        <div class="mb-3">
-          <label for="username" class="form-label">Username:</label>
-          <input type="text" name="username"  placeholder="Enter Username" class="form-control" required>
-          <div class="valid-feedback">Looks good!</div>
-          <div class="invalid-feedback">Please enter a valid username</div>
-        </div>
-
-        <div class="mb-3">
-          <label for="email" class="form-label">Email:</label>
-          <input type="email" name="email" placeholder="Enter Email" class="form-control" required>
-          <div class="valid-feedback">Looks good!</div>
-          <div class="invalid-feedback">Please enter a valid email</div>
-        </div>
-
-        <div class="mb-3">
-          <label for="password" class="form-label">Password:</label>
-          <input type="password" name="password" placeholder="Enter Password" class="form-control" required>
-          <div class="valid-feedback">Looks good!</div>
-          <div class="invalid-feedback">Please enter a valid password</div>
-        </div>
-
-
-           <div class="mb-3">
-          <label for="phone" class="form-label">Phone:</label>
-          <input type="phone" name="phone" placeholder="Enter number" class="form-control" required>
-          <div class="valid-feedback">Looks good!</div>
-          <div class="invalid-feedback">Please enter a running number</div>
-        </div>
-
-
-
-
-
-
-
-        <button type="submit" class="btn btn-primary px-4 p-1">Sign Up</button>
-      </form>
-    </div>
-  </div> -->
   <div class="container my-5">
   <div class="row justify-content-center">
     <div class="col-lg-6 col-md-8">
@@ -75,7 +32,15 @@
             <!-- Username -->
             <div class="mb-3">
               <label class="form-label">Username</label>
-              <input type="text" name="username" class="form-control" placeholder="Choose a username" required>
+              <!-- <input type="text" name="username" class="form-control" placeholder="Choose a username" required> -->
+               <input
+  type="text"
+  name="username"
+  class="form-control"
+  placeholder="Choose a username"
+  minlength="3"
+  required
+>
               <div class="invalid-feedback">Please enter a username</div>
             </div>
 
@@ -89,15 +54,36 @@
             <!-- Password -->
             <div class="mb-3">
               <label class="form-label">Password</label>
-              <input type="password" name="password" class="form-control" placeholder="Create a strong password" required>
-              <div class="invalid-feedback">Please enter a password</div>
-            </div>
+              <!-- <input type="password" name="password" class="form-control" placeholder="Create a strong password" required> -->
+<input
+  type="password"
+  name="password"
+  class="form-control"
+  placeholder="Create a strong password"
+   maxlength="50"
+  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$])[A-Za-z\d@#$]{8,}$"
+  required
+>
+<div class="invalid-feedback">
+  Password must be at least 8 characters long and include uppercase,
+  lowercase, number, and special character.
+</div>
+            
 
             <!-- Phone -->
             <div class="mb-3">
               <label class="form-label">Phone Number</label>
-              <input type="tel" name="phone" class="form-control" placeholder="10-digit mobile number" required>
-              <div class="invalid-feedback">Enter a valid phone number</div>
+              <!-- <input type="tel" name="phone" class="form-control" placeholder="10-digit mobile number" required> -->
+               <input
+  type="text"
+  name="phone"
+  class="form-control"
+  placeholder="10-digit mobile number"
+  maxlength="10"
+  pattern="[0-9]{10}"
+  required
+>
+              <div class="invalid-feedback">Enter a valid 10 digit phone number</div>
             </div>
 
             <!-- 🔒 Terms & Privacy -->
@@ -135,17 +121,238 @@
     </div>
   </div>
 </div>
-<script>
+<!-- <script>
   const form = document.getElementById("signupForm");
   const btn = document.getElementById("submitBtn");
   const spinner = btn.querySelector(".spinner-border");
   const text = btn.querySelector(".btn-text");
 
-  form.addEventListener("submit", function () {
-    if (form.checkValidity()) {
-      btn.disabled = true;
-      spinner.classList.remove("d-none");
-      text.textContent = "Creating account...";
+
+
+  form.addEventListener("submit", function (event) {
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  const username = form.username.value.trim();
+  const email = form.email.value.trim();
+  const password = form.password.value.trim();
+  const phone = form.phone.value.trim();
+  const terms = document.getElementById("termsCheck");
+
+  let isValid = true;
+
+  // Username
+  if (username.length < 3) {
+    isValid = false;
+  }
+
+  // Email
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    isValid = false;
+  }
+
+  // Password
+  if (password.length < 6) {
+    isValid = false;
+  }
+
+  // Phone
+  if (!/^\d{10}$/.test(phone)) {
+    isValid = false;
+  }
+
+  // Terms
+  if (!terms.checked) {
+    isValid = false;
+  }
+
+  form.classList.add("was-validated");
+
+  if (!isValid) {
+    return;
+  }
+
+  btn.disabled = true;
+  spinner.classList.remove("d-none");
+  text.textContent = "Creating account...";
+
+  form.submit();
+});
+</script> -->
+<!-- <script>
+const form = document.getElementById("signupForm");
+const btn = document.getElementById("submitBtn");
+const spinner = btn.querySelector(".spinner-border");
+const text = btn.querySelector(".btn-text");
+
+// Real-time validation
+form.querySelectorAll("input").forEach(input => {
+
+  input.addEventListener("input", () => {
+
+    if (input.name === "phone") {
+      input.value = input.value.replace(/\D/g, "").slice(0, 10);
     }
+
+    if (input.checkValidity()) {
+      input.classList.remove("is-invalid");
+      input.classList.add("is-valid");
+    } else {
+      input.classList.remove("is-valid");
+    }
+
   });
+
+});
+
+form.addEventListener("submit", function(event) {
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  const username = form.username.value.trim();
+  const email = form.email.value.trim();
+  const password = form.password.value.trim();
+  const phone = form.phone.value.trim();
+  const terms = document.getElementById("termsCheck");
+
+  let isValid = true;
+
+  // Username
+  if (username.length < 3) {
+    form.username.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Email
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    form.email.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Password
+const strongPassword =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+if (!strongPassword.test(password)) {
+  form.password.classList.add("is-invalid");
+  isValid = false;
+} else {
+  form.password.classList.remove("is-invalid");
+  form.password.classList.add("is-valid");
+}
+
+  // Phone
+  if (!/^\d{10}$/.test(phone)) {
+    form.phone.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Terms
+  if (!terms.checked) {
+    terms.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  form.classList.add("was-validated");
+
+  if (!isValid) {
+    return;
+  }
+
+  // Loading state
+  btn.disabled = true;
+  spinner.classList.remove("d-none");
+  text.textContent = "Creating account...";
+
+  form.submit();
+});
+</script> -->
+<script>
+const form = document.getElementById("signupForm");
+const btn = document.getElementById("submitBtn");
+const spinner = btn.querySelector(".spinner-border");
+const text = btn.querySelector(".btn-text");
+
+const strongPassword =
+/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+// Real-time validation
+form.querySelectorAll("input").forEach(input => {
+
+  input.addEventListener("input", () => {
+
+    if (input.name === "phone") {
+      input.value = input.value.replace(/\D/g, "").slice(0, 10);
+    }
+
+    input.classList.remove("is-invalid");
+
+    if (input.value.trim() !== "") {
+      input.classList.add("is-valid");
+    } else {
+      input.classList.remove("is-valid");
+    }
+
+  });
+
+});
+
+form.addEventListener("submit", function (event) {
+
+  event.preventDefault();
+
+  let isValid = true;
+
+  const username = form.username.value.trim();
+  const email = form.email.value.trim();
+  const password = form.password.value.trim();
+  const phone = form.phone.value.trim();
+  const terms = document.getElementById("termsCheck");
+
+  // Reset classes
+  form.querySelectorAll("input").forEach(input => {
+    input.classList.remove("is-invalid");
+  });
+
+  // Username
+  if (username.length < 3) {
+    form.username.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Email
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    form.email.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Strong Password
+  if (!strongPassword.test(password)) {
+    form.password.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Phone Number
+  if (!/^\d{10}$/.test(phone)) {
+    form.phone.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Terms
+  if (!terms.checked) {
+    terms.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  if (!isValid) return;
+
+  // Loading state
+  btn.disabled = true;
+  spinner.classList.remove("d-none");
+  text.textContent = "Creating account...";
+
+  form.submit();
+});
 </script>
