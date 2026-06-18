@@ -58,17 +58,6 @@ mongoose.connect(dbUrl)
 .then(() => {
   console.log("MongoDB connected");
 
-  const store = MongoStore.create({
-    client: mongoose.connection.getClient(),
-    collectionName: "sessions",
-    autoRemove: "native",
-    touchAfter: 24 * 3600,
-  });
-
-  store.on("error", (err) => {
-    console.log("Session store error:", err);
-  });
-
   server.listen(8080, () => {
     socketSetup(io);
     console.log("Server + Socket.io running on port 8080");
@@ -102,8 +91,7 @@ const sessionOptions = {
 
 };
 
-// const sessionMiddleware = session(sessionOptions);
-// app.use(sessionMiddleware);
+
 
 
   const sessionMiddleware = session(sessionOptions);
@@ -146,18 +134,54 @@ passport.use('restaurant-local',
   )
 );
 
-// Serialize by ID + model type
-passport.deserializeUser(async (obj, done) => {
-  if (obj.type === 'User') {
-    const user = await User.findById(obj.id);
-    done(null, user);
-  } else if (obj.type === 'Restaurant') {
-    const restaurant = await Restaurant.findById(obj.id);
-    done(null, restaurant);
+
+passport.serializeUser((user, done) => {
+  try {
+    if (!user || !user._id) {
+      return done(new Error("Invalid user object"), null);
+    }
+
+    const type =
+      user.constructor.modelName === 'User'
+        ? 'User'
+        : 'Restaurant';
+
+    done(null, {
+      id: user._id,
+      type
+    });
+
+  } catch (err) {
+    done(err, null);
   }
 });
 
+passport.deserializeUser(async (obj, done) => {
+  try {
+    if (!obj || !obj.id || !obj.type) {
+      return done(new Error("Invalid session object"), null);
+    }
 
+    let user = null;
+
+    if (obj.type === 'User') {
+      user = await User.findById(obj.id);
+    } else if (obj.type === 'Restaurant') {
+      user = await Restaurant.findById(obj.id);
+    } else {
+      return done(new Error("Unknown user type"), null);
+    }
+
+    if (!user) {
+      return done(new Error("User not found"), null);
+    }
+
+    return done(null, user);
+
+  } catch (err) {
+    return done(err, null);
+  }
+});
 
 
 
