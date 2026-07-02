@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router = express.Router();
 const Restaurant = require('../Models/mobileShops.js');
@@ -11,9 +12,7 @@ router.post('/register', async (req, res, next) => {
   console.log("In mongo save");
 
  try {
-
   const { name, email, password, phone, address, fcmToken } = req.body;
-  
     if (!name ||!email || !address || !phone) return res.status(400).json({ message: "All fields required" });
 
     const restaurant = new Restaurant({ name, email, address, phone, fcmToken: fcmToken || null });
@@ -51,6 +50,9 @@ const io = req.app.locals.io;
     });
   }
 );
+
+
+
 
 router.post("/login_Shop", (req, res, next) => {
   passport.authenticate("restaurant-local", (err, user, info) => {
@@ -215,7 +217,6 @@ router.post("/location", async (req, res) => {
    }
 
 });
-
 
 
 

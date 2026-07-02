@@ -1,6 +1,7 @@
 
 
-let socket;
+// let socket;
+const socket = window.socket;
 let orders = [];
 document.addEventListener("DOMContentLoaded", async () => {
 
@@ -10,30 +11,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 await registerForNotifications(RESTAURANT_ID);
 await loadExistingOrders();
-socket = io();
+// socket = io();
 
  
 
 
   socket.on("connect", () => {
-    console.log("Shop socket connected:", socket.id);
-     socket.emit("restaurant:join", RESTAURANT_ID);
-    console.log("Restaurant connected:", RESTAURANT_ID);
-
+  
+    // console.log("Shop socket connected:", socket.id);
+    //  socket.emit("restaurant:join", RESTAURANT_ID);
+    // console.log("Restaurant connected:", RESTAURANT_ID);
     // Join order room ONLY if order page
     if (typeof CURRENT_ORDER_ID !== "undefined") {
       socket.emit("join_order", CURRENT_ORDER_ID);
       console.log("Shop joined order room:", CURRENT_ORDER_ID);
     }
-
-   
+    
   });
-///
+
+
 
 socket.on("new_order", order => {
+console.log("New order received:", order);
   if (!document.getElementById(`order_${order._id}`)) {
     orders.unshift(order);
-    renderOrder(order, "top"); // latest on top
+    renderOrder(order,"top"); // latest on top
   }
 });
 
@@ -122,6 +124,7 @@ document.getElementById('restaurantForm')?.addEventListener('submit', async (e) 
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   });
+
   const data = await res.json();
  if (data?.success === true && data?.redirectUrl) {
   window.location.href = data.redirectUrl;
@@ -155,30 +158,48 @@ function resetBtn() {
 }
 
 
-  async function acceptOrder(orderId) {
-    await  fetch(`/api/orders/${orderId}/accept`, {
-    method: "POST"
-  })
-    .then(res => {
-      if (!res.ok) throw new Error("Failed to accept order");
-      window.location.href = `/delivery/${orderId}`;
-    })
-    .catch(err => console.error(err));
+//   async function acceptOrder(orderId) {
+//     fetch(`/api/orders/${orderId}/accept`, {
+//       method: "POST"
+//     })
+//     .then(res => {
+//       if (!res.ok) throw new Error("Failed to accept order");
+//       console.log("Accepting order:", orderId, res);
+//       window.location.href = `/delivery/${orderId}`;
+//     })
+//     .catch(err => console.error(err));
+// }
+
+// socket.emit(orderID)
+
+async function acceptOrder(orderId) {
+  try {
+    const res = await fetch(`/api/orders/${orderId}/accept`, {
+      method: "POST"
+    });
+    if (!res.ok) {
+      throw new Error("Failed to accept order");
+    }
+
+    window.location.href = `/delivery/${orderId}`;
+  } catch (err) {
+    console.error(err);
+  }
 }
+
+
 
 
 async function rejectOrder(orderId) {
   try {
-    console.log("Rejecting order:", orderId);
-
     const res = await fetch(`/api/orders/${orderId}/reject`, {
       method: "POST"
     });
-
+    
     if (!res.ok) throw new Error("Failed to reject order");
 
     if (socket) {
-      socket.emit('order:updateStatus', { orderId, status: 'Rejected' });
+      socket.emit('order:updateStatus', { orderId, status: 'cancelled' });
     } 
 
     window.location.reload();
@@ -188,6 +209,9 @@ async function rejectOrder(orderId) {
   }
 }
 
+
+
+
 async function loadExistingOrders() {
   console.log("Star loadExistingOrders");
   try {
@@ -196,7 +220,7 @@ async function loadExistingOrders() {
 
  console.log("Filter order", orders);
     // orders.forEach(order => showOrder(order));
-    orders.forEach(order => renderOrder(order));
+  orders.forEach(order => renderOrder(order));
 
 
   } catch (err) {
@@ -204,13 +228,11 @@ async function loadExistingOrders() {
   }
 }
 
-//////////////
-
-
-
-
 
 function renderOrder(order, position = "bottom") {
+
+ console.log("Rendering order:", order);
+
   const div = document.createElement('div');
   div.className = 'order-box';
   div.id = `order_${order._id}`;

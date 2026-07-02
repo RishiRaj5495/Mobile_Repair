@@ -36,25 +36,26 @@ module.exports = function(io) {
 });
 
 ///new
+
+
 io.emitToRestaurant = (restaurantId, event, payload) => {
 io.to(`restaurant_${restaurantId}`).emit(event, payload);
+console.log("Emitting to restaurant:", restaurantId, event, payload);
 };
+io.emitToCustomer = ( customerId,event,payload) => {
+io.to(`customer_${customerId}`).emit(event, payload);
+console.log("Emitting to customer:", customerId, event, payload);
+};
+
 
 
 io.on('connection', (socket) => {
 console.log('socket connected', socket.id);
 
 
-// socket.on('restaurant:join', (restaurantId) => {
-// console.log('restaurant join', restaurantId);
-// socket.join(`restaurant_${restaurantId}`);
-// });old-------
-//////new
 
-    // socket.on("joinShop", (shopId) => {     //////r
-    //   socket.join(`shop_${shopId}`);   //////r
-    // });
-    socket.on("joinShop", (shopId) => {
+// for technician tracking
+    socket.on("joinShop", (shopId) => {   
 
   const room = `shop_${shopId}`;
   socket.join(room);
@@ -62,6 +63,13 @@ console.log('socket connected', socket.id);
   // console.log(`Socket ${socket.id} joined ${room}`);
 
 });
+
+// for customer tracking
+
+   socket.on("joinCustomer", (customerId) => {
+    socket.join(`customer_${customerId}`);
+    console.log(`Socket ${socket.id} joined customer_${customerId}`);
+  });
 socket.on("requestAllShops", async () => {
   try {
     const shops = await Restaurant.find();
@@ -114,6 +122,7 @@ console.log('socket disconnected', socket.id);
       console.log(`Socket ${socket.id} joined order ${orderId}`);
     });
 
+
       socket.on("delivery:location", ({ orderId, lat, lng }) => {
       socket.to(orderId).emit("delivery:location", { lat, lng });
     });
@@ -143,6 +152,8 @@ console.log('socket disconnected', socket.id);
 //     });
 ///new
 socket.on("order:updateStatus", async ({ orderId, status }) => {
+
+  console.log("Received order:updateStatus:", { orderId, status });
   try {
     const user = socket.user;
 

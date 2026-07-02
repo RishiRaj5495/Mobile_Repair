@@ -1,5 +1,5 @@
 <!-- ===== HEAD ===== -->
- <% layout("/layouts/boilerPlate") %>
+ <!-- <% layout("/layouts/boilerPlate") %>
 
 
   <link
@@ -18,17 +18,347 @@
     width: 100%;
     border-radius: 12px;
   }
+</style> -->
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+}
+
+.tracking-container{
+    display:flex;
+    height:100vh;
+}
+
+.info-section{
+    width:35%;
+    background:#f8fafc;
+    padding:20px;
+    overflow-y:auto;
+    border-right:1px solid #e5e7eb;
+}
+
+.map-section{
+    width:65%;
+}
+
+#map{
+    width:100%;
+    height:100%;
+}
+
+.card{
+    background:#fff;
+    border-radius:16px;
+    padding:18px;
+    margin-bottom:18px;
+    box-shadow:0 4px 20px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 30px rgba(0,0,0,.12);
+}
+
+.card h2{
+    font-size:18px;
+    margin-bottom:15px;
+    color:#111827;
+}
+
+.badge{
+    display:inline-block;
+    padding:10px 18px;
+    border-radius:999px;
+    font-weight:600;
+    text-transform:capitalize;
+}
+
+.pending_technician{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.accepted{
+    background:#d4edda;
+    color:#155724;
+}
+
+.travelling{
+    background:#cce5ff;
+    color:#004085;
+}
+
+.arrived{
+    background:#d1ecf1;
+    color:#0c5460;
+}
+
+.repairing{
+    background:#f8d7da;
+    color:#721c24;
+}
+
+.completed{
+    background:#d4edda;
+    color:#155724;
+}
+
+.cancelled{
+    background:#f5c6cb;
+    color:#721c24;
+}
+
+.detail-row{
+    margin-bottom:10px;
+    line-height:1.7;
+}
+
+.call-btn{
+    display:block;
+    text-align:center;
+    padding:12px;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    margin-top:12px;
+    font-weight:600;
+}
+
+.call-btn:hover{
+    background:#1d4ed8;
+}
+
+.tracking-box{
+    text-align:center;
+}
+
+.tracking-box h3{
+    font-size:28px;
+    margin-bottom:6px;
+    color:#2563eb;
+}
+
+.notification{
+    background:#f3f4f6;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+.timeline{
+    margin-top:10px;
+}
+
+.timeline-step{
+    padding:10px 0;
+    border-left:3px solid #22c55e;
+    padding-left:15px;
+    margin-left:8px;
+}
+
+.timeline-step:not(:last-child){
+    margin-bottom:8px;
+}
+
+video{
+    width:100%;
+    border-radius:12px;
+}
 </style>
 
+<div class="tracking-container">
+
+    <!-- LEFT PANEL -->
+    <div class="info-section">
+
+        <!-- BOOKING STATUS -->
+        <div class="card">
+            <h2>📋 Booking Status</h2>
+
+            <span id="bookingStatus" class="badge <%= order.status %>">
+                <%= order.status.replaceAll('_',' ') %>
+            </span>
+        </div>
+
+        <!-- LIVE TRACKING -->
+        <div class="card tracking-box">
+            <h2>🛰 Live Tracking</h2>
+
+            <h3 id="distance">---</h3>
+          
+            <p>Distance Away</p>
+
+            <br>
+
+            <h3 id="eta">---</h3>
+             
+            <p>Estimated Arrival</p>
+        </div>
+
+        <!-- REPAIR PROGRESS -->
+        <div class="card">
+            <h2>🚀 Repair Progress</h2>
+
+            <div class="timeline">
+
+                <div class="timeline-step">
+                    ✓ Request Submitted
+                </div>
+
+                <div class="timeline-step">
+                    ✓ Payment Completed
+                </div>
+
+                <div class="timeline-step">
+                    👨‍🔧 Technician Assigned
+                </div>
+
+                <div class="timeline-step">
+                    🛵 Travelling
+                </div>
+
+                <div class="timeline-step">
+                    📍 Arrived
+                </div>
+
+                <div class="timeline-step">
+                    🔧 Repairing
+                </div>
+
+                <div class="timeline-step">
+                    🎉 Completed
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TECHNICIAN -->
+        <div class="card">
+            <h2>👨‍🔧 Technician Details</h2>
+
+            <div class="detail-row">
+                <strong>Name:</strong>
+                <%= order.restaurant.name %>
+            </div>
+
+            <div class="detail-row">
+                <strong>Phone:</strong>
+                <%= order.restaurant.phone %>
+            </div>
+
+            <div class="detail-row">
+                <strong>Rating:</strong>
+                <%= order.restaurant.averageRating.toFixed(1) %> ⭐
+            </div>
+
+            <a href="tel:<%= order.restaurant.phone %>" class="call-btn">
+                📞 Call Technician
+            </a>
+        </div>
+
+        <!-- CUSTOMER DETAILS -->
+        <div class="card">
+            <h2>👤 Customer Details</h2>
+
+            <div class="detail-row">
+                <strong>Name:</strong>
+                <%= order.customerFirstName %> <%= order.customerLastName %>
+            </div>
+
+            <div class="detail-row">
+                <strong>Phone:</strong>
+                <%= order.customerPhone %>
+            </div>
+
+            <div class="detail-row">
+                <strong>Email:</strong>
+                <%= order.customerEmail %>
+            </div>
+
+            <div class="detail-row">
+                <strong>Address:</strong>
+                <%= order.customerAddress %>
+            </div>
+
+            <div class="detail-row">
+                <strong>Ticket ID:</strong>
+                <%= order.ticketId %>
+            </div>
+
+           <div class="detail-row">
+    <strong>Payment:</strong>
+
+    <% if (order.paymentStatus === "paid") { %>
+        ₹<%= order.advanceAmount %> Advance Paid
+    <% } else if (order.paymentStatus === "pending") { %>
+        ₹<%= order.advanceAmount %> Payment Pending
+    <% } else if (order.paymentStatus === "refunded") { %>
+        ₹<%= order.advanceAmount %> Refunded
+    <% } %>
+</div>
+
+            <div class="detail-row">
+                <strong>Created:</strong>
+                <%= order.createdAt.toLocaleString() %>
+            </div>
+        </div>
+
+        <!-- ISSUE VIDEO -->
+        <div class="card">
+            <h2>🎥 Issue Video</h2>
+
+            <video controls>
+                <source src="<%= order.video.url %>" type="video/mp4">
+            </video>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div class="card">
+            <h2>🔔 Notifications</h2>
+
+            <div id="notifications">
+
+                <div class="notification">
+                    ✓ Request Submitted
+                </div>
+
+                <div class="notification">
+                    ✓ Payment Successful
+                </div>
+
+                <div class="notification">
+                    ✓ Waiting For Technician
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="map-section">
+        <div id="map"></div>
+    </div>
+
+</div>
 
 
   
 
   <!-- ===== BODY ===== -->
-<div id="map"></div>
+<!-- <div id="map"></div>
 
 <p>📏 Distance: <span id="distance">--</span></p>
-<p>⏱ ETA: <span id="eta">--</span></p>
+<p>⏱ ETA: <span id="eta">--</span></p> -->
 
 
 <!-- Leaflet -->
@@ -47,6 +377,9 @@
 
 <script>
   const ORDER_ID = "<%= order._id %>";
+
+const status = "<%= order.status %>";
+console.log("Status:", status);
   console.log("ORDER_ID:", ORDER_ID);
   const CUSTOMER_LAT = Number("<%= order.customerLocation && order.customerLocation.lat ? order.customerLocation.lat : 25.4358 %>");
   console.log("CUSTOMER_LAT:", CUSTOMER_LAT);
@@ -56,7 +389,10 @@
 
 <script src="/js/orderTracks.js"></script>
 
-
+<script>
+    const order = <%- JSON.stringify(order) %>;
+    console.log("ORDER_details:", order);
+    </script>
 
 
 

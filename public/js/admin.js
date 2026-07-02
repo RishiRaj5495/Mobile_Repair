@@ -1,6 +1,7 @@
 
-window.socket = io();
-socket.on("connect", () => {
+// window.socket = io();
+console.log("window.socket before use =", window.socket);
+window.socket.on("connect", () => {
   console.log("Customer socket connected:", socket.id);
   if (typeof ORDER_ID !== "undefined") {
     socket.emit("join_order", ORDER_ID);
@@ -10,7 +11,7 @@ socket.on("connect", () => {
 
 
 
-socket.on("disconnect", () => {
+window.socket.on("disconnect", () => {
   console.log("Customer socket disconnected");
 });
 const form = document.getElementById('orderForm');

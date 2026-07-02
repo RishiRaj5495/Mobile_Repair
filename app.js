@@ -1,4 +1,5 @@
-  
+  // 5267 3181 8797 5449
+
  if(process.env.NODE_ENV !== "production") {
   require('dotenv').config();
     }
@@ -6,8 +7,7 @@
 
    console.log("Cloudinary Name:", process.env.CLOUD_NAME);
  const admin = require("firebase-admin");
-
-// const {isLogged,isOwner,validateListing} = require("./middlewear.js");
+ 
 const {isLogged} = require("./middlewear.js");
   const express = require("express");
   const app = express();
@@ -200,8 +200,24 @@ app.get("/ping", (req, res) => {
 app.get("/", async(req, res) => {
 res.set("Cache-Control", "no-store");
    const restaurants = await Restaurant.find();
-  res.render("listings/showServices.ejs", { restaurants } );
+          let order = null;
+
+    if (req.user) {
+         order = await Order.findOne({
+    customer: req.user._id
+})
+.sort({ createdAt: -1 })   // newest first
+.populate("restaurant")
+.populate("customer");
+    }
+
+  console.log("Order found /:", order);
+  res.render("listings/showServices.ejs", { restaurants, order } );
 });
+
+
+
+
 
 app.get('/mobileShops', (req, res) => {
   res.set("Cache-Control", "no-store");
@@ -220,7 +236,18 @@ app.get("/listings", async(req, res) => {
 res.set("Cache-Control", "no-store");
   console.log("You are awesome");
    const restaurants = await Restaurant.find();
-  res.render("listings/showServices.ejs", { restaurants} );
+     let order = null;
+
+    if (req.user) {
+       order = await Order.findOne({
+    customer: req.user._id
+})
+.sort({ createdAt: -1 })   // newest first
+.populate("restaurant")
+.populate("customer");
+    }
+console.log("Order found listings:", order);
+  res.render("listings/showServices.ejs", { restaurants, order } );
 });
 
 
@@ -229,7 +256,6 @@ res.set("Cache-Control", "no-store");
 // const AI_Flow= require("./routes/AI-flow.js");
 // app.use("/AI-flow", AI_Flow);
 const usersRouter = require("./routes/users.js");
-
 app.use("/users", usersRouter);
 const ordersRouter = require('./routes/orders.js');
 app.use('/api/orders', ordersRouter);
@@ -249,6 +275,7 @@ app.use("/allNearbyTechnician", allNearbyTech);
 
 const bookingRoutes = require("./routes/booking.js");
 app.use("/api/orders/booking", bookingRoutes);
+
 
 
 

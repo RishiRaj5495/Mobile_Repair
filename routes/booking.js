@@ -72,7 +72,7 @@ if (!req.body.videoUrl) {
       }
 
       req.session.pendingOrder = {
-
+       customer: req.user._id,
         ticketId,
 
         customerFirstName,

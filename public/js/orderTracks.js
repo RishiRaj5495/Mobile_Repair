@@ -115,4 +115,31 @@ function checkNearbyAlert(distanceMeters) {
     alert("🚨 Delivery partner is nearby!");
   }
 }
+          
 
+socket.on("customer:booking_updated", booking => {
+  console.log("Received booking update:", booking);
+
+  const statusEl = document.getElementById("bookingStatus");
+
+  // Remove old status classes
+  statusEl.classList.remove(
+    "pending_technician",
+    "accepted",
+    "travelling",
+    "arrived",
+    "repairing",
+    "completed",
+    "cancelled"
+  );
+
+  // Add new status class
+  statusEl.classList.add(booking.status);
+console.log("Booking status updated:", booking.status);
+  // Update text
+  statusEl.textContent = booking.status.replaceAll("_", " ");
+
+  if (booking.status === "accepted") {
+    alert("✅ Your order has been accepted! Tracking delivery location now.");
+  }
+});

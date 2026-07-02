@@ -38,7 +38,7 @@ navigator.geolocation.watchPosition(
     const lat = pos.coords.latitude;
     const lng = pos.coords.longitude;
 
-    updateTechnicianMarker(lat, lng);
+    // updateTechnicianMarker(lat, lng);
 
     socket.emit("delivery:location", {
       orderId: ORDER_ID,
@@ -62,7 +62,7 @@ function updateTechnicianMarker(lat, lng) {
     technicianMarker.slideTo(newLatLng, { duration: 1000 });
   }
 
- calculateDistanceAndETA([lat, lng]);
+//  calculateDistanceAndETA([lat, lng]);
 }
 
 // ETA + DISTANCE
