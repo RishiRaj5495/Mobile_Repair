@@ -36,7 +36,7 @@ const customerId = booking.customer._id// Assuming booking has a customerId fiel
 console.log("Notifying customer:", customerId, "about booking:", booking._id);
     if (io && io.emitToCustomer) {
       io.emitToCustomer(customerId, "customer:booking_updated", booking);
-    }
+      }
 }
 
 
