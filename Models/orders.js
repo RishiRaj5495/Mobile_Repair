@@ -2,8 +2,12 @@
 const { custom } = require('joi');
 const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
-// customerName: String,
-// customerPhone: String,
+
+customer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
 customerFirstName: { type: String, required: true },
 customerLastName: { type: String, required: true },
 customerCity: { type: String, required: true },
@@ -45,6 +49,11 @@ paymentStatus: {
     type: String,
     enum: ["pending", "paid", "refunded"],
     default: "pending"
+},
+
+advanceAmount: {
+    type: Number,
+    required: true
 },
 
 razorpayOrderId: String,

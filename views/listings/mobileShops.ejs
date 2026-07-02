@@ -206,31 +206,7 @@ min-width: 120px;
             <!-- Password with eye toggle -->
                <label class="form-label">Password :</label>
                
-<!--          
-            <div class="mb-3 position-relative">
-      
-<input
-  type="password"
-  name="password"
-  id="password"
-  class="form-control"
-  placeholder="Create a strong password"
-   maxlength="50"
-  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$])[A-Za-z\d@#$]{8,}$"
-  required
->
 
-<div class="invalid-feedback">
-  Password must be at least 8 characters long and include uppercase,
-  lowercase, number, and special character.
-
-  
-</div>
-         <span class="password-toggle" onclick="togglePassword()">
-    <i class="bi bi-eye-slash" id="toggleIcon"></i>
-  </span>
- 
-</div> -->
 <div class="mb-3 position-relative">
 
   <input
@@ -364,6 +340,142 @@ min-width: 120px;
 </div>
 
 
+<script>
+  const form1 = document.getElementById('loginForm');
+  const spinner1 = document.getElementById('loginSpinner');
+  const text1 = document.getElementById('loginText');
+  const btn1 = document.getElementById('loginBtn');
+
+  form1.addEventListener('submit', (e) => {
+    // If form is invalid, stop spinner
+    if (!form1.checkValidity()) {
+      e.preventDefault();
+      e.stopPropagation();
+      form1.classList.add('was-validated');
+      return;
+    }
+
+    // Form is valid → show spinner
+    spinner1.classList.remove('d-none');
+    text1.textContent = 'Processing...';
+    btn1.disabled = true;
+  });
+
+  
+</script>
+
+
+
+
+<script>
+  function togglePassword() {
+    const password = document.getElementById('password');
+    password.type = password.type === 'password' ? 'text' : 'password';
+  }
+
+  const form = document.getElementById('restaurantForm');
+  const spinner = document.getElementById('registerSpinner');
+  const text = document.getElementById('registerText');
+  const btn = document.getElementById('registerBtn');
+
+  const strongPassword =
+/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+
+form.addEventListener("submit", function (event) {
+
+  event.preventDefault();
+
+  let isValid = true;
+
+  const name = document.getElementById("name");
+  const email = document.getElementById("email");
+  const phone = document.getElementById("phone");
+  const password = document.getElementById("password");
+  const address = document.getElementById("address");
+
+  // Reset
+  form.querySelectorAll("input").forEach(input => {
+    input.classList.remove("is-invalid");
+  });
+
+  // Shop Name
+  if (name.value.trim().length < 3) {
+    name.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Email
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+    email.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Phone
+  if (!/^\d{10}$/.test(phone.value.trim())) {
+    phone.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Password
+  if (!strongPassword.test(password.value.trim())) {
+    password.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  // Address
+  if (address.value.trim().length < 10) {
+    address.classList.add("is-invalid");
+    isValid = false;
+  }
+
+  form.classList.add("was-validated");
+
+  if (!isValid) return;
+
+  spinner.classList.remove("d-none");
+  text.textContent = "Creating Account...";
+  btn.disabled = true;
+
+  form.submit();
+});
+
+
+</script>
+<script>
+function togglePassword() {
+  const password = document.getElementById('password');
+  const icon = document.getElementById('toggleIcon');
+
+  if (password.type === 'password') {
+    password.type = 'text';
+    icon.classList.replace('bi-eye-slash', 'bi-eye');
+  } else {
+    password.type = 'password';
+    icon.classList.replace('bi-eye', 'bi-eye-slash');
+  }
+}
+
+
+
+
+
+
+</script>
+<!-- login -->
+<script>function togglePassword1() {
+  const pass = document.getElementById("pass");
+  const icon = document.getElementById("eyeIcon");
+
+  if (pass.type === "password") {
+    pass.type = "text";
+     icon.classList.replace("bi-eye-slash", "bi-eye");
+  } else {
+    pass.type = "password";
+  
+     icon.classList.replace("bi-eye", "bi-eye-slash");
+  }
+}</script>
+
  
 <% } %>
 
@@ -450,148 +562,7 @@ navigator.geolocation.getCurrentPosition(async (pos) => {
 <!-- Firebase v8 (compat) CDN - MUST be before firebase-config.js -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
-<script>
-  const form1 = document.getElementById('loginForm');
-  const spinner1 = document.getElementById('loginSpinner');
-  const text1 = document.getElementById('loginText');
-  const btn1 = document.getElementById('loginBtn');
 
-  form1.addEventListener('submit', (e) => {
-    // If form is invalid, stop spinner
-    if (!form1.checkValidity()) {
-      e.preventDefault();
-      e.stopPropagation();
-      form1.classList.add('was-validated');
-      return;
-    }
-
-    // Form is valid → show spinner
-    spinner1.classList.remove('d-none');
-    text1.textContent = 'Processing...';
-    btn1.disabled = true;
-  });
-
-  
-</script>
-
-
-
-
-<script>
-  function togglePassword() {
-    const password = document.getElementById('password');
-    password.type = password.type === 'password' ? 'text' : 'password';
-  }
-
-  const form = document.getElementById('restaurantForm');
-  const spinner = document.getElementById('registerSpinner');
-  const text = document.getElementById('registerText');
-  const btn = document.getElementById('registerBtn');
-
-  // form.addEventListener('submit', async (event) => {
-  //   // if (!form.checkValidity()) return;
-  //   if (!form.checkValidity()) {
-  //     event.preventDefault(); // STOP submit
-  //     event.stopPropagation(); 
-  //     return;
-  //   }
-  //   spinner.classList.remove('d-none');
-  //   text.textContent = 'Creating Account...';
-  //   btn.disabled = true;
-  // });
-
-
-
-
-  const strongPassword =
-/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
-
-form.addEventListener("submit", function (event) {
-
-  event.preventDefault();
-
-  let isValid = true;
-
-  const name = document.getElementById("name");
-  const email = document.getElementById("email");
-  const phone = document.getElementById("phone");
-  const password = document.getElementById("password");
-  const address = document.getElementById("address");
-
-  // Reset
-  form.querySelectorAll("input").forEach(input => {
-    input.classList.remove("is-invalid");
-  });
-
-  // Shop Name
-  if (name.value.trim().length < 3) {
-    name.classList.add("is-invalid");
-    isValid = false;
-  }
-
-  // Email
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
-    email.classList.add("is-invalid");
-    isValid = false;
-  }
-
-  // Phone
-  if (!/^\d{10}$/.test(phone.value.trim())) {
-    phone.classList.add("is-invalid");
-    isValid = false;
-  }
-
-  // Password
-  if (!strongPassword.test(password.value.trim())) {
-    password.classList.add("is-invalid");
-    isValid = false;
-  }
-
-  // Address
-  if (address.value.trim().length < 10) {
-    address.classList.add("is-invalid");
-    isValid = false;
-  }
-
-  form.classList.add("was-validated");
-
-  if (!isValid) return;
-
-  spinner.classList.remove("d-none");
-  text.textContent = "Creating Account...";
-  btn.disabled = true;
-
-  form.submit();
-});
-</script>
-<script>
-function togglePassword() {
-  const password = document.getElementById('password');
-  const icon = document.getElementById('toggleIcon');
-
-  if (password.type === 'password') {
-    password.type = 'text';
-    icon.classList.replace('bi-eye-slash', 'bi-eye');
-  } else {
-    password.type = 'password';
-    icon.classList.replace('bi-eye', 'bi-eye-slash');
-  }
-}
-</script>
-<!-- login -->
-<script>function togglePassword1() {
-  const pass = document.getElementById("pass");
-  const icon = document.getElementById("eyeIcon");
-
-  if (pass.type === "password") {
-    pass.type = "text";
-     icon.classList.replace("bi-eye-slash", "bi-eye");
-  } else {
-    pass.type = "password";
-  
-     icon.classList.replace("bi-eye", "bi-eye-slash");
-  }
-}</script>
 
 
 <script src="/js/firebase-config.js"></script>

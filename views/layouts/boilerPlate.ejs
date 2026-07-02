@@ -56,7 +56,13 @@
  <link rel="icon" type="image/png" sizes="520x520" href="images/RNLogo.png">
 </head>
 <body>
-  
+  <script src="/socket.io/socket.io.js"></script>
+<script>
+window.socket = io();
+</script>
+
+<!-- then body/page scripts -->
+<!-- <script src="/js/admin.js"></script> -->
   <!-- </div>
   </div>  -->
 <!-- script -->
@@ -65,12 +71,37 @@
  <%- include("../includes/flash.ejs") %> <%- body %></div>
  <%- include("../includes/footer.ejs") %>
  
+<!-- <script src="/socket.io/socket.io.js"></script> -->
+<script>
+  // window.socket = io();
 
+window.socket.on("connect", () => {
+   <% if(currentUser){ %>
+      window.socket.emit("joinCustomer", "<%= currentUser._id %>");
+      console.log("Joining customer room:", "<%= currentUser._id %>");
+   <% } %>
 
+   <% if(currentRestaurant){ %>
+      window.socket.emit("restaurant:join", "<%= currentRestaurant._id %>");
+      console.log("Joining restaurant room:", "<%= currentRestaurant._id %>");
+   <% } %>
+});
+</script>
 <script src="/js/probList.js"></script>
 <script src="/js/product.js"></script>
 <script src="/js/anshuWeb.js"></script>
 <script src="/js/script.js"></script>
+
+
+
+
+<script>
+</script>
+
+  
+
+
+
 
  </body>
 </html>

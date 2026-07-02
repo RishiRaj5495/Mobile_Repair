@@ -2,7 +2,83 @@
 
 
 <style>
+  
+.service-order-link{
+    display:block;
+    text-decoration:none;
+    color:inherit;
+}
+.service-order-card{
+    width:100%;
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    padding:16px;
+    cursor:pointer;
+    transition:.2s;
+}
 
+.service-order-card:hover{
+    border-color:#2563eb;
+}
+
+.service-order-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+}
+
+.service-order-header h3{
+    margin:0;
+    font-size:16px;
+}
+
+.service-status{
+    background:#fff7ed;
+    color:#ea580c;
+    padding:4px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.service-order-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 0;
+    border-bottom:1px solid #f1f5f9;
+}
+
+.service-order-row:last-of-type{
+    border-bottom:none;
+}
+
+.service-label{
+    color:#64748b;
+    font-size:14px;
+}
+
+.service-value{
+    font-size:14px;
+    font-weight:600;
+    color:#0f172a;
+}
+
+.success{
+    color:#16a34a;
+}
+
+.service-order-footer{
+    margin-top:12px;
+    color:#2563eb;
+    font-weight:600;
+    text-align:right;
+}
+
+
+/* ////////////////////////////////////////////// */
 .left-card{
     background:#fff;
     border-radius:24px;
@@ -122,14 +198,63 @@
 
         </div>
 
-        <!-- <div class="quick-repair"> -->
-          <!-- <div class="icon-circle">⚡</div> -->
 
-          <!-- <div>
-            <h3>Quick Repair</h3>
-            <p>Fast, reliable and hassle-free service.</p>
-          </div> -->
-        <!-- </div> -->
+
+
+
+        <% if (currentUser != undefined && order) { %>
+
+<a href="/api/orders/<%= order._id %>/track" class="service-order-link">
+
+    <div class="service-order-card">
+
+        <div class="service-order-header">
+            <h3>Active Repair Request</h3>
+            <span class="service-status"><%= order.status %></span>
+        </div>
+
+        <div class="service-order-row">
+            <span class="service-label">Ticket ID</span>
+            <span class="service-value"><%= order.ticketId %></span>
+        </div>
+
+        <div class="service-order-row">
+            <span class="service-label">Customer</span>
+            <span class="service-value">
+                <%= order.customerFirstName %> <%= order.customerLastName %>
+            </span>
+        </div>
+
+       <div class="service-order-row">
+    <span class="service-label">Payment</span>
+
+    <span class="service-value <%= order.paymentStatus === 'paid' ? 'success' : '' %>">
+        <% if (order.paymentStatus === "paid") { %>
+            ₹<%= order.advanceAmount %> Advance Paid
+        <% } else if (order.paymentStatus === "pending") { %>
+            ₹<%= order.advanceAmount %> Payment Pending
+        <% } else if (order.paymentStatus === "refunded") { %>
+            ₹<%= order.advanceAmount %> Refunded
+        <% } %>
+    </span>
+</div>
+
+        <div class="service-order-row">
+            <span class="service-label">Technician</span>
+            <span class="service-value">
+                <%= order.restaurant.name %>
+            </span>
+        </div>
+
+        <div class="service-order-footer">
+            View Details & Track →
+        </div>
+
+    </div>
+
+</a>
+
+<% } else { %>
 
         <div class="upload-card">
 
@@ -151,6 +276,8 @@
 
 
         </div>
+
+<% } %>
 
       </div>
 
@@ -225,6 +352,7 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+
 
 <script>
   // 🔥 ADD THIS FIRST
