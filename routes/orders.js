@@ -17,6 +17,8 @@ const multer = require("multer");
 const {storage} = require("../cloudConfig.js"); // path of your cloudinary file
 const upload = multer({ storage });
 const Restaurant = require("../Models/mobileShops.js");
+const { producer } = require("../config/kafka");
+const { client } = require("../config/redis");
 
 // const { admin, io } = require("../app"); // import firebase admin + sockets
 
@@ -84,58 +86,12 @@ technician_TO_Customer(order,io);
   }
 });
 
-// router.post("/:id/reject", async (req, res) => {
-  
-//   await Order.findByIdAndUpdate(req.params.id, {
-//     status: "rejected"
-//   });
-//   res.sendStatus(200);
-// });
 
 // Create a new order
 console.log("RAZORPAY_KEY_SECRET:", process.env.RAZORPAY_KEY_SECRET);
 router.post("/verify-payment",upload.single("video"), async (req, res) => {
   console.log("Payment verification request received with body:", req.body);
   try {
-//     const { customerFirstName, customerLastName,customerPhone, customerEmail, customerAddress, customerCity,  customerState, customerPincode, customerCountry, restaurantId,lat,lng} = req.body;
-   
-//     const restaurant = await Restaurant.findById(restaurantId);
-
-// let ticketId;
-// let exists = true;
-
-// while (exists) {
-//   ticketId = "RN-" + Math.floor(100000 + Math.random() * 900000);
-//   exists = await Order.exists({ ticketId });
-// }
-//     let order = await Order.create({
-//         ticketId,
-//       customerFirstName,
-//       customerLastName,
-//       customerPhone,
-//       customerEmail,
-//       customerAddress,
-//       customerCity,
-//       customerState,
-//       customerPincode,
-//       customerCountry,
-//       restaurant:restaurantId,
-//    customerLocation: {
-//         lat: lat ? Number(lat) : null,
-//         lng: lng ? Number(lng) : null
-//       },
-//         video: {
-//     url: req.file?.path || null,
-//     filename: req.file?.filename || null
-//   }
-//     });
-
- 
-// order = await Order.findById(order._id).populate("restaurant").sort({ createdAt: -1 });
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////
 
  const {
       razorpay_order_id,
@@ -221,11 +177,24 @@ try {
   // console.log("Created order ID:", order._id);
 
   order = await Order.findById(order._id)
-    .populate("restaurant");
+    .populate("restaurant")
+    .populate("customer");
 
 
   console.log("After populate()");
   console.log("Order created with Razorpay details:", order);
+  await producer.send({
+    topic: "booking-created",
+    messages: [
+        {
+            value: JSON.stringify({
+                orderId: order._id,
+                technicianId: order.restaurant._id,
+                
+            }),
+        },
+    ],
+});
 
 } catch (err) {
 
@@ -241,49 +210,43 @@ try {
 
 }
 
-    // Clear pending order from session
-    // delete req.session.pendingOrder;
+   
 
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
- const restaurantId = pendingOrder.restaurant;
- console.log("Restaurant ID for notifications:", restaurantId);
-    // 🔥 REAL-TIME UPDATE (Socket.io)
-    const io = req.app.locals.io;
-    if (io && io.emitToRestaurant) {
-      console.log("Emitting new_order event to restaurant:", restaurantId, "for order:", order._id);
-      io.emitToRestaurant(restaurantId, "new_order", order);
-      console.log("✅ Event emitted to restaurant:", restaurantId);
-    }
+//  const restaurantId = pendingOrder.restaurant;
+//  console.log("Restaurant ID for notifications:", restaurantId);
+//     // 🔥 REAL-TIME UPDATE (Socket.io)
+//     const io = req.app.locals.io;
+//     if (io && io.emitToRestaurant) {
+//       console.log("Emitting new_order event to restaurant:", restaurantId, "for order:", order._id);
+//       io.emitToRestaurant(restaurantId, "new_order", order);
+//       console.log("✅ Event emitted to restaurant:", restaurantId);
+//     }
 
 
 
-    // 🔥 PUSH NOTIFICATION (FCM)   && !connectedRestaurants.has(restaurantId)
-    const rest = await Restaurant.findById(restaurantId);
-    console.log("Restaurant details for FCM:", rest);
-     const admin = req.app.locals.admin;      
-    if (rest?.fcmToken && admin) {   
-      const message = {
-        token: rest.fcmToken,
-        notification: {
-          title: "New  Request",
-          body: `Order ${order._id}`,
-        },
-        data: { orderId: String(order._id) },
-        webpush: { fcmOptions: { link: `/delivery/${order._id}` } }
-      };
+//     // 🔥 PUSH NOTIFICATION (FCM)   && !connectedRestaurants.has(restaurantId)
+//     const rest = await Restaurant.findById(restaurantId);
+//     console.log("Restaurant details for FCM:", rest);
+//      const admin = req.app.locals.admin;      
+//     if (rest?.fcmToken && admin) {   
+//       const message = {
+//         token: rest.fcmToken,
+//         notification: {
+//           title: "New  Request",
+//           body: `Order ${order._id}`,
+//         },
+//         data: { orderId: String(order._id) },
+//         webpush: { fcmOptions: { link: `/delivery/${order._id}` } }
+//       };
 
-      admin.messaging().send(message)
-      .then(resp => console.log("FCM sent:", resp))
-      .catch((err) => {
-        console.error("❌ FCM Error:", err);
-      });
-    }
+//       admin.messaging().send(message)
+//       .then(resp => console.log("FCM sent:", resp))
+//       .catch((err) => {
+//         console.error("❌ FCM Error:", err);
+//       });
+//     }
 
   res.json({
   success: true,
@@ -332,15 +295,49 @@ router.post("/:id/status", async (req, res) => {
 
 
 
+// router.get("/:orderId/track", async (req, res) => {
+//   const { orderId } = req.params;
+
+  
+//   const order = await Order.findById(orderId).populate("restaurant");
+//   if (!order) return res.send("Order not found");
+
+//   res.render("listings/orderTracs.ejs", { order });
+// });
 router.get("/:orderId/track", async (req, res) => {
-  const { orderId } = req.params;
+    const { orderId } = req.params;
 
-  const order = await Order.findById(orderId).populate("restaurant");
-  if (!order) return res.send("Order not found");
+    let order;
 
-  res.render("listings/orderTracs.ejs", { order });
+    const cacheKey = `order:${orderId}`;
+
+    const cachedOrder = await client.get(cacheKey);
+
+    if (cachedOrder) {
+
+        console.log("✅ Data served from Redis");
+
+        order = JSON.parse(cachedOrder);
+
+    } else {
+
+        console.log("📦 Data served from MongoDB");
+
+        order = await Order.findById(orderId).populate("restaurant");
+
+        if (!order) {
+            return res.send("Order not found");
+        }
+
+        await client.setEx(
+            cacheKey,
+            600,
+            JSON.stringify(order)
+        );
+    }
+
+    res.render("listings/orderTracs.ejs", { order });
 });
-
 
 //////////
 //hm ye route is liye garha h kyuki mobile shop dashboard pr live orders dikhane h to jb wo apna id dega to uske hisab se orders fetch kr lenge

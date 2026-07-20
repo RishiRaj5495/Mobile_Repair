@@ -7,6 +7,7 @@ const { isLoggedInForMobileshop } = require("../middlewear.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const Rating = require("../Models/ratings.js");
 const { isLogged } = require("../middlewear.js");
+const { client } = require("../config/redis");
 
 router.post('/register', async (req, res, next) => {
   console.log("In mongo save");
@@ -17,6 +18,7 @@ router.post('/register', async (req, res, next) => {
 
     const restaurant = new Restaurant({ name, email, address, phone, fcmToken: fcmToken || null });
    const registerMobileShop = await Restaurant.register(restaurant, password);
+    await client.del("restaurants");
 const io = req.app.locals.io;
   io.emit("new_shop", registerMobileShop);
   

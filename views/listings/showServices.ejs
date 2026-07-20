@@ -351,7 +351,7 @@
 
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="/socket.io/socket.io.js"></script>
+
 
 
 <script>
@@ -656,17 +656,22 @@ function getLocation() {
     // Option 1: Start receiving random shops
 const container = document.querySelector(".priceListContainer");
 
+// Insert only if it doesn't already exist
+if (!document.getElementById("demoNotice")) {
+  container.insertAdjacentHTML(
+    "beforebegin",
+    `
+    <div class="alert alert-info mb-3" id="demoNotice">
+      <strong>Notice:</strong> No nearby technicians were found. The technicians shown below are other registered technicians for demonstration purposes.
+    </div>
+    `
+  );
+}
 
-container.insertAdjacentHTML(
-  "beforebegin",
-  `
-  <div class="alert alert-info mb-3" id="demoNotice">
-    <strong>Notice:</strong> No nearby technicians were found. The technicians shown below are other registered technicians for demonstration purposes.
-  </div>
-  `
-);
-
-socket.emit("requestAllShops");
+if (!window.requestSent) {
+    window.requestSent = true;
+    socket.emit("requestAllShops");
+}
 
 
   }
@@ -680,7 +685,10 @@ socket.emit("requestAllShops");
 
   document.getElementById("demoNotice")?.remove();
 
-  socket.emit("requestAllShops");
+ if (!window.requestSent) {
+    window.requestSent = true;
+    socket.emit("requestAllShops");
+}
 
       }
     },

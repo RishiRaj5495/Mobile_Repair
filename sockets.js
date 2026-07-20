@@ -70,6 +70,7 @@ console.log('socket connected', socket.id);
     socket.join(`customer_${customerId}`);
     console.log(`Socket ${socket.id} joined customer_${customerId}`);
   });
+  
 socket.on("requestAllShops", async () => {
   try {
     const shops = await Restaurant.find();

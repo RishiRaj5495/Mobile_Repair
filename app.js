@@ -6,7 +6,8 @@
 
    console.log("Cloudinary Name:", process.env.CLOUD_NAME);
  const admin = require("firebase-admin");
- 
+
+
 const {isLogged} = require("./middlewear.js");
   const express = require("express");
   const app = express();
@@ -25,9 +26,12 @@ const http = require('http');////
 
 const ExpressError = require("./utils/ExpressError.js"); 
 const session = require("express-session");
- const MongoStore = require("connect-mongo");
 
-// const MongoStore = require('connect-mongo');
+ const { client, connectRedis } = require("./config/redis.js");
+ const { connectKafka } = require("./config/kafka.js");
+ const startConsumer = require("./config/kafkaConsumer.js");
+ const { RedisStore } = require("connect-redis");
+
 
 const flash = require("connect-flash");
 const passport = require("passport");
@@ -41,41 +45,43 @@ const cors = require('cors');//
 const socketSetup = require('./sockets.js');//
 const server = http.createServer(app);
 // const io = require('socket.io')(server, { cors: { origin: process.env.FRONTEND_URL || '*' } });
+
 const io = require("socket.io")(server, {
   cors: {
     origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST"],
   },
 });
-  io.use((socket, next) => {
-  sessionMiddleware(socket.request, {}, next);
-});
+
+
+
 // socketSetup(io);
 const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
 // const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
 mongoose.connect(dbUrl)
-.then(() => {
+.then( async () => {
   console.log("MongoDB connected");
+  await initializeFirebase();
+  await connectRedis();
+  await connectKafka();
+  
 
   server.listen(8080, () => {
     socketSetup(io);
     console.log("Server + Socket.io running on port 8080");
   });
+  await startConsumer(io, admin);
 })
 .catch((err) => {
   console.log("DB error:", err);
 });
 
 
-const store = MongoStore.create({
-  client: mongoose.connection.getClient(),
-   collectionName: "sessions",
-   autoRemove: "native",        
-  touchAfter: 24 * 3600,
+const store = new RedisStore({
+  client,
+  prefix: "sess:",
 });
-store.on("error", (err) => {
-  console.log("Session store error:", err);
-})
+
 const sessionOptions = {
   store,
   secret: process.env.SECRET,
@@ -89,13 +95,16 @@ const sessionOptions = {
 },
 
 };
-
-
-
-
   const sessionMiddleware = session(sessionOptions);
 
   app.use(sessionMiddleware);
+  io.use((socket, next) => {
+  sessionMiddleware(socket.request, {}, next);
+});
+
+
+
+
   app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -197,8 +206,36 @@ app.get("/ping", (req, res) => {
 
 
 app.get("/", async(req, res) => {
-res.set("Cache-Control", "no-store");
-   const restaurants = await Restaurant.find();
+res.set("Cache-Control", "no-store")
+let restaurants;
+ const cachedRestaurants = await client.get("restaurants");
+
+
+  if (cachedRestaurants) {
+
+    console.log("✅ Data served from Redis");
+
+    restaurants = JSON.parse(cachedRestaurants);
+
+  } else {
+
+    console.log("📦 Data served from MongoDB");
+
+    restaurants = await Restaurant.find();
+
+    await client.setEx(
+      "restaurants",
+      600, // 5 minutes
+      JSON.stringify(restaurants)
+    );
+  }
+
+
+
+
+
+
+  //  const restaurants = await Restaurant.find();
           let order = null;
 
     if (req.user) {
@@ -225,7 +262,6 @@ app.get('/mobileShops', (req, res) => {
 
 
 app.get("/shop/:id", isLogged,async (req, res) => {
-  
   const restaurant = await Restaurant.findById(req.params.id);
   res.render("listings/singleShops.ejs", { restaurant, cloudName: process.env.CLOUD_NAME});
 });
@@ -234,7 +270,29 @@ app.get("/shop/:id", isLogged,async (req, res) => {
 app.get("/listings", async(req, res) => {
 res.set("Cache-Control", "no-store");
   console.log("You are awesome");
-   const restaurants = await Restaurant.find();
+  //  const restaurants = await Restaurant.find();
+  let restaurants;
+ const cachedRestaurants = await client.get("restaurants");
+
+
+  if (cachedRestaurants) {
+
+    console.log("✅ Data served from Redis");
+
+    restaurants = JSON.parse(cachedRestaurants);
+
+  } else {
+
+    console.log("📦 Data served from MongoDB");
+
+    restaurants = await Restaurant.find();
+
+    await client.setEx(
+      "restaurants",
+      600, // 5 minutes
+      JSON.stringify(restaurants)
+    );
+  }
      let order = null;
 
     if (req.user) {
@@ -277,7 +335,15 @@ app.use("/api/orders/booking", bookingRoutes);
 
 
 
+app.get("/redis-test", async (req, res) => {
 
+  await client.set("name", "Rishi Raj");
+
+  const value = await client.get("name");
+
+  res.send(value);
+
+});
 
 app.get("/delivery/:orderId", async (req, res) => {
   const order = await Order.findById(req.params.orderId);
@@ -286,14 +352,22 @@ app.get("/delivery/:orderId", async (req, res) => {
 
 
 
+async function initializeFirebase() {
+    const firebaseKeyPath = process.env.RENDER
+        ? "/etc/secrets/firebase-admin.json"
+        : path.join(__dirname, "firebase-admin.json");
 
-const firebaseKeyPath = process.env.RENDER
-  ? "/etc/secrets/firebase-admin.json"      // Render
-  : path.join(__dirname, "firebase-admin.json"); // Local
+    admin.initializeApp({
+        credential: admin.credential.cert(firebaseKeyPath),
+    });
 
-admin.initializeApp({
-  credential: admin.credential.cert(firebaseKeyPath),
-});
+    console.log("✅ Firebase initialized");
+}
+
+
+
+
+
 app.use((err, req, res, next) => {
   if (res.headersSent) {
     return next(err);   // ✅ VERY IMPORTANT
