@@ -1,4 +1,4 @@
-# RepairNow – Full Stack Mobile Repair Service Platform
+# RepairNow – Full-Stack Mobile Repair Platform with Real-Time Technician Dispatch
 
 RepairNow is a doorstep mobile repair platform that allows users to upload phone issue videos, book trusted technicians, track real-time location, and receive secure repair services without visiting repair shops.
 
@@ -25,7 +25,7 @@ RepairNow is a doorstep mobile repair platform that allows users to upload phone
 |---|---|
 | Frontend | HTML, CSS, Bootstrap 5, JavaScript |
 | Backend | Node.js, Express.js |
-| Database | MongoDB + Mongoose |
+| Database | MongoDB + Mongoose + Redis|
 | Real-Time | Socket.io |
 | Maps & ETA | Google Maps, Directions API, Distance Matrix API |
 | Notifications | Firebase Admin SDK |
