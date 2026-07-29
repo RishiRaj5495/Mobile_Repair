@@ -116,7 +116,11 @@ Create a `.env` file in the root directory and add:
 ```env
 SECRET=your_secret_key
 
-FIREBASE_SERVICE_ACCOUNT_PATH=path_to_service_account.json
+REDIS_URL=your_redis_connection_string
+
+KAFKA_BROKER=your_kafka_bootstrap_server
+KAFKA_USERNAME=your_kafka_api_key
+KAFKA_PASSWORD=your_kafka_api_secret
 
 FRONTEND_URL=your_frontend_url
 
@@ -133,6 +137,7 @@ FIREBASE_STORAGE_BUCKET=your_bucket.appspot.com
 FIREBASE_SENDER_ID=your_sender_id
 FIREBASE_APP_ID=your_app_id
 FIREBASE_MEASUREMENT_ID=your_measurement_id
+FIREBASE_SERVICE_ACCOUNT_PATH=path_to_service_account.json
 
 GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 
