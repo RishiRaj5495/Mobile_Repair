@@ -440,8 +440,9 @@ form.addEventListener("submit", function (event) {
 });
 
 
-</script>
-<script>
+ </script>
+
+ <script>
 function togglePassword() {
   const password = document.getElementById('password');
   const icon = document.getElementById('toggleIcon');
@@ -461,8 +462,9 @@ function togglePassword() {
 
 
 </script>
-<!-- login -->
-<script>function togglePassword1() {
+
+<script>
+  function togglePassword1() {
   const pass = document.getElementById("pass");
   const icon = document.getElementById("eyeIcon");
 
@@ -474,7 +476,8 @@ function togglePassword() {
   
      icon.classList.replace("bi-eye", "bi-eye-slash");
   }
-}</script>
+}
+</script>
 
  
 <% } %>
@@ -486,7 +489,6 @@ function togglePassword() {
 
 <% if (currentRestaurant) { %>
 
-<!-- LIVE ORDERS CARD -->
 <div class="container mb-5">
   <div class="live-orders-card text-center">
     <div class="icon">⚡</div>
@@ -504,6 +506,8 @@ function togglePassword() {
 
    <script>
     window.RESTAURANT_ID = "<%= currentRestaurant._id %>";
+    console.log("Restaurant ID:", window.RESTAURANT_ID);
+
   </script>
 
 

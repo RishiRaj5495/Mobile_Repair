@@ -3,12 +3,13 @@
 // let socket;
 const socket = window.socket;
 let orders = [];
+const RESTAURANT_ID = window.RESTAURANT_ID;
 document.addEventListener("DOMContentLoaded", async () => {
 
-    if (!RESTAURANT_ID) {
-    console.error("Restaurant ID missing");
-    return;
-  }
+  //   if (!RESTAURANT_ID) {
+  //   console.error("Restaurant ID missing");
+  //   return;
+  // }
 await registerForNotifications(RESTAURANT_ID);
 await loadExistingOrders();
 // socket = io();
@@ -17,11 +18,6 @@ await loadExistingOrders();
 
 
   socket.on("connect", () => {
-  
-    // console.log("Shop socket connected:", socket.id);
-    //  socket.emit("restaurant:join", RESTAURANT_ID);
-    // console.log("Restaurant connected:", RESTAURANT_ID);
-    // Join order room ONLY if order page
     if (typeof CURRENT_ORDER_ID !== "undefined") {
       socket.emit("join_order", CURRENT_ORDER_ID);
       console.log("Shop joined order room:", CURRENT_ORDER_ID);
@@ -87,7 +83,7 @@ async function registerForNotifications(restaurantIdForUpdate) {
       await fetch(`/api/restaurants/${restaurantIdForUpdate}/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fcmToken })
+        body: JSON.stringify({ token:fcmToken })
       });
     }
 
@@ -119,6 +115,7 @@ document.getElementById('restaurantForm')?.addEventListener('submit', async (e) 
   fcmToken: token
 });
 
+
   const res = await fetch('/api/restaurants/register', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -138,7 +135,6 @@ function resetBtn() {
   btn.disabled = false;
 }
 
-  // alert(data.message || 'Registered');
 });
 
 
@@ -230,7 +226,6 @@ async function loadExistingOrders() {
 
 
 function renderOrder(order, position = "bottom") {
-
  console.log("Rendering order:", order);
 
   const div = document.createElement('div');

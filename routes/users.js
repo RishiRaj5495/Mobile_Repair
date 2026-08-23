@@ -1,5 +1,4 @@
 const express = require("express");
-
 const router = express.Router(); // mergeParams allows us to access params from the parent route
 const User = require("../Models/users.js");
 const wrapAsync = require("../utils/wrapAsync.js");
@@ -11,7 +10,7 @@ const usersController = require("../controllers/users.js"); // Import the functi
 
 
 
- 
+
 router
 .route("/signup")
 .get(usersController.signupPage)

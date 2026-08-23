@@ -70,15 +70,21 @@ console.log('socket connected', socket.id);
     socket.join(`customer_${customerId}`);
     console.log(`Socket ${socket.id} joined customer_${customerId}`);
   });
-  
+
+
+
 socket.on("requestAllShops", async () => {
+   console.log("✅ requestAllShops received");
   try {
     const shops = await Restaurant.find();
+    console.log("Total shops:", shops.length);
 
     shops.forEach(shop => {
+       console.log("Sending:", shop._id);
       socket.emit("new_shop", shop);
     });
 
+        console.log("Finished sending");
   } catch (err) {
     console.error("requestAllShops error:", err);
   }

@@ -26,6 +26,7 @@ router.post("/nearest-technicians", async (req, res) => {
          success: true,
          technicians
       });
+      console.log("Nearby technicians found:", technicians);
 
    } catch(err) {
 

@@ -50,6 +50,8 @@ navigator.geolocation.watchPosition(
   { enableHighAccuracy: true }
 );
 
+
+
 // UPDATE TECHNICIAN MARKER
 function updateTechnicianMarker(lat, lng) {
   const newLatLng = L.latLng(lat, lng);

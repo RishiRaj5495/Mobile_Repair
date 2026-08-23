@@ -6,9 +6,20 @@ services:
       - "8080:8080"
     env_file:
       - .env
+    volumes:
+      - .:/app
+      - /app/node_modules
     depends_on:
       - redis
       - kafka
+      - mongodb
+    restart: unless-stopped
+
+  mongodb:      
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
     restart: unless-stopped
 
   redis:

@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon --legacy-watch app.js"
   },
   "keywords": [],
   "author": "",
@@ -44,5 +44,8 @@
     "redis": "^6.1.0",
     "socket.io": "^4.8.1",
     "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }

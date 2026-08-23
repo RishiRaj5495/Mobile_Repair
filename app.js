@@ -16,7 +16,7 @@ const http = require('http');////
   const path = require("path");
   app.set("view engine", "ejs");
   app.set("views", path.join(__dirname, "views"));
-  app.use(express.json());
+  
   app.use(express.urlencoded({ extended: true }));
   const methodOverride = require("method-override");
   app.use(methodOverride("_method"));
@@ -37,7 +37,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const User = require("./Models/users.js");
 const Order = require("./Models/orders.js");
-
+const razorpayWebhook =  require("./routes/razorpayWebhook");
 const Restaurant = require("./Models/mobileShops.js");
 const LocalStrategy = require("passport-local");
 const bodyParser = require('body-parser');//
@@ -53,24 +53,27 @@ const io = require("socket.io")(server, {
   },
 });
 
+app.use("/webhook",razorpayWebhook);
+
+app.use(express.json());
 
 
 // socketSetup(io);
-const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
+// const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
 // const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
+const dbUrl = 'mongodb://mongodb:27017/mobile-repair-services';
 mongoose.connect(dbUrl)
 .then( async () => {
   console.log("MongoDB connected");
   await initializeFirebase();
   await connectRedis();
-  await connectKafka();
-  
+  // await connectKafka();
 
   server.listen(8080, () => {
     socketSetup(io);
     console.log("Server + Socket.io running on port 8080");
   });
-  await startConsumer(io, admin);
+  // await startConsumer(io, admin);
 })
 .catch((err) => {
   console.log("DB error:", err);
@@ -194,6 +197,7 @@ passport.deserializeUser(async (obj, done) => {
 
 
 app.use(cors());
+
 app.use(bodyParser.json());
 
 app.get("/ping", (req, res) => {
@@ -222,6 +226,7 @@ let restaurants;
     console.log("📦 Data served from MongoDB");
 
     restaurants = await Restaurant.find();
+    console.log("Restaurants fetched from MongoDB:", restaurants);
 
     await client.setEx(
       "restaurants",
@@ -247,7 +252,7 @@ let restaurants;
 .populate("customer");
     }
 
-  console.log("Order found /:", order);
+  console.log("Order found /:",restaurants);
   res.render("listings/showServices.ejs", { restaurants, order } );
 });
 
@@ -407,5 +412,5 @@ app.locals.io = io;
 
 // test();
 
-
+console.log("✅ Server is running.oo")
 

@@ -18,6 +18,7 @@ router.post('/register', async (req, res, next) => {
 
     const restaurant = new Restaurant({ name, email, address, phone, fcmToken: fcmToken || null });
    const registerMobileShop = await Restaurant.register(restaurant, password);
+  
     await client.del("restaurants");
 const io = req.app.locals.io;
   io.emit("new_shop", registerMobileShop);
@@ -96,8 +97,9 @@ router.get("/yourShop/logout", (req, res, next) => {
 router.post('/:id/token', async (req, res) => {
 try {
 const { token } = req.body;
+console.log("TOKEN RECEIVED:", token);
 const rest = await Restaurant.findByIdAndUpdate(req.params.id, { fcmToken: token }, { new: true });
-
+    console.log("Saved token:", rest.fcmToken);
 res.json(rest);
 } catch(e) {
 // res.status(500).json({ error: err.message });

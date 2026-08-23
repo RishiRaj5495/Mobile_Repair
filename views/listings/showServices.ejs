@@ -581,12 +581,13 @@ async function checkPermission() {
   const permission = await navigator.permissions.query({
     name: "geolocation"
   });
+  console.log(permission.state);
 
   if (permission.state === "granted") {
 
     getLocation();
 
-  } else if (permission.state === "denied") {
+  } else if(permission.state === "denied") {
 
     Swal.fire({
       icon: "warning",
@@ -597,27 +598,39 @@ async function checkPermission() {
     // didOpen: () => {
     //   Swal.showLoading();
     // }
-
-
     }).then(() => {
-      getLocation();
-    });
+    console.log("Permission denied block executed");
+
+    try{
+        console.log("Before getLocation");
+
+        getLocation();
+
+        console.log("After getLocation");
+    } catch (err) {
+        console.error("ERROR:", err);
+    }
+});
 
   } 
 
-  permission.onchange = checkPermission;
+  // permission.onchange = checkPermission;
 }
 
 
 ////////////////////////////////
 function getLocation() {
+ console.log("geolocation.getCurrentPosition called=======");
   navigator.geolocation.getCurrentPosition(
-
+   
     async (position) => {
+       console.log("Success callback entered");
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
+       console.log(lat, lng);
 
       try {
+        console.log("Before fetch");
         const response = await fetch(
           "/allNearbyTechnician/nearest-technicians",
           {
@@ -628,21 +641,25 @@ function getLocation() {
             body: JSON.stringify({ lat, lng })
           }
         );
-
+         
+console.log("Fetch completed");
+console.log(response.status);
+console.log(response.ok);
         const data = await response.json();
           //  Swal.close(); // 🔥 CLOSE LOADER AFTER RESPONSE
-
+     console.log("Nearby technicians data:", data);
         document.querySelector(".priceListContainer").innerHTML = "";
 
 
         if (data.technicians && data.technicians.length > 0) {
-
+        console.log("if+++++++++");
     // Nearby technicians found
+    console.log("Nearby technicians found:", data.technicians);
     renderTechnicians(data.technicians);
 
   } else {
 
-
+        console.log("else+++++++++");
         Swal.fire({
       icon: "info",
       title: "No technicians nearby",
@@ -655,6 +672,10 @@ function getLocation() {
 
     // Option 1: Start receiving random shops
 const container = document.querySelector(".priceListContainer");
+container.innerHTML = "";
+
+// Remove previous notice if it exists
+document.getElementById("demoNotice")?.remove();
 
 // Insert only if it doesn't already exist
 if (!document.getElementById("demoNotice")) {
@@ -668,10 +689,11 @@ if (!document.getElementById("demoNotice")) {
   );
 }
 
-if (!window.requestSent) {
-    window.requestSent = true;
+// if (!window.requestSent) {
+//     window.requestSent = true;
+    console.log("Requesting all shops for demonstration purposes");
     socket.emit("requestAllShops");
-}
+// }
 
 
   }
@@ -679,26 +701,64 @@ if (!window.requestSent) {
 
       } catch (err) {
         
-  console.log(err);
+  console.log("err-----------------",err);
 
   document.querySelector(".priceListContainer").innerHTML = "";
 
   document.getElementById("demoNotice")?.remove();
-
- if (!window.requestSent) {
-    window.requestSent = true;
     socket.emit("requestAllShops");
-}
+
 
       }
     },
 
 
+
+
+
+    // Error callback
+    (error) => {
+        console.log("Location Error:", error.code, error.message);
+
+        document.querySelector(".priceListContainer").innerHTML = "";
+
+        document.getElementById("demoNotice")?.remove();
+
+        const container = document.querySelector(".priceListContainer");
+
+        if (!document.getElementById("demoNotice")) {
+            container.insertAdjacentHTML(
+                "beforebegin",
+                `
+                <div class="alert alert-info mb-3" id="demoNotice">
+                    <strong>Notice:</strong>
+                    Location is turned off or unavailable.
+                    The technicians shown below are for demonstration purposes.
+                    Please enable location services to see nearby technicians.
+                </div>
+                `
+            );
+        }
+
+       
+            socket.emit("requestAllShops");
+       
+    },
+
+    {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+    }
+
   );
 }
 
 socket.on("new_shop", (restaurant) => {
+
   const container = document.querySelector(".priceListContainer");
+   console.log("🔥 NEW SHOP RECEIVED:", restaurant.name);
+    console.log("Shop ID:", restaurant._id);
 
     const card = document.createElement("div");
     card.className = "col-md-6";
@@ -736,13 +796,12 @@ socket.on("new_shop", (restaurant) => {
 
 
 <script>
-
 function renderTechnicians(technicians) {
+  
+  document.querySelector(".priceListContainer").innerHTML = "";
 
-   const container = document.querySelector(".priceListContainer");
-
-   container.innerHTML = "";
-
+    document.getElementById("demoNotice")?.remove();
+    const container = document.querySelector(".priceListContainer");
    technicians.forEach((restaurant) => {
 
       const card = document.createElement("div");

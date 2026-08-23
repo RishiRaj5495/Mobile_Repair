@@ -141,9 +141,15 @@ try {
 }
 console.log("✅ Signature verified");
     // 2️⃣ Get pending order from session
-    const pendingOrder = req.session.pendingOrder;
+    // const pendingOrder = req.session.pendingOrder;
+    const pendingOrderId = req.session.pendingOrderId;
+   let order =
+    await Order.findOne({
+        razorpayOrderId:
+            razorpay_order_id
+    });
 
-    if (!pendingOrder) {
+    if (!pendingOrderId) {
 
       return res.status(400).json({
         success: false,
@@ -152,49 +158,74 @@ console.log("✅ Signature verified");
 
     }
 console.log("Creating order...");
-console.log("Pending Order:", pendingOrder);
-let order;
+
+// let order;
     // 3️⃣ Create final order
 try {
 
   console.log("Before Order.create()");
 
-     order = await Order.create({
+  //    order = await Order.create({
 
-    ...pendingOrder,
+  //   ...pendingOrder,
 
-    status: "pending_technician",
+  //   status: "pending_technician",
 
-    paymentStatus: "paid",
+  //   paymentStatus: "paid",
 
-    razorpayOrderId: razorpay_order_id,
+  //   razorpayOrderId: razorpay_order_id,
 
-    razorpayPaymentId: razorpay_payment_id
+  //   razorpayPaymentId: razorpay_payment_id
 
-  });
+  // });
 
-  // console.log("After Order.create()");
-  // console.log("Created order ID:", order._id);
+  order = await Order.findOne({
+    razorpayOrderId: razorpay_order_id
+});
 
-  order = await Order.findById(order._id)
+if (!order) {
+
+    return res.status(404).json({
+        success: false,
+        message: "Order not found"
+    });
+
+}
+
+order.paymentStatus = "paid";
+
+order.status =
+    "pending_technician";
+
+order.razorpayPaymentId =
+    razorpay_payment_id;
+
+await order.save();
+
+order = await Order.findById(order._id)
     .populate("restaurant")
     .populate("customer");
 
 
+
   console.log("After populate()");
   console.log("Order created with Razorpay details:", order);
-  await producer.send({
-    topic: "booking-created",
-    messages: [
-        {
-            value: JSON.stringify({
-                orderId: order._id,
-                technicianId: order.restaurant._id,
+  console.log("Order ID:", order._id);
+console.log("Restaurant ID:", order.restaurant?._id);
+console.log("Customer ID:", order.customer?._id);
+console.log("AFTER ORDER LOG");
+//   await producer.send({
+//     topic: "booking-created",
+//     messages: [
+//         {
+//             value: JSON.stringify({
+//                 orderId: order._id,
+//                 technicianId: order.restaurant._id,
                 
-            }),
-        },
-    ],
-});
+//             }),
+//         },
+//     ],
+// });
 
 } catch (err) {
 
@@ -212,58 +243,69 @@ try {
 
    
 
+console.log(" ===================================================================================================");
+  // const restaurantId = pendingOrderId.restaurant;
+  const restaurantId = order.restaurant?._id || order.restaurant;
+ console.log("Restaurant ID for notifications:", restaurantId);
+    // 🔥 REAL-TIME UPDATE (Socket.io)
+    let io = req.app.locals.io;
+    if (io && io.emitToRestaurant) {
+      console.log("Emitting new_order event to restaurant:", restaurantId, "for order:", order._id);
+      io.emitToRestaurant(restaurantId, "new_order", order);
+      console.log("✅ Event emitted to restaurant:", restaurantId);
+    }
 
 
-//  const restaurantId = pendingOrder.restaurant;
-//  console.log("Restaurant ID for notifications:", restaurantId);
-//     // 🔥 REAL-TIME UPDATE (Socket.io)
-//     const io = req.app.locals.io;
-//     if (io && io.emitToRestaurant) {
-//       console.log("Emitting new_order event to restaurant:", restaurantId, "for order:", order._id);
-//       io.emitToRestaurant(restaurantId, "new_order", order);
-//       console.log("✅ Event emitted to restaurant:", restaurantId);
-//     }
+console.log("Restaurant details for FCM:=======================================", restaurantId);
+    // 🔥 PUSH NOTIFICATION (FCM)   
+    const rest = await Restaurant.findById(restaurantId);
+    console.log("Restaurant details for FCM:============================================", rest);
+     const admin = req.app.locals.admin;    
+     console.log("Before if");
+console.log("rest exists:", !!rest);
+console.log("Token:", rest?.fcmToken);
+console.log("admin exists:", !!admin);  
+    if (rest?.fcmToken && admin) {
+       console.log("Inside FCM if");   
+      const message = {
+        token: rest.fcmToken,
+        notification: {
+          title: "New  Request",
+          body: `Order ${order._id}`,
+        },
+        data: { orderId: String(order._id) },
+        webpush: { fcmOptions: { link: `/delivery/${order._id}` } }
+      };
 
+     try {
+    console.log("Sending FCM...");
+      console.log(rest.fcmToken);
+    const resp = await admin.messaging().send(message);
 
-
-//     // 🔥 PUSH NOTIFICATION (FCM)   && !connectedRestaurants.has(restaurantId)
-//     const rest = await Restaurant.findById(restaurantId);
-//     console.log("Restaurant details for FCM:", rest);
-//      const admin = req.app.locals.admin;      
-//     if (rest?.fcmToken && admin) {   
-//       const message = {
-//         token: rest.fcmToken,
-//         notification: {
-//           title: "New  Request",
-//           body: `Order ${order._id}`,
-//         },
-//         data: { orderId: String(order._id) },
-//         webpush: { fcmOptions: { link: `/delivery/${order._id}` } }
-//       };
-
-//       admin.messaging().send(message)
-//       .then(resp => console.log("FCM sent:", resp))
-//       .catch((err) => {
-//         console.error("❌ FCM Error:", err);
-//       });
-//     }
+    console.log("✅ FCM sent:", resp);
+} catch (err) {
+    console.error("❌ FCM send failed:", err);
+}
+    }else {
+  console.log("FCM Skipped: =======================================", { tokenExists: !!rest?.fcmToken, adminExists: !!admin });
+}
 
   res.json({
-  success: true,
-  redirectUrl: `/api/orders/${order._id}/track`,
-  message: "Issue Forwarded",
-  order
-});
+    success: true,
+    redirectUrl: `/api/orders/${order._id}/track`,
+    message: "Issue Forwarded",
+    order
+  });
 
-
-  } catch (e) {
- 
-    res.status(500).json({ error: e.message });
+  // the outer try/catch above handles errors
+  } catch (err) {
+    console.error("VERIFY PAYMENT ERROR:", err);
+    return res.status(500).json({
+      success: false,
+      error: err.message
+    });
   }
-
-   
 });
-
 
 
 // Update order status (Accept / Decline)
@@ -281,11 +323,16 @@ router.post("/:id/status", async (req, res) => {
 
     console.log("Found order:", order);
     if (!order) return res.status(404).json({ error: "Order not found" });
-    if (io.emitToRestaurant) {
-      io.emitToRestaurant(order.restaurant._id, "order_status_changed", order);
+
+    const restaurantId = order.restaurant?._id || order.restaurant;
+    let io = req.app.locals.io;
+    if (restaurantId && io && io.emitToRestaurant) {
+      io.emitToRestaurant(restaurantId, "order_status_changed", order);
+    } else if (!restaurantId) {
+      console.warn("Cannot emit order status update: restaurant ID missing on order", order._id);
     }
 
-    res.json({ message: "Status updated", order });
+    res.json({ success: true, message: "Status updated", order });
 
   } catch (e) {
     console.error("Status update error:", e);
@@ -304,6 +351,9 @@ router.post("/:id/status", async (req, res) => {
 
 //   res.render("listings/orderTracs.ejs", { order });
 // });
+
+
+
 router.get("/:orderId/track", async (req, res) => {
     const { orderId } = req.params;
 
