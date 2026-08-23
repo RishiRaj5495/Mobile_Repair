@@ -59,9 +59,9 @@ app.use(express.json());
 
 
 // socketSetup(io);
-// const dbUrl = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mobile-repair-services';
-// const dbUrl = 'mongodb://127.0.0.1:27017/mobile-repair-services';
-const dbUrl = 'mongodb://mongodb:27017/mobile-repair-services';
+const dbUrl = process.env.MONGODB_URI;
+
+// const dbUrl = 'mongodb://mongodb:27017/mobile-repair-services';
 mongoose.connect(dbUrl)
 .then( async () => {
   console.log("MongoDB connected");
