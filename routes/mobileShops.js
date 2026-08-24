@@ -97,12 +97,12 @@ router.get("/yourShop/logout", (req, res, next) => {
 router.post('/:id/token', async (req, res) => {
 try {
 const { token } = req.body;
-console.log("TOKEN RECEIVED:", token);
+
 const rest = await Restaurant.findByIdAndUpdate(req.params.id, { fcmToken: token }, { new: true });
-    console.log("Saved token:", rest.fcmToken);
+   
 res.json(rest);
 } catch(e) {
-// res.status(500).json({ error: err.message });
+console.error("Error updating FCM token:", e);
 req.flash("success", e.message);
 }
 });
@@ -115,7 +115,7 @@ router.post("/:id/rate", isLogged, async (req, res) => {
   try {
     const value = Number(req.body.value);
     const comment = req.body.comment;
-console.log("Comment:", comment);
+
     if (value < 1 || value > 5) {
       return res.status(400).json({ message: "Invalid rating value" });
     }
@@ -195,7 +195,7 @@ router.post("/location", async (req, res) => {
    try {
 
       const { lat, lng } = req.body;
-      console.log("Received location update:", { lat, lng });
+      
 
       await Restaurant.findByIdAndUpdate(req.user._id, {
 

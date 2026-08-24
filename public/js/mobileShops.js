@@ -28,19 +28,14 @@ await loadExistingOrders();
 
 
 socket.on("new_order", order => {
-console.log("New order received:", order);
+
   if (!document.getElementById(`order_${order._id}`)) {
     orders.unshift(order);
     renderOrder(order,"top"); // latest on top
   }
 });
 
-///////
-//   socket.on("new_order", order => {
-//   if (!document.getElementById(`order_${order._id}`)) {
-//     showOrder(order);
-//   }
-// });
+
 
   socket.on("order_status_changed", order => {
     updateOrderUI(order);
@@ -53,7 +48,7 @@ console.log("New order received:", order);
 
 
 
-console.log("Messaging from config =", window.messaging);
+
 
 
 if ('serviceWorker' in navigator) {
@@ -74,7 +69,7 @@ async function registerForNotifications(restaurantIdForUpdate) {
     
     const fcmToken = await messaging.getToken({ vapidKey: vapidKey });
 
-    console.log('FCM token', fcmToken);
+  
 
     if (!fcmToken) return null;
 
@@ -154,19 +149,7 @@ function resetBtn() {
 }
 
 
-//   async function acceptOrder(orderId) {
-//     fetch(`/api/orders/${orderId}/accept`, {
-//       method: "POST"
-//     })
-//     .then(res => {
-//       if (!res.ok) throw new Error("Failed to accept order");
-//       console.log("Accepting order:", orderId, res);
-//       window.location.href = `/delivery/${orderId}`;
-//     })
-//     .catch(err => console.error(err));
-// }
 
-// socket.emit(orderID)
 
 async function acceptOrder(orderId) {
   try {
@@ -214,8 +197,7 @@ async function loadExistingOrders() {
     const res = await fetch(`/api/orders/mobileDashboard/${RESTAURANT_ID}`);
     const orders = await res.json();
 
- console.log("Filter order", orders);
-    // orders.forEach(order => showOrder(order));
+ 
   orders.forEach(order => renderOrder(order));
 
 
@@ -270,4 +252,3 @@ function renderOrder(order, position = "bottom") {
     : container.appendChild(div); // old orders
 }
 
-///////////////

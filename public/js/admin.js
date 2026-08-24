@@ -121,6 +121,16 @@ if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
   const restaurantId = document.getElementById('restId').value;
 console.log("Customer First Name:", customerFirstName);
   const video = document.querySelector('#video').files[0];
+  if (!video.type.startsWith("video/")) {
+    alert("Please select a valid video file.");
+    return;
+}
+const maxSize = 50 * 1024 * 1024;
+
+if (video.size > maxSize) {
+    alert("Video must be smaller than 50 MB.");
+    return;
+}
   const cloudinaryData = new FormData();
 
 cloudinaryData.append("file", video);
@@ -137,13 +147,22 @@ const cloudinaryRes = await fetch(
     body: cloudinaryData
   }
 );
+  if (!cloudinaryRes.ok) {
+        throw new Error("Cloudinary upload failed");
+    }
 
 const cloudinaryJson = await cloudinaryRes.json();
+  if (!cloudinaryJson.secure_url) {
+        throw new Error("Cloudinary did not return video URL");
+    }
 
 
 const videoUrl = cloudinaryJson.secure_url;
 
-
+    const optimizedVideoUrl = videoUrl.replace(
+        "/video/upload/",
+        "/video/upload/c_scale,w_1280,h_720/q_auto/f_auto/"
+    );
 
   const formData = new FormData();
   formData.append('customerFirstName', customerFirstName);
@@ -158,7 +177,7 @@ const videoUrl = cloudinaryJson.secure_url;
 
   formData.append('restaurantId', restaurantId); // IMPORTANT
   // formData.append('video', video);
-  formData.append('videoUrl', videoUrl);
+  formData.append('videoUrl', optimizedVideoUrl);
 
 const xhr = new XMLHttpRequest();
 xhr.open("POST", "/api/orders/booking/prepare");
@@ -284,13 +303,7 @@ xhr.onload = async function () {
     const rzp = new Razorpay(options);
 rzp.on("payment.failed", function (response) {
 
-  // console.log("Payment Failed Full Response:", response);
-
-  // console.log("Error:", response.error);
-
-  // console.log("Description:", response.error.description);
-
-  // console.log("Code:", response.error.code);
+ 
 
   showFormError(
     response.error.description || "Payment failed."

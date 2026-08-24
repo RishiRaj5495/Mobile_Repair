@@ -141,10 +141,7 @@ router.post(
 
                 await order.save();
 
-                console.log(
-                    "✅ Order marked as PAID:",
-                    order._id
-                );
+             
 
                 // --------------------------------
                 // SOCKET.IO
@@ -164,9 +161,7 @@ router.post(
                         order
                     );
 
-                    console.log(
-                        "✅ Socket notification sent"
-                    );
+                    
                 }
 
                 // --------------------------------
@@ -225,10 +220,7 @@ router.post(
                                 .messaging()
                                 .send(message);
 
-                        console.log(
-                            "✅ FCM sent:",
-                            response
-                        );
+                      
 
                     } catch (error) {
 

@@ -20,16 +20,7 @@ const Restaurant = require("../Models/mobileShops.js");
 const { producer } = require("../config/kafka");
 const { client } = require("../config/redis");
 
-// const { admin, io } = require("../app"); // import firebase admin + sockets
 
-
-// router.post("/:id/accept", async (req, res) => {
-
-//   await Order.findByIdAndUpdate(req.params.id, {
-//     status: "accepted"
-//   });
-//   res.sendStatus(200);
-// });
 
 
 
@@ -51,13 +42,13 @@ router.post("/:id/accept", async (req, res) => {
       { status: "accepted" },
       { new: true, runValidators: true }
     );
-    console.log("Accepting order:", order);
+   
   technician_TO_Customer(
     order,
     io
    
   );
-    console.log("AccNow",order);
+    
 
     res.sendStatus(200);
   } catch (err) {
@@ -68,7 +59,7 @@ router.post("/:id/accept", async (req, res) => {
 
 router.post("/:id/reject", async (req, res) => {
   const io = req.app.locals.io;
-  console.log("Rejecting order:", req.params.id);
+  
   try {
     const order = await Order.findByIdAndUpdate(
       req.params.id,
@@ -77,7 +68,7 @@ router.post("/:id/reject", async (req, res) => {
     );
 
  
-  console.log("RejNow",order);
+
 technician_TO_Customer(order,io);
     res.sendStatus(200);
   } catch (err) {
@@ -88,9 +79,9 @@ technician_TO_Customer(order,io);
 
 
 // Create a new order
-console.log("RAZORPAY_KEY_SECRET:", process.env.RAZORPAY_KEY_SECRET);
+
 router.post("/verify-payment",upload.single("video"), async (req, res) => {
-  console.log("Payment verification request received with body:", req.body);
+  
   try {
 
  const {
@@ -103,7 +94,7 @@ let expectedSignature;
 
 try {
 
-  console.log("Before signature generation");
+ 
 
   expectedSignature = crypto
     .createHmac(
@@ -115,8 +106,7 @@ try {
     )
     .digest("hex");
 
-  console.log("Expected Signature:", expectedSignature);
-  console.log("Received Signature:", razorpay_signature);
+
 
   if (expectedSignature !== razorpay_signature) {
 
@@ -127,7 +117,7 @@ try {
 
   }
 
-  console.log("✅ Signature verified");
+ 
 
 } catch (err) {
 
@@ -139,7 +129,7 @@ try {
   });
 
 }
-console.log("✅ Signature verified");
+
     // 2️⃣ Get pending order from session
     // const pendingOrder = req.session.pendingOrder;
     const pendingOrderId = req.session.pendingOrderId;
@@ -157,27 +147,11 @@ console.log("✅ Signature verified");
       });
 
     }
-console.log("Creating order...");
 
-// let order;
+
+
     // 3️⃣ Create final order
 try {
-
-  console.log("Before Order.create()");
-
-  //    order = await Order.create({
-
-  //   ...pendingOrder,
-
-  //   status: "pending_technician",
-
-  //   paymentStatus: "paid",
-
-  //   razorpayOrderId: razorpay_order_id,
-
-  //   razorpayPaymentId: razorpay_payment_id
-
-  // });
 
   order = await Order.findOne({
     razorpayOrderId: razorpay_order_id
@@ -208,12 +182,6 @@ order = await Order.findById(order._id)
 
 
 
-  console.log("After populate()");
-  console.log("Order created with Razorpay details:", order);
-  console.log("Order ID:", order._id);
-console.log("Restaurant ID:", order.restaurant?._id);
-console.log("Customer ID:", order.customer?._id);
-console.log("AFTER ORDER LOG");
 //   await producer.send({
 //     topic: "booking-created",
 //     messages: [
@@ -229,10 +197,9 @@ console.log("AFTER ORDER LOG");
 
 } catch (err) {
 
-  console.error("❌ ORDER ERROR:");
+  
   console.error(err);
-  console.error(err.message);
-  console.error(err.stack);
+  
 
   return res.status(500).json({
     success: false,
@@ -243,10 +210,10 @@ console.log("AFTER ORDER LOG");
 
    
 
-console.log(" ===================================================================================================");
+
   // const restaurantId = pendingOrderId.restaurant;
   const restaurantId = order.restaurant?._id || order.restaurant;
- console.log("Restaurant ID for notifications:", restaurantId);
+ 
     // 🔥 REAL-TIME UPDATE (Socket.io)
     let io = req.app.locals.io;
     if (io && io.emitToRestaurant) {
@@ -256,15 +223,12 @@ console.log(" ==================================================================
     }
 
 
-console.log("Restaurant details for FCM:=======================================", restaurantId);
+
     // 🔥 PUSH NOTIFICATION (FCM)   
     const rest = await Restaurant.findById(restaurantId);
-    console.log("Restaurant details for FCM:============================================", rest);
+  
      const admin = req.app.locals.admin;    
-     console.log("Before if");
-console.log("rest exists:", !!rest);
-console.log("Token:", rest?.fcmToken);
-console.log("admin exists:", !!admin);  
+  
     if (rest?.fcmToken && admin) {
        console.log("Inside FCM if");   
       const message = {
@@ -278,11 +242,11 @@ console.log("admin exists:", !!admin);
       };
 
      try {
-    console.log("Sending FCM...");
-      console.log(rest.fcmToken);
+    
+      
     const resp = await admin.messaging().send(message);
 
-    console.log("✅ FCM sent:", resp);
+    
 } catch (err) {
     console.error("❌ FCM send failed:", err);
 }
@@ -321,7 +285,7 @@ router.post("/:id/status", async (req, res) => {
     ).populate("restaurant");
 
 
-    console.log("Found order:", order);
+    
     if (!order) return res.status(404).json({ error: "Order not found" });
 
     const restaurantId = order.restaurant?._id || order.restaurant;
@@ -342,15 +306,6 @@ router.post("/:id/status", async (req, res) => {
 
 
 
-// router.get("/:orderId/track", async (req, res) => {
-//   const { orderId } = req.params;
-
-  
-//   const order = await Order.findById(orderId).populate("restaurant");
-//   if (!order) return res.send("Order not found");
-
-//   res.render("listings/orderTracs.ejs", { order });
-// });
 
 
 
@@ -403,7 +358,7 @@ router.get("/mobileDashboard/:restaurantId", async (req, res) => {
       .sort({ createdAt: -1 });
 
     res.json(orders);
-  console.log("Fetched orders for restaurant:", restaurantId, "Orders:", orders);
+
   } catch (err) {
     
     res.status(500).json({ message: "Failed to fetch orders" });

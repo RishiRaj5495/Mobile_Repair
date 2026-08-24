@@ -642,24 +642,22 @@ function getLocation() {
           }
         );
          
-console.log("Fetch completed");
-console.log(response.status);
-console.log(response.ok);
+
         const data = await response.json();
           //  Swal.close(); // 🔥 CLOSE LOADER AFTER RESPONSE
-     console.log("Nearby technicians data:", data);
+   
         document.querySelector(".priceListContainer").innerHTML = "";
 
 
         if (data.technicians && data.technicians.length > 0) {
-        console.log("if+++++++++");
+        
     // Nearby technicians found
-    console.log("Nearby technicians found:", data.technicians);
+   
     renderTechnicians(data.technicians);
 
   } else {
 
-        console.log("else+++++++++");
+       
         Swal.fire({
       icon: "info",
       title: "No technicians nearby",
@@ -689,11 +687,10 @@ if (!document.getElementById("demoNotice")) {
   );
 }
 
-// if (!window.requestSent) {
-//     window.requestSent = true;
-    console.log("Requesting all shops for demonstration purposes");
+
+   
     socket.emit("requestAllShops");
-// }
+
 
 
   }
@@ -701,7 +698,8 @@ if (!document.getElementById("demoNotice")) {
 
       } catch (err) {
         
-  console.log("err-----------------",err);
+ 
+  console.error("Error fetching nearby technicians:", err);
 
   document.querySelector(".priceListContainer").innerHTML = "";
 
@@ -718,7 +716,7 @@ if (!document.getElementById("demoNotice")) {
 
     // Error callback
     (error) => {
-        console.log("Location Error:", error.code, error.message);
+        console.error("Geolocation error:", error);
 
         document.querySelector(".priceListContainer").innerHTML = "";
 
@@ -757,8 +755,7 @@ if (!document.getElementById("demoNotice")) {
 socket.on("new_shop", (restaurant) => {
 
   const container = document.querySelector(".priceListContainer");
-   console.log("🔥 NEW SHOP RECEIVED:", restaurant.name);
-    console.log("Shop ID:", restaurant._id);
+  
 
     const card = document.createElement("div");
     card.className = "col-md-6";

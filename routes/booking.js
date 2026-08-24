@@ -121,55 +121,6 @@ if (!req.body.videoUrl) {
 
 
 
-// router.post("/create-order", async (req, res) => {
-
-//     try {
-
-//         if (!req.session.pendingOrder) {
-//             return res.status(400).json({
-//                 success: false,
-//                 message: "No pending order found"
-//             });
-//         }
-
-//         const amount = req.session.pendingOrder.advanceAmount;
-
-//         const razorpayOrder = await razorpay.orders.create({
-
-//             amount: amount * 100, // paise
-
-//             currency: "INR",
-
-//             receipt: req.session.pendingOrder.ticketId
-
-//         });
-//         console.log("Razorpay order created:", razorpayOrder);
-
-//         res.json({
-
-//             success: true,
-
-//             key: process.env.RAZORPAY_KEY_ID,
-
-//             razorpayOrder
-
-//         });
-
-//     } catch (err) {
-
-//         console.error(err);
-
-//         res.status(500).json({
-
-//             success: false,
-
-//             message: "Failed to create Razorpay order"
-
-//         });
-
-//     }
-
-// });
 
 router.post("/create-order", async (req, res) => {
 
@@ -183,11 +134,11 @@ router.post("/create-order", async (req, res) => {
                 message: "No pending order found"
             });
         }
-        console.log("Pending Order:", pendingOrder);
+      
 
         const amount = pendingOrder.advanceAmount;
-console.log("Amount:", amount);
-console.log("Razorpay Key:", process.env.RAZORPAY_KEY_ID);
+
+
         // 1. Create Razorpay order
         const razorpayOrder = await razorpay.orders.create({
 
@@ -198,10 +149,7 @@ console.log("Razorpay Key:", process.env.RAZORPAY_KEY_ID);
             receipt: pendingOrder.ticketId
         });
 
-        console.log(
-            "Razorpay order created:",
-            razorpayOrder.id
-        );
+     
 
         // 2. Create PENDING order in MongoDB
         const order = await Order.create({
@@ -216,10 +164,6 @@ console.log("Razorpay Key:", process.env.RAZORPAY_KEY_ID);
 
         });
 
-        console.log(
-            "Pending MongoDB order created:",
-            order._id
-        );
 
         // 3. Save order ID in session
         req.session.pendingOrderId = order._id;
