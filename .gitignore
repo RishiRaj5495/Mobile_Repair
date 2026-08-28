@@ -2,3 +2,7 @@
 firebase-admin.json
 key.json
 node_modules/
+AI-Service/venv/
+AI-Service/__pycache__/
+AI-Service/temp/
+*.pyc
