@@ -20,8 +20,7 @@ RepairNow is a doorstep mobile repair platform that allows users to upload phone
 ---
 
 ## Current Pipeline 
- 
-```text
+
 Customer Video 
       ↓ 
 Python + FastAPI 
