@@ -53,7 +53,6 @@ Phone-Related?
 | Maps & ETA | Google Maps, Directions API, Distance Matrix API |
 | Notifications | Firebase Admin SDK |
 | Video Upload | Cloudinary |
-| AI Diagnostics | Gemini API |
 | Deployment | Render |
 
 ---
