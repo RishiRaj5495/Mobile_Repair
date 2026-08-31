@@ -15,7 +15,7 @@ RepairNow is a doorstep mobile repair platform that allows users to upload phone
 ---
 
 ## Workflow
-<img src="images/Architecture.png" width="800" />
+<img src="images/Architecture.png" width="900" />
 
 ---
 
