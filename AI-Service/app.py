@@ -45,10 +45,17 @@ async def analyze_video(file: UploadFile = File(...)):
             status_code=400,
             detail="No video file provided."
         )
-    print("Filename:", file.filename)
-    print("MIME type:", file.content_type)
-    # Check video type
-    if not file.content_type or not file.content_type.startswith("video/"):
+    allowed_extensions = {".mp4", ".mov", ".avi", ".mkv", ".webm"}
+
+    file_extension = os.path.splitext(file.filename or "")[1].lower()
+
+    if (
+        not file.filename
+        or (
+            not file.content_type.startswith("video/")
+            and file_extension not in allowed_extensions
+        )
+    ):
         raise HTTPException(
             status_code=400,
             detail="Please upload a valid video file."
