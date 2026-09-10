@@ -107,7 +107,7 @@ if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     btnText.textContent = "Forwarding...";
     console.log("Form start collect information");
 
-  
+
   const customerFirstName = document.querySelector('#customerFirstName').value;
   const customerLastName = document.querySelector('#customerLastName').value;
   const customerPhone = document.querySelector('#customerPhone').value;
@@ -131,6 +131,444 @@ if (video.size > maxSize) {
     alert("Video must be smaller than 50 MB.");
     return;
 }
+
+// ============================================
+// AI VIDEO VALIDATION
+// ============================================
+
+// const aiFormData = new FormData();
+
+// aiFormData.append("file", video);
+
+// let aiResult;
+
+// try {
+
+//     const aiResponse = await fetch(
+//         "http://127.0.0.1:8000/analyze-video",
+//         {
+//             method: "POST",
+//             body: aiFormData
+//         }
+//     );
+
+//     if (!aiResponse.ok) {
+
+//         alert("Video analysis failed. Please try again.");
+//         return;
+//     }
+
+//     aiResult = await aiResponse.json();
+//     console.log(aiResult);
+
+// } catch (error) {
+
+//     console.error("AI Service Error:", error);
+
+//     alert(
+//         "Unable to validate the video. Please try again."
+//     );
+
+//     return;
+// }
+
+
+// const decision = aiResult.decision;
+
+// console.log("AI Decision:", decision);
+
+// if (decision.status === "INVALID") {
+
+//     alert(
+//         "The video is not suitable for further processing."
+//     );
+
+//     return;
+//}
+
+
+// ============================================
+// AI VIDEO VALIDATION
+// ============================================
+
+const aiFormData = new FormData();
+
+aiFormData.append("file", video);
+
+
+// ============================================
+// AI PROCESSING UI ELEMENTS
+// ============================================
+
+const videoProcessing =
+    document.getElementById("videoProcessing");
+
+const videoResult =
+    document.getElementById("videoResult");
+
+const processingMessage =
+    document.getElementById("processingMessage");
+
+const videoProgressBar =
+    document.getElementById("videoProgressBar");
+
+const progressPercentage =
+    document.getElementById("progressPercentage");
+
+const stepUpload =
+    document.getElementById("stepUpload");
+
+const stepExtract =
+    document.getElementById("stepExtract");
+
+const stepAI =
+    document.getElementById("stepAI");
+
+const stepDecision =
+    document.getElementById("stepDecision");
+
+
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
+
+function updateProgress(percent) {
+
+    videoProgressBar.style.width =
+        percent + "%";
+
+    progressPercentage.textContent =
+        percent + "%";
+
+    videoProgressBar.setAttribute(
+        "aria-valuenow",
+        percent
+    );
+}
+
+
+function resetStep(step, number) {
+
+    step.classList.remove(
+        "active",
+        "processing",
+        "completed"
+    );
+
+    const icon =
+        step.querySelector(".step-icon");
+
+    if (icon) {
+        icon.textContent = number;
+    }
+}
+
+
+function processingStep(
+    step,
+    message,
+    percent
+) {
+
+    step.classList.add("processing");
+
+    processingMessage.textContent =
+        message;
+
+    updateProgress(percent);
+}
+
+
+function completeStep(step) {
+
+    step.classList.remove(
+        "processing"
+    );
+
+    step.classList.add(
+        "completed"
+    );
+
+    const icon =
+        step.querySelector(".step-icon");
+
+    if (icon) {
+        icon.textContent = "✓";
+    }
+}
+
+
+function delay(ms) {
+
+    return new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
+}
+
+
+// ============================================
+// RESET PROCESSING UI
+// ============================================
+
+resetStep(stepUpload, "1");
+resetStep(stepExtract, "2");
+resetStep(stepAI, "3");
+resetStep(stepDecision, "4");
+
+updateProgress(0);
+
+videoResult.classList.add("d-none");
+videoResult.innerHTML = "";
+
+videoProcessing.classList.remove("d-none");
+
+
+// ============================================
+// STEP 1 - VIDEO UPLOADED
+// ============================================
+
+stepUpload.classList.add("processing");
+
+processingMessage.textContent =
+    "Video uploaded. Preparing AI validation...";
+
+updateProgress(10);
+
+await delay(500);
+
+completeStep(stepUpload);
+
+updateProgress(20);
+
+
+// ============================================
+// STEP 2 - FRAME & AUDIO EXTRACTION
+// ============================================
+
+processingStep(
+    stepExtract,
+    "Extracting video frames & audio...",
+    35
+);
+
+
+// ============================================
+// CALL FASTAPI
+// ============================================
+
+try {
+
+    const response = await fetch(
+        "https://repairnow-ai.onrender.com/analyze-video",
+        {
+            method: "POST",
+            body: aiFormData
+        }
+    );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "AI validation failed"
+        );
+    }
+
+
+    const aiResult =
+        await response.json();
+
+
+    console.log(
+        "AI Validation Result:",
+        aiResult
+    );
+
+
+    // ========================================
+    // STEP 2 COMPLETE
+    // ========================================
+
+    completeStep(stepExtract);
+
+    updateProgress(60);
+
+
+    // ========================================
+    // STEP 3 - AI ANALYSIS
+    // ========================================
+
+    processingStep(
+        stepAI,
+        "Running YOLO & speech analysis...",
+        70
+    );
+
+    await delay(500);
+
+    completeStep(stepAI);
+
+
+    // ========================================
+    // STEP 4 - DECISION
+    // ========================================
+
+    processingStep(
+        stepDecision,
+        "Generating validation result...",
+        90
+    );
+
+    await delay(500);
+
+    completeStep(stepDecision);
+
+    updateProgress(100);
+
+    processingMessage.textContent =
+        "AI video validation completed.";
+
+    await delay(500);
+
+
+    // ========================================
+    // GET AI DECISION
+    // ========================================
+
+ const decisionData = aiResult.decision;
+
+const status = decisionData.status;
+const score = decisionData.score;
+const reason = decisionData.reason;
+
+
+
+
+    // ========================================
+    // VALID VIDEO
+    // ========================================
+
+    if (
+         status === "VALID" ||
+         status === "REVIEW"
+    ) {
+
+          videoResult.classList.remove("d-none");
+
+    videoResult.innerHTML = `
+
+        <div class="alert alert-success">
+
+            <strong>
+                ✅ Video Valid
+            </strong>
+
+            <div class="small mt-1">
+                ${reason}
+            </div>
+
+            <div class="small mt-1">
+                AI Confidence Score: ${score}
+            </div>
+
+        </div>
+
+    `;
+
+    videoProcessing.classList.add("d-none");
+
+    // Continue to Cloudinary upload
+        // IMPORTANT:
+        // Do NOT return here.
+        //
+        // The code below this AI block
+        // continues to Cloudinary upload.
+    }
+
+
+    // ========================================
+    // INVALID VIDEO
+    // ========================================
+
+    else {
+
+       videoResult.classList.remove("d-none");
+
+    videoResult.innerHTML = `
+
+        <div class="alert alert-danger">
+
+            <strong>
+                ❌ Video Invalid
+            </strong>
+
+            <div class="small mt-1">
+                ${reason}
+            </div>
+
+            <div class="small mt-2">
+                Please upload another repair video.
+            </div>
+
+        </div>
+
+    `;
+
+    videoProcessing.classList.add("d-none");
+
+    resetSubmitBtn();
+
+    return;
+    }
+
+
+} catch (error) {
+
+    console.error(
+        "AI Service Error:",
+        error
+    );
+
+
+    videoResult.classList.remove(
+        "d-none"
+    );
+
+
+    videoResult.innerHTML = `
+
+        <div class="alert alert-danger">
+
+            <strong>
+                ❌ AI Validation Failed
+            </strong>
+
+            <div class="small mt-1">
+                Unable to connect to the video
+                validation service.
+            </div>
+
+            <div class="small mt-1">
+                Please try again.
+            </div>
+
+        </div>
+
+    `;
+
+
+    videoProcessing.classList.add(
+        "d-none"
+    );
+
+
+    resetSubmitBtn();
+
+    return;
+}
+
+
+
   const cloudinaryData = new FormData();
 
 cloudinaryData.append("file", video);
@@ -206,8 +644,7 @@ xhr.onload = async function () {
     return;
   }
 
-  try {
-
+    try {
     const response = await fetch("/api/orders/booking/create-order", {
       method: "POST"
     });
@@ -273,7 +710,7 @@ xhr.onload = async function () {
           resetSubmitBtn();
 
         }
-          
+
       },
       modal: {
     ondismiss: function () {
@@ -303,7 +740,7 @@ xhr.onload = async function () {
     const rzp = new Razorpay(options);
 rzp.on("payment.failed", function (response) {
 
- 
+
 
   showFormError(
     response.error.description || "Payment failed."

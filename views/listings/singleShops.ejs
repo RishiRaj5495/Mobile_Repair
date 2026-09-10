@@ -124,6 +124,939 @@ body {
   75% { transform: translateX(-5px); }
   100% { transform: translateX(0); }
 }
+/*
+///////////////////////////// */
+/* =========================================================
+   VIDEO EVIDENCE SECTION
+========================================================= */
+
+.video-evidence-section {
+    width: 100%;
+}
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.video-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.video-section-header h5 {
+    font-weight: 650;
+    color: #212529;
+}
+
+.video-required-badge {
+    font-size: 11px;
+    font-weight: 600;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    background: #fff3cd;
+    color: #856404;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   UPLOAD BOX
+========================================================= */
+
+.video-upload-box {
+    position: relative;
+
+    border: 2px dashed #d7dce2;
+
+    border-radius: 18px;
+
+    padding: 42px 25px 30px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #f8fafc 100%
+        );
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.25s ease,
+        background 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.video-upload-box:hover {
+    border-color: #4c8bf5;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #f3f7ff 100%
+        );
+
+    box-shadow:
+        0 8px 25px rgba(
+            13,
+            110,
+            253,
+            0.08
+        );
+
+    transform: translateY(-1px);
+}
+
+.video-upload-box.dragover {
+    border-color: #0d6efd;
+
+    background: #edf5ff;
+
+    box-shadow:
+        0 10px 30px rgba(
+            13,
+            110,
+            253,
+            0.14
+        );
+
+    transform: scale(1.01);
+}
+
+
+/* =========================================================
+   UPLOAD ICON
+========================================================= */
+
+.upload-icon-wrapper {
+    display: flex;
+    justify-content: center;
+
+    margin-bottom: 14px;
+}
+
+.upload-icon {
+    width: 64px;
+    height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: #eaf2ff;
+
+    font-size: 30px;
+
+    box-shadow:
+        0 5px 15px rgba(
+            13,
+            110,
+            253,
+            0.08
+        );
+}
+
+
+/* =========================================================
+   UPLOAD TEXT
+========================================================= */
+
+.upload-title {
+    margin-bottom: 8px;
+
+    font-size: 18px;
+
+    font-weight: 650;
+
+    color: #212529;
+}
+
+.upload-text {
+    margin-bottom: 20px;
+
+    color: #6c757d;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+.upload-text span {
+    color: #0d6efd;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   UPLOAD BUTTON
+========================================================= */
+
+.upload-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    border: none;
+
+    background: #0d6efd;
+
+    color: #ffffff;
+
+    padding: 11px 22px;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.upload-button:hover {
+    background: #0b5ed7;
+
+    box-shadow:
+        0 6px 15px rgba(
+            13,
+            110,
+            253,
+            0.22
+        );
+
+    transform: translateY(-1px);
+}
+
+.upload-button-icon {
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   FORMAT TEXT
+========================================================= */
+
+.upload-format {
+    margin-top: 17px;
+
+    color: #8a929a;
+
+    font-size: 11px;
+}
+
+.format-divider {
+    margin: 0 7px;
+
+    color: #c4c9ce;
+}
+
+
+/* =========================================================
+   SELECTED VIDEO
+========================================================= */
+
+.selected-video {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    margin-top: 14px;
+
+    padding: 14px 15px;
+
+    border: 1px solid #dfe4ea;
+
+    border-radius: 13px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 3px 12px rgba(
+            0,
+            0,
+            0,
+            0.04
+        );
+
+    animation: selectedVideoIn 0.25s ease;
+}
+
+@keyframes selectedVideoIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+.video-file-icon {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background: #edf4ff;
+
+    font-size: 22px;
+}
+
+.video-file-info {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.video-file-name {
+    color: #212529;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+.video-file-size {
+    margin-top: 3px;
+
+    color: #8a929a;
+
+    font-size: 12px;
+}
+
+.video-selected-status {
+    width: 26px;
+    height: 26px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #d1e7dd;
+
+    color: #198754;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+.remove-video {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: #dc3545;
+
+    font-size: 22px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.remove-video:hover {
+    background: #fff0f1;
+
+    transform: scale(1.05);
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.video-error {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 9px;
+
+    padding: 9px 11px;
+
+    border-radius: 8px;
+
+    background: #fff5f5;
+
+    color: #dc3545;
+
+    font-size: 12px;
+}
+
+.error-icon {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   AI PROCESSING CARD
+========================================================= */
+
+.video-processing {
+    margin-top: 16px;
+
+    padding: 20px;
+
+    border: 1px solid #dce6f5;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #f6f9ff 100%
+        );
+
+    box-shadow:
+        0 8px 28px rgba(
+            0,
+            0,
+            0,
+            0.06
+        );
+
+    animation: processingIn 0.3s ease;
+}
+
+@keyframes processingIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   PROCESSING HEADER
+========================================================= */
+
+.processing-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+}
+
+.processing-icon-wrapper {
+    position: relative;
+
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+.processing-icon {
+    position: relative;
+
+    z-index: 2;
+
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: #eaf2ff;
+
+    color: #0d6efd;
+
+    font-size: 21px;
+}
+
+.processing-pulse {
+    position: absolute;
+
+    inset: 0;
+
+    border-radius: 14px;
+
+    border: 2px solid #9ec5fe;
+
+    animation: processingPulse 1.5s infinite;
+}
+
+@keyframes processingPulse {
+
+    0% {
+        opacity: 0.8;
+        transform: scale(0.85);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.35);
+    }
+
+}
+
+.processing-header-text {
+    flex: 1;
+}
+
+.processing-title-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+.processing-title-row h6 {
+    margin: 0;
+
+    font-size: 16px;
+
+    font-weight: 650;
+
+    color: #212529;
+}
+
+.ai-badge {
+    padding: 2px 6px;
+
+    border-radius: 5px;
+
+    background: #e7f1ff;
+
+    color: #0d6efd;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.4px;
+}
+
+.processing-header-text p {
+    margin: 4px 0 0;
+
+    color: #6c757d;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.processing-progress-container {
+    margin-top: 20px;
+}
+
+.processing-progress-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    color: #6c757d;
+
+    font-size: 11px;
+}
+
+.processing-progress-top span:last-child {
+    color: #0d6efd;
+
+    font-weight: 600;
+}
+
+.video-progress {
+    height: 7px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background: #e9ecef;
+}
+
+.video-progress .progress-bar {
+    border-radius: 20px;
+
+    background: #0d6efd;
+
+    transition:
+        width 0.6s ease;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.video-progress .progress-bar::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.35),
+            transparent
+        );
+
+    animation: progressShine 1.5s infinite;
+}
+
+@keyframes progressShine {
+
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(100%);
+    }
+
+}
+
+
+/* =========================================================
+   PROCESSING STEPS
+========================================================= */
+
+.processing-steps {
+    margin-top: 20px;
+
+    padding-left: 2px;
+}
+
+.processing-step {
+    position: relative;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 11px;
+
+    padding: 8px 0;
+
+    color: #adb5bd;
+
+    transition:
+        color 0.25s ease;
+}
+
+.processing-step:not(:last-child)::after {
+    content: "";
+
+    position: absolute;
+
+    left: 11px;
+
+    top: 34px;
+
+    width: 1px;
+
+    height: 19px;
+
+    background: #e5e7eb;
+}
+
+.step-icon {
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #edf0f2;
+
+    color: #899198;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease;
+}
+
+.step-content {
+    padding-top: 2px;
+}
+
+.step-title {
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.step-description {
+    margin-top: 2px;
+
+    font-size: 10px;
+
+    color: #adb5bd;
+}
+
+
+/* ACTIVE */
+
+.processing-step.active {
+    color: #212529;
+}
+
+
+/* PROCESSING */
+
+.processing-step.processing {
+    color: #0d6efd;
+}
+
+.processing-step.processing .step-icon {
+    background: #cfe2ff;
+
+    color: #0d6efd;
+
+    animation: stepPulse 1.2s infinite;
+}
+
+.processing-step.processing .step-description {
+    color: #6c9fe8;
+}
+
+@keyframes stepPulse {
+
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+
+/* COMPLETED */
+
+.processing-step.completed {
+    color: #198754;
+}
+
+.processing-step.completed .step-icon {
+    background: #d1e7dd;
+
+    color: #198754;
+}
+
+.processing-step.completed .step-description {
+    color: #75a98e;
+}
+
+
+/* =========================================================
+   PROCESSING NOTICE
+========================================================= */
+
+.processing-notice {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 16px;
+
+    padding: 9px 11px;
+
+    border-radius: 8px;
+
+    background: #f1f5f9;
+
+    color: #64748b;
+
+    font-size: 10px;
+}
+
+.notice-icon {
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+.video-result {
+    margin-top: 15px;
+
+    animation: resultIn 0.3s ease;
+}
+
+@keyframes resultIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+.video-result .alert {
+    margin-bottom: 0;
+
+    border-radius: 12px;
+
+    padding: 13px 15px;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   HIDDEN
+========================================================= */
+
+.d-none {
+    display: none !important;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 576px) {
+
+    .video-upload-box {
+        padding: 32px 18px 25px;
+    }
+
+    .video-section-header {
+        align-items: flex-start;
+    }
+
+    .upload-icon {
+        width: 56px;
+        height: 56px;
+
+        font-size: 26px;
+    }
+
+    .upload-title {
+        font-size: 16px;
+    }
+
+    .selected-video {
+        gap: 9px;
+    }
+
+    .video-selected-status {
+        display: none;
+    }
+
+    .video-processing {
+        padding: 16px;
+    }
+
+}
 </style>
 
 <div class="container my-5">
@@ -221,7 +1154,7 @@ body {
     <div class="col-lg-7">
 
       <div class="form-card">
-  
+
   <div id="formError" class="alert alert-danger d-none mb-3 shadow-sm"></div>
         <div class="form-header">
           <h4 class="fw-bold mb-1">Forwarding Your Issue</h4>
@@ -271,7 +1204,7 @@ body {
                   class="form-control" required>
                     <div class="text-danger small mt-1 d-none" id="customerEmailError">
     Valid email is required
-  </div>  
+  </div>
               </div>
             </div>
 
@@ -281,7 +1214,7 @@ body {
                 class="form-control" required>
                     <div class="text-danger small mt-1 d-none" id="customerAddressError">
     Address is required
-             </div>         
+             </div>
             </div>
 
             <div class="row">
@@ -322,15 +1255,16 @@ body {
               </div>
             </div>
 
-            <div class="mb-4">
+            <!-- <div class="mb-4">
               <input type="file" id="video"
                 class="form-control"
                 accept="video/*" required>
                   <div class="text-danger small mt-1 d-none" id="videoError">
     Video evidence is required
     </div>
-            </div>
+            </div> -->
 
+<!-- ========================================================= VIDEO EVIDENCE SECTION ========================================================= --> <div class="video-evidence-section mb-4"> <!-- Section Header --> <div class="video-section-header mb-3"> <div> <h5 class="mb-1"> Video Evidence </h5> <p class="text-muted mb-0 small"> Upload a short video showing the issue with your device. </p> </div> <span class="video-required-badge"> Required </span> </div> <!-- ===================================================== UPLOAD CARD ====================================================== --> <div class="video-upload-box" id="videoUploadBox"> <input type="file" id="video" accept="video/*" required hidden > <!-- Upload Icon --> <div class="upload-icon-wrapper"> <div class="upload-icon"> 🎥 </div> </div> <!-- Upload Text --> <h5 class="upload-title"> Upload Video Evidence </h5> <p class="upload-text"> Drag & drop your repair video here <br> <span>or click to browse</span> </p> <!-- Choose Button --> <button type="button" class="upload-button" id="uploadVideoButton"> <span class="upload-button-icon"> ↑ </span> Choose Video </button> <!-- Supported Formats --> <div class="upload-format"> <span>MP4</span> <span>•</span> <span>MOV</span> <span>•</span> <span>AVI</span> <span class="format-divider"> | </span> <span> Maximum 50 MB </span> </div> </div> <!-- ===================================================== SELECTED VIDEO CARD ====================================================== --> <div id="selectedVideo" class="selected-video d-none"> <!-- File Icon --> <div class="video-file-icon"> <span> 🎬 </span> </div> <!-- File Information --> <div class="video-file-info"> <div id="videoFileName" class="video-file-name"> </div> <div id="videoFileSize" class="video-file-size"> </div> </div> <!-- Selected Status --> <div class="video-selected-status"> <span> ✓ </span> </div> <!-- Remove --> <button type="button" id="removeVideo" class="remove-video" aria-label="Remove video"> × </button> </div> <!-- ===================================================== ERROR ====================================================== --> <div id="videoError" class="video-error d-none"> <span class="error-icon"> ⚠ </span> <span> Video evidence is required </span> </div> <!-- ===================================================== AI PROCESSING CARD ====================================================== --> <div id="videoProcessing" class="video-processing d-none"> <!-- Processing Header --> <div class="processing-header"> <!-- Animated Icon --> <div class="processing-icon-wrapper"> <div class="processing-icon"> ✨ </div> <div class="processing-pulse"></div> </div> <!-- Processing Text --> <div class="processing-header-text"> <div class="processing-title-row"> <h6> AI Video Validation </h6> <span class="ai-badge"> AI </span> </div> <p id="processingMessage"> Preparing your video... </p> </div> </div> <!-- ================================================= PROGRESS ================================================== --> <div class="processing-progress-container"> <div class="processing-progress-top"> <span> Validation progress </span> <span id="progressPercentage"> 0% </span> </div> <div class="progress video-progress"> <div class="progress-bar" id="videoProgressBar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"> </div> </div> </div> <!-- ================================================= PROCESSING STEPS ================================================== --> <div class="processing-steps"> <!-- Step 1 --> <div class="processing-step" id="stepUpload"> <div class="step-icon"> ✓ </div> <div class="step-content"> <div class="step-title"> Video uploaded </div> <div class="step-description"> File received successfully </div> </div> </div> <!-- Step 2 --> <div class="processing-step" id="stepExtract"> <div class="step-icon"> 2 </div> <div class="step-content"> <div class="step-title"> Extracting frames & audio </div> <div class="step-description"> Processing video with FFmpeg </div> </div> </div> <!-- Step 3 --> <div class="processing-step" id="stepAI"> <div class="step-icon"> 3 </div> <div class="step-content"> <div class="step-title"> Running AI analysis </div> <div class="step-description"> Analyzing visual and speech evidence </div> </div> </div> <!-- Step 4 --> <div class="processing-step" id="stepDecision"> <div class="step-icon"> 4 </div> <div class="step-content"> <div class="step-title"> Generating validation result </div> <div class="step-description"> Checking video eligibility </div> </div> </div> </div> <!-- Processing Notice --> <div class="processing-notice"> <span class="notice-icon"> 🔒 </span> <span> Please don't close this page while your video is being validated. </span> </div> </div> <!-- ===================================================== AI RESULT ====================================================== --> <div id="videoResult" class="video-result d-none"> </div> </div>
             <input type="hidden" id="restId" value="<%= restaurant._id %>">
 
             <button id="place" type="submit" class="submit-btn w-100">
@@ -411,10 +1345,10 @@ stars.forEach((star, index) => {
 
 });
 document.getElementById("submitRating").addEventListener("click", async (e) => {
-  
 
 
- e.preventDefault();  
+
+ e.preventDefault();
 
 
   // if (!selectedRating) {
@@ -447,7 +1381,7 @@ if (!selectedRating) {
     headers: { "Content-Type": "application/json",
        "x-page-url": window.location.pathname
      },
-       
+
 
     body: JSON.stringify({
       value: Number(selectedRating),
@@ -551,3 +1485,266 @@ function showFormError(message) {
 
 
 
+<script>
+
+// ============================================
+// VIDEO UPLOAD UI
+// ============================================
+
+const videoInput = document.getElementById("video");
+const uploadVideoButton =
+    document.getElementById("uploadVideoButton");
+
+const videoUploadBox =
+    document.getElementById("videoUploadBox");
+
+const selectedVideo =
+    document.getElementById("selectedVideo");
+
+const videoFileName =
+    document.getElementById("videoFileName");
+
+const videoFileSize =
+    document.getElementById("videoFileSize");
+
+const removeVideo =
+    document.getElementById("removeVideo");
+
+const videoError =
+    document.getElementById("videoError");
+
+
+// ============================================
+// CHOOSE VIDEO BUTTON
+// ============================================
+
+uploadVideoButton.addEventListener("click", function (e) {
+
+    e.stopPropagation();
+
+    videoInput.click();
+
+});
+
+
+// ============================================
+// CLICK UPLOAD BOX
+// ============================================
+
+videoUploadBox.addEventListener("click", function () {
+
+    videoInput.click();
+
+});
+
+
+// ============================================
+// FILE SELECTED
+// ============================================
+
+videoInput.addEventListener("change", function () {
+
+    const video = this.files[0];
+
+    if (!video) {
+        return;
+    }
+
+    handleVideoFile(video);
+
+});
+
+
+// ============================================
+// HANDLE VIDEO
+// ============================================
+
+function handleVideoFile(video) {
+
+    // Hide previous error
+    videoError.classList.add("d-none");
+
+
+    // Check video type
+    if (!video.type.startsWith("video/")) {
+
+        videoError.classList.remove("d-none");
+
+        videoError.querySelector("span:last-child").textContent =
+            "Please select a valid video file.";
+
+        videoInput.value = "";
+
+        return;
+    }
+
+
+    // 50 MB limit
+    const maxSize =
+        50 * 1024 * 1024;
+
+    if (video.size > maxSize) {
+
+        videoError.classList.remove("d-none");
+
+        videoError.querySelector("span:last-child").textContent =
+            "Video must be smaller than 50 MB.";
+
+        videoInput.value = "";
+
+        return;
+    }
+
+
+    // ========================================
+    // SHOW SELECTED VIDEO
+    // ========================================
+
+    videoFileName.textContent =
+        video.name;
+
+    videoFileSize.textContent =
+        formatFileSize(video.size);
+
+    selectedVideo.classList.remove(
+        "d-none"
+    );
+
+
+    // Optional: hide upload box
+    videoUploadBox.classList.add(
+        "d-none"
+    );
+
+
+    console.log(
+        "Selected video:",
+        video.name
+    );
+
+}
+
+
+// ============================================
+// FORMAT FILE SIZE
+// ============================================
+
+function formatFileSize(bytes) {
+
+    if (bytes < 1024 * 1024) {
+
+        return (
+            (bytes / 1024).toFixed(1)
+            + " KB"
+        );
+
+    }
+
+    return (
+        (bytes / (1024 * 1024)).toFixed(2)
+        + " MB"
+    );
+}
+
+
+// ============================================
+// REMOVE VIDEO
+// ============================================
+
+removeVideo.addEventListener(
+    "click",
+    function (e) {
+
+        e.stopPropagation();
+
+        videoInput.value = "";
+
+        selectedVideo.classList.add(
+            "d-none"
+        );
+
+        videoUploadBox.classList.remove(
+            "d-none"
+        );
+
+        videoError.classList.add(
+            "d-none"
+        );
+
+    }
+);
+
+
+// ============================================
+// DRAG OVER
+// ============================================
+
+videoUploadBox.addEventListener(
+    "dragover",
+    function (e) {
+
+        e.preventDefault();
+
+        videoUploadBox.classList.add(
+            "dragover"
+        );
+
+    }
+);
+
+
+// ============================================
+// DRAG LEAVE
+// ============================================
+
+videoUploadBox.addEventListener(
+    "dragleave",
+    function () {
+
+        videoUploadBox.classList.remove(
+            "dragover"
+        );
+
+    }
+);
+
+
+// ============================================
+// DROP VIDEO
+// ============================================
+
+videoUploadBox.addEventListener(
+    "drop",
+    function (e) {
+
+        e.preventDefault();
+
+        videoUploadBox.classList.remove(
+            "dragover"
+        );
+
+        const files =
+            e.dataTransfer.files;
+
+        if (!files || !files.length) {
+            return;
+        }
+
+        const video =
+            files[0];
+
+        // Put dropped file into input
+        const dataTransfer =
+            new DataTransfer();
+
+        dataTransfer.items.add(video);
+
+        videoInput.files =
+            dataTransfer.files;
+
+        handleVideoFile(video);
+
+    }
+);
+
+</script>
