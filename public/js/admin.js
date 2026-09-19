@@ -359,7 +359,7 @@ processingStep(
 try {
 
     const response = await fetch(
-        "https://repairnow-ai.onrender.com/analyze-video",
+        "http://65.2.176.71:8000/analyze-video",
         {
             method: "POST",
             body: aiFormData
