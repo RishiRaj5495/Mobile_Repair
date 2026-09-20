@@ -359,7 +359,7 @@ processingStep(
 try {
 
     const response = await fetch(
-        "http://65.2.176.71:8000/analyze-video",
+         "https://deferred-teddy-forms-kate.trycloudflare.com/analyze-video",
         {
             method: "POST",
             body: aiFormData
