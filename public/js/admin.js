@@ -359,7 +359,7 @@ processingStep(
 try {
 
     const response = await fetch(
-         "https://cargo-retained-supported-witness.trycloudflare.com/analyze-video",
+         "https://coordination-garlic-progressive-careers.trycloudflare.com/analyze-video",
         {
             method: "POST",
             body: aiFormData
