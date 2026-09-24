@@ -359,7 +359,7 @@ processingStep(
 try {
 
     const response = await fetch(
-         "https://coordination-garlic-progressive-careers.trycloudflare.com/analyze-video",
+         "https://thereof-category-tools-substance.trycloudflare.com/analyze-video",
         {
             method: "POST",
             body: aiFormData
