@@ -23,21 +23,39 @@ RepairNow is a doorstep mobile repair platform that allows users to upload phone
 
  
 ```text
-Customer Video 
-      ↓ 
-Python + FastAPI 
-      ↓ 
-FFmpeg Video Processing 
-      ├── Extract Video Frames 
-      └── Extract Audio 
-      ↓ 
-Planned: Vision AI + Speech Analysis 
-      ↓ 
-Planned: Decision Engine 
-      ↓ 
-Phone-Related? 
-   ├── YES → Continue to Technician Workflow 
-   └── NO  → Reject / Request Another Video
+Customer
+   │
+   │ Repair Video
+   ▼
+┌─────────────────────┐
+│   RepairNow Backend │
+│ Node.js + Express   │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│   AI Video Service  │
+│      AWS EC2        │
+│ FastAPI + FFmpeg    │
+└──────────┬──────────┘
+           │
+      ┌────┴────┐
+      ▼         ▼
+    YOLO     Whisper
+   Vision     Speech
+      │         │
+      └────┬────┘
+           ▼
+┌─────────────────────┐
+│ Video Validation    │
+│ VALID / REVIEW /    │
+│ INVALID             │
+└──────────┬──────────┘
+           │
+     ┌─────┴─────┐
+     ▼           ▼
+ Technician    Request
+  Workflow    New Video
 ```
 
 ---
