@@ -6,15 +6,6 @@ Customers can submit repair issue videos, receive AI-assisted video validation, 
 
 The platform combines a Node.js/Express backend with MongoDB, Redis, Kafka, Socket.IO, Razorpay, and a separate Python/FastAPI AI video-processing service deployed on AWS EC2.
 
----
-
-[![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/Express.js-4.x-000000?logo=express&logoColor=white)](https://expressjs.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![Socket.io](https://img.shields.io/badge/Socket.io-4.x-010101?logo=socket.io&logoColor=white)](https://socket.io/)
-[![Firebase](https://img.shields.io/badge/Firebase-Admin-FFCA28?logo=firebase&logoColor=black)](https://firebase.google.com/)
-[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
-
 
 ---
 ## Demo
@@ -251,7 +242,6 @@ Mobile_Repair/
 │   └── users.js
 │
 ├── routes/
-│   ├── AI-flow.js
 │   ├── allNearbyTechnician.js
 │   ├── booking.js
 │   ├── eta.js
