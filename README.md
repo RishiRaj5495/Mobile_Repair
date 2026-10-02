@@ -323,36 +323,87 @@ Mobile_Repair/
 
 ---
 
-## 🛠️ Installation
+## 🚀 Quick Start
+
+Run RepairNow locally with Docker:
 
 ### Clone the repository
 
 ```bash
 git clone https://github.com/RishiRaj5495/Mobile_Repair.git
-```
-
-### Navigate to project folder
-
-```bash
 cd Mobile_Repair
 ```
 
-### Install dependencies
+### Configure environment variables
+
+Create a `.env` file in the project root and add the required environment variables.
+
+### Start the application
 
 ```bash
-npm install
+docker compose up --build
 ```
 
-### Start the server
+### Open the application
+
+```text
+http://localhost:8080
+```
+
+### Check running services
 
 ```bash
-npm run dev
+docker compose ps
 ```
+
+### Stop the application
+
+```bash
+docker compose down
+```
+
+For detailed configuration, Docker services, and AI service setup, see the Installation section below.
+
 ---
 
-## 🔐 Environment Variables
+## 🛠️ Installation
 
-Create a `.env` file in the root directory and add:
+### 📋 Prerequisites
+
+Install the following tools:
+
+- Git
+- Docker
+- Docker Compose
+
+No separate installation of Node.js, MongoDB, Redis, or Kafka is required when running RepairNow with Docker Compose.
+
+---
+
+### 🔗 Clone the Repository
+
+```bash
+git clone https://github.com/RishiRaj5495/Mobile_Repair.git
+cd Mobile_Repair
+```
+
+---
+
+### ⚙️ Environment Variables
+
+Create a `.env` file in the project root:
+
+```text
+Mobile_Repair/
+├── .env
+├── Dockerfile
+├── docker-compose.yml
+├── package.json
+├── app.js
+└── ...
+```
+
+Add the required environment variables:
 
 ```env
 SECRET=your_secret_key
@@ -374,16 +425,181 @@ MONGODB_URI=your_mongodb_connection_string
 FIREBASE_API_KEY=your_firebase_api_key
 FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
 FIREBASE_PROJECT_ID=your_project_id
-FIREBASE_STORAGE_BUCKET=your_bucket.appspot.com
+FIREBASE_STORAGE_BUCKET=your_storage_bucket
 FIREBASE_SENDER_ID=your_sender_id
 FIREBASE_APP_ID=your_app_id
 FIREBASE_MEASUREMENT_ID=your_measurement_id
 FIREBASE_SERVICE_ACCOUNT_PATH=path_to_service_account.json
 
 GOOGLE_MAPS_API_KEY=your_google_maps_api_key
-
-GOOGLE_APPLICATION_CREDENTIALS=path_to_google_credentials.json
-
-GEMINI_API_KEY=your_gemini_api_key
 ```
+
+> **Important:** These values are placeholders. Never commit API keys, passwords, Firebase credentials, private keys, or other secrets to GitHub.
+
+---
+
+### 🐳 Docker Compose
+
+Build the application image and start the required services:
+
+```bash
+docker compose up --build
+```
+
+Docker Compose starts the following local services:
+
+```text
+RepairNow Backend
+       │
+       ├── MongoDB
+       ├── Redis
+       └── Kafka
+```
+
+The backend is available at:
+
+```text
+http://localhost:8080
+```
+
+#### Run in the Background
+
+```bash
+docker compose up --build -d
+```
+
+Check running containers:
+
+```bash
+docker compose ps
+```
+
+---
+
+### 🧩 Docker Services
+
+RepairNow uses Docker Compose to run the main backend infrastructure locally.
+
+| Service | Technology | Port | Purpose |
+|---|---|---:|---|
+| `backend` | Node.js + Express | `8080` | Main RepairNow application |
+| `mongodb` | MongoDB | `27017` | Application database |
+| `redis` | Redis 7 | `6379` | Caching and session-related data |
+| `kafka` | Apache Kafka | `9092` | Asynchronous event processing |
+
+#### Backend
+
+The root `Dockerfile` uses Node.js 22 Alpine and runs the RepairNow backend on port `8080`.
+
+#### MongoDB
+
+MongoDB is used as the primary application database.
+
+#### Redis
+
+Redis is used for caching and session-related data.
+
+#### Kafka
+
+Apache Kafka is used for asynchronous booking-event processing.
+
+---
+
+### 🤖 AI Video Validation Service
+
+RepairNow's AI video validation runs as a separate service from the main Docker Compose application.
+
+AI service location:
+
+```text
+AI-Service/
+```
+
+The service uses:
+
+- Python
+- FastAPI
+- FFmpeg
+- YOLO
+- Faster-Whisper
+- Semantic analysis
+- Decision engine
+
+The AI service has its own Dockerfile:
+
+```text
+AI-Service/Dockerfile
+```
+
+The AI service is deployed separately from the main backend because video processing and AI inference require more compute resources.
+
+#### Local AI Service Testing
+
+```bash
+cd AI-Service
+docker build -t repairnow-ai .
+docker run -p 10000:10000 repairnow-ai
+```
+
+The local FastAPI service is available at:
+
+```text
+http://localhost:10000
+```
+
+For the deployed setup, the AI service runs separately on AWS EC2.
+
+---
+
+### 🧰 Useful Docker Commands
+
+#### Rebuild
+
+```bash
+docker compose up --build
+```
+
+#### Start in Background
+
+```bash
+docker compose up -d
+```
+
+#### Stop
+
+```bash
+docker compose down
+```
+
+#### Check Services
+
+```bash
+docker compose ps
+```
+
+#### View Logs
+
+```bash
+docker compose logs -f
+```
+
+#### View Backend Logs
+
+```bash
+docker compose logs -f backend
+```
+
+#### Rebuild Without Cache
+
+```bash
+docker compose build --no-cache
+```
+
+#### Restart Services
+
+```bash
+docker compose restart
+```
+
+---
 
