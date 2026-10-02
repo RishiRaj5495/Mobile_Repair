@@ -319,13 +319,11 @@ Mobile_Repair/
 - **`public/` and `views/`** — Frontend assets and EJS views.
 - **`images/`** — Architecture diagrams and project screenshots.
 - **`Dockerfile` / `docker-compose.yml`** — Containerization and local service orchestration.
-```
 
----
 
-## 🚀 Quick Start
 
-Run RepairNow locally with Docker:
+## 🚀Quick Start
+  Run RepairNow locally with Docker:
 
 ### Clone the repository
 
@@ -333,6 +331,8 @@ Run RepairNow locally with Docker:
 git clone https://github.com/RishiRaj5495/Mobile_Repair.git
 cd Mobile_Repair
 ```
+
+
 
 ### Configure environment variables
 
