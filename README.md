@@ -38,7 +38,7 @@ The platform combines a Node.js/Express backend with MongoDB, Redis, Kafka, Sock
 ##  AI Video Validation Pipeline
    Customer repair videos are processed by a dedicated AI service rather than directly inside the main Node.js application.
  mermaid-diagram
- <img src="images/mermaid-diagram.png" width="900" />
+ <img src="images/mermaid-diagram.png" width="400" />
 
 
 ---
