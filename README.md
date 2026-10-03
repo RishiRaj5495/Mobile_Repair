@@ -37,43 +37,9 @@ The platform combines a Node.js/Express backend with MongoDB, Redis, Kafka, Sock
 
 ##  AI Video Validation Pipeline
    Customer repair videos are processed by a dedicated AI service rather than directly inside the main Node.js application.
+ mermaid-diagram
+ <img src="images/mermaid-diagram.png" width="900" />
 
- 
-```text
-Customer
-   │
-   │ Repair Video
-   ▼
-┌─────────────────────┐
-│   RepairNow Backend │
-│ Node.js + Express   │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   AI Video Service  │
-│      AWS EC2        │
-│ FastAPI + FFmpeg    │
-└──────────┬──────────┘
-           │
-      ┌────┴────┐
-      ▼         ▼
-    YOLO     Faster-Whisper
-   Vision     Speech
-      │         │
-      └────┬────┘
-           ▼
-┌─────────────────────┐
-│ Validation Decision   │
-│ VALID / REVIEW /    │
-│ INVALID             │
-└──────────┬──────────┘
-           │
-     ┌─────┴─────┐
-     ▼           ▼
- Technician    Request
-  Workflow    New Video
-```
 
 ---
 ## Architecture
