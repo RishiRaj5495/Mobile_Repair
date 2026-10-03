@@ -359,7 +359,7 @@ processingStep(
 try {
 
     const response = await fetch(
-         "https://thereof-category-tools-substance.trycloudflare.com/analyze-video",
+         "https://temple-finished-highland-ref.trycloudflare.com/analyze-video",
         {
             method: "POST",
             body: aiFormData
