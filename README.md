@@ -158,14 +158,19 @@ Razorpay webhooks allow the backend to receive payment events server-side. HMAC-
 
 ### Customer Issue Reporting & Video Upload
 <img src="images/customerForm.png" width="800"/>
+
 ### Validate Issue Video 
 <img src="images/VideoValidation.png" width="800"/>
+
 ### Payment Process Validation
 <img src="images/PaymentIntegration.png" width="800"/>
+
 ### Booking Status
 <img src="images/CustomerBooking.png" width="800"/>
+
 ### Technician Dashboard
 <img src="images/technicianDashboard.png" width="800"/>
+
 ### Customer Login Page
 <img src="images/customerLogin.png" width="800"/>
 
@@ -174,6 +179,7 @@ Razorpay webhooks allow the backend to receive payment events server-side. HMAC-
 
 ### Technician Registration Page
 <img src="images/technicianRegister.png" width="800"/>
+
 ### Technician Login Page
 <img src="images/TechnicianLogin.png" width="800"/>
 
