@@ -19,7 +19,12 @@ customerCountry: { type: String, required: true },
 customerPhone: { type: String, required: true,  match: [/^\d{10}$/, "Phone number must be exactly 10 digits"] },
 restaurant: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant', required: true },
 /////////////
-  customerLocation: { lat: { type: Number },lng: { type: Number }},
+customerLocation: { lat: { type: Number },lng: { type: Number }},
+
+customerSummary: {
+  type: String,
+  default: "No summary provided"
+},
 
 ////////////////
  video: {

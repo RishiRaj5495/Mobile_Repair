@@ -20,6 +20,128 @@
   }
 </style> -->
 <style>
+
+
+
+
+.customer-summary-card {
+    background: #ffffff;
+    border: 1px solid #e5eaf2;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06);
+    overflow-wrap: anywhere;
+}
+
+.summary-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #eaf2ff;
+    font-size: 24px;
+}
+
+.summary-header h2 {
+    margin: 0 0 5px;
+    font-size: 20px;
+    color: #172033;
+}
+
+.summary-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.summary-divider {
+    height: 1px;
+    background: #e8edf5;
+    margin: 20px 0;
+}
+
+.summary-content {
+    color: #334155;
+    font-size: 14px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+.summary-content h1,
+.summary-content h2,
+.summary-content h3 {
+    color: #172033;
+    line-height: 1.4;
+    margin: 20px 0 10px;
+}
+
+.summary-content h1:first-child,
+.summary-content h2:first-child,
+.summary-content h3:first-child {
+    margin-top: 0;
+}
+
+.summary-content p {
+    margin: 8px 0 14px;
+}
+
+.summary-content ul,
+.summary-content ol {
+    padding-left: 22px;
+    margin: 10px 0 16px;
+}
+
+.summary-content li {
+    margin-bottom: 8px;
+    padding-left: 3px;
+}
+
+.summary-content strong {
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.summary-content blockquote {
+    margin: 14px 0;
+    padding: 12px 16px;
+    border-left: 4px solid #3b82f6;
+    background: #f1f6ff;
+    border-radius: 0 10px 10px 0;
+}
+
+.summary-content code {
+    background: #f1f5f9;
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+
+@media (max-width: 600px) {
+    .customer-summary-card {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .summary-header h2 {
+        font-size: 18px;
+    }
+
+    .summary-content {
+        font-size: 13px;
+    }
+}
+
+
+    /* /////////////////////////////////////// */
 *{
     margin:0;
     padding:0;
@@ -455,26 +577,31 @@ video{
             </video>
         </div>
 
-        <!-- NOTIFICATIONS -->
-        <div class="card">
-            <h2>🔔 Notifications</h2>
-
-            <div id="notifications">
-
-                <div class="notification">
-                    ✓ Request Submitted
-                </div>
-
-                <div class="notification">
-                    ✓ Payment Successful
-                </div>
-
-                <div class="notification">
-                    ✓ Waiting For Technician
-                </div>
-
+        <!-- CUSTOMER SUMMARY -->
+        <!-- <div class="card">
+            <h2>Customer Summary</h2>
+            <div id="customer-summary">
+                <%= order.customerSummary %>
             </div>
+        </div> -->
+
+        
+<div class="card customer-summary-card">
+    <div class="summary-header">
+        <div class="summary-icon">🔧</div>
+
+        <div>
+            <h2>Repair Assessment</h2>
+            <p>AI-assisted analysis of your repair video</p>
         </div>
+    </div>
+
+    <div class="summary-divider"></div>
+
+    <div id="customer-summary" class="summary-content"><%= order.customerSummary || "Your repair assessment will appear here once the video analysis is complete." %></div>
+</div>
+
+
 
     </div>
 
@@ -527,5 +654,26 @@ console.log("Status:", status);
     const order = <%- JSON.stringify(order) %>;
     console.log("ORDER_details:", order);
     </script>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+
+<script>
+    const summaryElement =
+        document.getElementById("customer-summary");
+
+    if (summaryElement) {
+        const markdown = summaryElement.textContent.trim();
+
+        summaryElement.innerHTML = DOMPurify.sanitize(
+            marked.parse(markdown)
+        );
+    }
+</script>
+
+
 
 

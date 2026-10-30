@@ -42,6 +42,7 @@ router.post(
         customerPincode,
         customerCountry,
         restaurantId,
+        customerSummary,
         lat,
         lng
       } = req.body;
@@ -84,6 +85,7 @@ if (!req.body.videoUrl) {
         customerState,
         customerPincode,
         customerCountry,
+        customerSummary: customerSummary || "No summary provided",
 
         restaurant: restaurantId,
 

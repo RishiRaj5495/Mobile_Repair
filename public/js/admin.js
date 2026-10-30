@@ -355,11 +355,12 @@ processingStep(
 // ============================================
 // CALL FASTAPI
 // ============================================
+let  repair_summary ;
 
 try {
 
     const response = await fetch(
-         "https://temple-finished-highland-ref.trycloudflare.com/analyze-video",
+         "https://motors-liverpool-invitations-passenger.trycloudflare.com/analyze-video",
         {
             method: "POST",
             body: aiFormData
@@ -440,9 +441,9 @@ try {
 const status = decisionData.status;
 const score = decisionData.score;
 const reason = decisionData.reason;
+ repair_summary = aiResult.repair_summary || "No summary provided";
 
-
-
+console.log("Repair Summary from AI:", repair_summary);
 
     // ========================================
     // VALID VIDEO
@@ -612,10 +613,14 @@ const videoUrl = cloudinaryJson.secure_url;
   formData.append('customerState', customerState);
   formData.append('customerPincode', customerPincode);
   formData.append('customerCountry', customerCountry);
-
+  formData.append('customerSummary', repair_summary); // Include the repair summary
   formData.append('restaurantId', restaurantId); // IMPORTANT
   // formData.append('video', video);
   formData.append('videoUrl', optimizedVideoUrl);
+  console.log(
+    "Customer Summary being sent:",
+    formData.get("customerSummary")
+);
 
 const xhr = new XMLHttpRequest();
 xhr.open("POST", "/api/orders/booking/prepare");
@@ -635,7 +640,7 @@ xhr.upload.onprogress = function (e) {
 xhr.onload = async function () {
 
   const data = JSON.parse(xhr.responseText);
-
+console.log("Customer Summary:", data.customerSummary);
   console.log("Prepare Response:", data);
 
   if (!data.success) {
