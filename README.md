@@ -6,6 +6,8 @@ Customers can submit repair issue videos, receive AI-assisted video validation, 
 
 The platform combines a Node.js/Express backend with MongoDB, Redis, Kafka, Socket.IO, Razorpay, and a separate Python/FastAPI AI video-processing service deployed on AWS EC2.
 
+The AI pipeline uses computer vision and speech recognition to analyze uploaded videos, then integrates NVIDIA Nemotron through Nebius Token Factory to generate structured repair assessments.
+
 
 ---
 ## Demo
@@ -15,6 +17,79 @@ The platform combines a Node.js/Express backend with MongoDB, Redis, Kafka, Sock
 💻 **Source Code:** [GitHub Repository](https://github.com/RishiRaj5495/Mobile_Repair)
 
 ---
+
+
+
+---
+
+## NVIDIA Nemotron + Nebius Token Factory Integration
+
+RepairNow integrates NVIDIA Nemotron through Nebius Token Factory
+to generate evidence-based repair assessments from customer-uploaded
+mobile repair videos.
+
+### Why Nemotron?
+
+Visual detection and speech transcription produce raw evidence, but
+that evidence alone does not provide customers with an understandable
+repair assessment.
+
+Nemotron processes the extracted evidence and generates a structured
+assessment to support the technician's initial inspection.
+
+### AI Processing Pipeline
+
+1. **Video Input:** Customer uploads a mobile repair issue video.
+2. **Frame Extraction:** FFmpeg extracts frames from the uploaded video.
+3. **Visual Analysis:** YOLO detects mobile phones and other relevant
+   objects across sampled frames.
+4. **Speech Analysis:** Faster-Whisper extracts speech and relevant
+   device information from the audio.
+5. **Evidence Aggregation:** The AI service combines visual detections
+   and transcription results.
+6. **Nemotron Reasoning:** The collected evidence is sent to NVIDIA
+   Nemotron through Nebius Token Factory.
+7. **Structured Assessment:** Nemotron generates:
+   - Observed Evidence
+   - Possible Causes
+   - Recommended Checks
+8. **Application Integration:** The generated assessment is stored
+   with the customer's order and displayed in RepairNow.
+
+### Model and Inference Details
+
+| Component | Technology |
+|---|---|
+| Language / Vision Model | NVIDIA Nemotron-3.5-Super-VL |
+| Inference Platform | Nebius Token Factory |
+| API Integration | OpenAI-compatible API |
+| Visual Detection | YOLO11n |
+| Speech Recognition | Faster-Whisper |
+| Video Processing | FFmpeg |
+| AI Backend | Python + FastAPI |
+| Deployment | AWS EC2 |
+
+### Example AI Assessment
+
+**Observed Evidence**
+- A mobile phone was detected in multiple sampled frames.
+- Speech transcription contained a possible device model reference.
+- Visual and audio evidence were combined for assessment.
+
+**Possible Causes**
+- Potential display-related issue based on the submitted evidence.
+- The exact hardware fault has not been confirmed.
+
+**Recommended Checks**
+- Verify the device model.
+- Inspect the display and its connectors.
+- Perform further technician inspection before recommending replacement.
+
+The output is an evidence-based repair assessment, not a confirmed
+hardware diagnosis.
+
+---
+
 
 ## Features
 
@@ -95,9 +170,16 @@ The AI service runs independently from the main backend because video processing
 
 - Integrated Razorpay Webhooks with HMAC-SHA256 signature verification to securely process payment events and synchronize payment status with MongoDB.
 
-- Built a separate AI video-validation service using Python, FastAPI, FFmpeg, YOLO, and Faster-Whisper to analyze visual and speech evidence from customer repair videos.
+- Integrated NVIDIA Nemotron through Nebius Token Factory to transform extracted visual and speech evidence into structured repair assessments.
 
-- Deployed the AI inference service on AWS EC2 as a systemd-managed FastAPI service, keeping compute-intensive video processing separate from the main application backend.
+- Implemented an evidence aggregation pipeline combining YOLO object detections and Faster-Whisper transcription before sending the information to Nemotron.
+
+- Used Nemotron to generate structured outputs containing Observed Evidence, Possible Causes, and Recommended Checks.
+
+- Integrated the generated AI assessment into the customer booking workflow and persisted the result with the MongoDB order.
+
+- Deployed the independent FastAPI AI service on AWS EC2, separating video processing and model inference from the main Node.js backend.
+
 
 - Implemented MongoDB 2dsphere geospatial queries using `$near` and `$geoNear` to discover nearby technicians within a configurable search radius.
 
@@ -196,10 +278,13 @@ Mobile_Repair/
 │   ├── app.py
 │   ├── requirements.txt
 │   ├── Dockerfile
+|   ├── nebius_service.py
+|   ├── test_nemotron.py
 │   ├── yolo11n.pt
 │   ├── test_yolo.py
 │   ├── test_yolo_videos.py
 │   └── services/
+│       ├── nebius_service.py
 │       ├── audio_processor.py
 │       ├── decision_engine.py
 │       ├── semantic_analyzer.py
@@ -504,21 +589,50 @@ AI-Service/Dockerfile
 
 The AI service is deployed separately from the main backend because video processing and AI inference require more compute resources.
 
-#### Local AI Service Testing
+
+### Nebius Token Factory Configuration
+
+The AI service uses Nebius Token Factory to access NVIDIA Nemotron.
+
+Set the following environment variables on the AI service:
+
+```env
+NEBIUS_KEY=your_nebius_api_key
+```
+
+Configure the model identifier and API endpoint according to
+the implementation in `services/nebius_service.py`.
+
+Never commit actual API keys or credentials to the repository.
+
+### Run the AI Service Locally
 
 ```bash
 cd AI-Service
-docker build -t repairnow-ai .
-docker run -p 10000:10000 repairnow-ai
+
+python -m venv venv
 ```
 
-The local FastAPI service is available at:
+Activate the environment and install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Start FastAPI:
+
+```bash
+uvicorn app:app --host 0.0.0.0 --port 8000
+```
+
+The API documentation is available at:
 
 ```text
-http://localhost:10000
+http://localhost:8000/docs
 ```
 
-For the deployed setup, the AI service runs separately on AWS EC2.
+The production AI service is deployed separately on AWS EC2.
+
 
 ---
 
