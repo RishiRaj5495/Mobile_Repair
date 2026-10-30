@@ -10,11 +10,12 @@ from services.speech_processor import transcribe_audio
 from services.visual_analyzer import analyze_frames
 from services.semantic_analyzer import analyze_transcript
 from services.decision_engine import make_decision
+from services.nebius_service import generate_repair_summary
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-         "https://repairnow.onrender.com",
+        "https://repairnow.onrender.com",
         "http://localhost:8080",
         "http://127.0.0.1:8080"
     ],
@@ -148,12 +149,12 @@ async def analyze_video(file: UploadFile = File(...)):
 
     if phone_percentage < 11:
         # Definitely weak
-        run_whisper = False
+        
         decision = "INVALID"
 
     elif phone_percentage >= 60:
         # Definitely strong
-        run_whisper = False
+        
         decision = "VALID"
 
     else:
@@ -259,6 +260,42 @@ async def analyze_video(file: UploadFile = File(...)):
     print(f"⏱ Decision engine: {decision_time:.2f}s")
 
     # --------------------------------------------------
+    # Generate advisory repair assessment using Nemotron
+    # --------------------------------------------------
+
+    nebius_time = 0.0
+    repair_summary = None
+
+    start = time.perf_counter()
+
+    try:
+        analysis = {
+            "visual_analysis": visual_result,
+            "transcription": speech_result,
+            "semantic_analysis": semantic_result,
+            "existing_validation_decision": decision_result,
+        }
+
+        repair_summary = generate_repair_summary(analysis)
+
+        if repair_summary:
+            print("Nemotron repair assessment generated successfully.")
+        else:
+            print("Nemotron returned an empty repair assessment.")
+
+    except Exception as e:
+        # Preserve the original validation result if Nebius fails.
+        print(
+            f"Nemotron summary failed: "
+            f"{type(e).__name__}: {e}"
+        )
+
+    finally:
+        nebius_time = time.perf_counter() - start
+
+    print(f"⏱ Nemotron: {nebius_time:.2f}s")
+
+    # --------------------------------------------------
     # Total processing time
     # --------------------------------------------------
 
@@ -291,6 +328,12 @@ async def analyze_video(file: UploadFile = File(...)):
         "transcription": speech_result,
         "semantic_analysis": semantic_result,
         "decision": decision_result,
+        "repair_summary": repair_summary,
+        "repair_summary_status": (
+            "generated"
+            if repair_summary
+            else "unavailable"
+        ),
         "processing_time": {
             "upload": round(upload_time, 2),
             "frame_extraction": round(frame_time, 2),
@@ -299,6 +342,7 @@ async def analyze_video(file: UploadFile = File(...)):
             "whisper": round(whisper_time, 2),
             "semantic_analysis": round(semantic_time, 2),
             "decision_engine": round(decision_time, 2),
+            "nebius_summary": round(nebius_time, 2),
             "total": round(total_time, 2)
         }
     }
