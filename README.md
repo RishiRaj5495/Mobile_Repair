@@ -228,8 +228,10 @@ Razorpay webhooks allow the backend to receive payment events server-side. HMAC-
 🟢 Core RepairNow platform — Working  
 🟢 Real-time technician tracking — Working  
 🟢 Online payments — Working  
-🟢 AI video validation — Working  
-🟢 AWS-hosted AI service — Working  
+🟡 AI Video Validation Pipeline — Implemented and Tested
+🔴 AI Service Deployment (AWS EC2 + Nebius Token Factory) — Temporarily Unavailable (credits exhausted)
+
+Note: The AI video analysis pipeline was implemented and tested using YOLO11n, Faster-Whisper, and NVIDIA Nemotron through Nebius Token Factory. The AI service is currently unavailable because the cloud service credits have been exhausted. The core RepairNow platform continues to operate independently.
 ---
 
 
